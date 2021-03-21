@@ -12,17 +12,18 @@ import java.net.URI;
 
 import java.net.URISyntaxException;
 import java.util.Objects;
-@Component
+//@Component
     public class TablesCreator {
     @Autowired
         private  JdbcTemplate jdbcTemplate;
+    private String propertyPath;
 
-    public TablesCreator() {
-
+    public TablesCreator(String propertyPath) {
+        this.propertyPath = propertyPath;
     }
 
     public void createTables() throws IOException, URISyntaxException {
-                URI scriptPath = Objects.requireNonNull(this.getClass().getClassLoader().getResource("Script.sql")).toURI();
+                URI scriptPath = Objects.requireNonNull(this.getClass().getClassLoader().getResource(propertyPath)).toURI();
                 String query = IOUtils.toString(new FileReader(new File(scriptPath)));
                jdbcTemplate.update(query);
     }

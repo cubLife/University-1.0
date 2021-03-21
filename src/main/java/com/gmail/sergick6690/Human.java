@@ -17,6 +17,13 @@ public class Human {
         this.age = age;
     }
 
+    public Human(String firstName, String lastNAme, String sex, int age) {
+    }
+
+    public Human() {
+
+    }
+
     public int getId() {
         return id;
     }

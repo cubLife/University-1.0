@@ -3,11 +3,28 @@ package com.gmail.sergick6690;
 import java.util.Objects;
 
 public class Student extends Human {
+    private  int groupID;
     private int course;
 
     public Student(int id, String firstName, String lastNAme, String sex, int age, int course) {
         super(id, firstName, lastNAme, sex, age);
         this.course = course;
+    }
+
+    public Student(int id, String firstName, String lastNAme, String sex, int age, int course, int groupID) {
+        super(id, firstName, lastNAme, sex, age);
+        this.course = course;
+        this.groupID = groupID;
+    }
+
+    public Student(String firstName, String lastNAme, String sex, int age, int course, int groupId) {
+        super(firstName, lastNAme, sex, age);
+        this.course = course;
+        this.groupID = groupId;
+    }
+
+    public Student() {
+        super();
     }
 
     public int getCourse() {

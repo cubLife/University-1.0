@@ -11,6 +11,9 @@ public class Audience {
         this.number = number;
     }
 
+    public Audience() {
+    }
+
     public int getId() {
         return id;
     }

@@ -8,6 +8,9 @@ public class Faculty {
     private String name;
     private List<Cathedra> cathedra;
 
+    public Faculty() {
+    }
+
     public Faculty(int id, String name, List<Cathedra> cathedra) {
         this.id = id;
         this.name = name;

@@ -14,6 +14,9 @@ public class Cathedra {
         this.groups = groups;
     }
 
+    public Cathedra() {
+    }
+
     public int getId() {
         return id;
     }

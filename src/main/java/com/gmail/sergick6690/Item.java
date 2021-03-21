@@ -18,6 +18,23 @@ public class Item {
         this.duration = duration;
     }
 
+    public Item(Subject subject, Date date, Audience audience, int duration) {
+        this.subject = subject;
+        this.date = date;
+        this.audience = audience;
+        this.duration = duration;
+    }
+
+    public Item(Subject subject, Audience audience) {
+        this.subject = subject;
+        this.audience = audience;
+    }
+
+    public Item() {
+    }
+
+
+
     public int getId() {
         return id;
     }

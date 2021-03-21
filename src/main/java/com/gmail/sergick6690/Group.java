@@ -16,6 +16,9 @@ public class Group {
         this.schedule = schedule;
     }
 
+    public Group() {
+    }
+
     public int getId() {
         return id;
     }
