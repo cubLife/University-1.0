@@ -1,6 +1,5 @@
 package com.gmail.sergick6690;
 
-import javax.xml.datatype.Duration;
 import java.util.Date;
 import java.util.Objects;
 
@@ -9,9 +8,9 @@ public class Item {
     private Subject subject;
     private Date date;
     private Audience audience;
-    private Duration duration;
+    private int duration;
 
-    public Item(int id, Subject subject, Date date, Audience audience, Duration duration) {
+    public Item(int id, Subject subject, Date date, Audience audience, int duration) {
         this.id = id;
         this.subject = subject;
         this.date = date;
@@ -51,11 +50,11 @@ public class Item {
         this.audience = audience;
     }
 
-    public Duration getDuration() {
+    public int getDuration() {
         return duration;
     }
 
-    public void setDuration(Duration duration) {
+    public void setDuration(int duration) {
         this.duration = duration;
     }
 
