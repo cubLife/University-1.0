@@ -1,39 +1,47 @@
 package com.gmail.sergick6690.implementation;
 
-import com.gmail.sergick6690.Audience;
+import com.gmail.sergick6690.university.Audience;
 import com.gmail.sergick6690.DAO.AudienceDAO;
-import com.gmail.sergick6690.qeries.AudienceQueries;
+import com.gmail.sergick6690.PropertyLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Properties;
 
+@Component
 public class JdbcAudienceDAO implements AudienceDAO {
-    @Autowired
     private JdbcTemplate jdbcTemplate;
-    private AudienceQueries queries = new AudienceQueries();
-    private BeanPropertyRowMapper<Audience> rowMapper = new BeanPropertyRowMapper<>(Audience.class);
+    private Properties properties = new PropertyLoader("Queries/audienceQueries.properties").loadProperty();
+
+    @Autowired
+    public JdbcAudienceDAO(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public void addAudience(Audience audience) {
-        jdbcTemplate.update(queries.getAddAudience(), audience.getNumber());
+        jdbcTemplate.update(properties.getProperty("addAudience"), audience.getNumber());
 
     }
 
     @Override
-    public Audience findAudienceById(int id) {
-        return jdbcTemplate.query(queries.getFindAudienceById(), new Object[]{id}, rowMapper)
-                .stream().findAny().orElse(new Audience(0, 0));
+    public Audience findAudienceById(int id) throws SQLException {
+        return jdbcTemplate.query(properties.getProperty("findAudienceById"), new Object[]{id}, new BeanPropertyRowMapper<>(Audience.class))
+                .stream().findAny().orElseThrow(() -> new SQLException("Audience not found - " + id));
     }
 
     @Override
     public List<Audience> findAllAudience() {
-        return jdbcTemplate.query(queries.getFindAllAudience(), rowMapper);
+        return jdbcTemplate.query(properties.getProperty("findAllAudience"), new BeanPropertyRowMapper<>(Audience.class));
     }
 
     @Override
     public void removeAudienceById(int id) {
-        jdbcTemplate.update(queries.getRemoveAudience(), id);
+        jdbcTemplate.update(properties.getProperty("removeAudience"), id);
     }
+
 }

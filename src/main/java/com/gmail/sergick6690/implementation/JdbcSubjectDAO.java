@@ -1,43 +1,50 @@
 package com.gmail.sergick6690.implementation;
 
 import com.gmail.sergick6690.DAO.SubjectDAO;
-import com.gmail.sergick6690.Subject;
-import com.gmail.sergick6690.qeries.SubjectQueries;
+import com.gmail.sergick6690.PropertyLoader;
+import com.gmail.sergick6690.university.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Properties;
 
+@Component
 public class JdbcSubjectDAO implements SubjectDAO {
-    @Autowired
     private JdbcTemplate jdbcTemplate;
-    private SubjectQueries queries = new SubjectQueries();
-    private BeanPropertyRowMapper<Subject> rowMapper = new BeanPropertyRowMapper<>(Subject.class);
+    private Properties properties = new PropertyLoader("Queries/subjectQueries.properties").loadProperty();
 
-    @Override
-    public void addSubject(Subject subject) {
-        jdbcTemplate.update(queries.getAddSubject(), subject.getName(), subject.getDescription());
+    @Autowired
+    public JdbcSubjectDAO(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public Subject findSubjectById(int id) {
-        return jdbcTemplate.query(queries.getFindSubjectById(), new Object[]{id}, rowMapper)
-                .stream().findAny().orElse(null);
+    public void addSubject(Subject subject) {
+        jdbcTemplate.update(properties.getProperty("addSubject"), subject.getName(), subject.getDescription(), subject.getTeacherId());
+    }
+
+    @Override
+    public Subject findSubjectById(int id) throws SQLException {
+        return jdbcTemplate.query(properties.getProperty("findSubjectById"), new Object[]{id}, new BeanPropertyRowMapper<>(Subject.class))
+                .stream().findAny().orElseThrow(() -> new SQLException("Subject not found - " + id));
     }
 
     @Override
     public List<Subject> findAllSubjects() {
-        return jdbcTemplate.query(queries.getFindAllSubjects(), rowMapper);
+        return jdbcTemplate.query(properties.getProperty("findAllSubjects"), new BeanPropertyRowMapper<>(Subject.class));
     }
 
     @Override
     public void removeSubjectById(int id) {
-        jdbcTemplate.update(queries.getRemoveSubjectById(), id);
+        jdbcTemplate.update(properties.getProperty("removeSubjectById"), id);
     }
 
     @Override
     public List<Subject> findAllSubjectRelatedToAudience(int id) {
-        return jdbcTemplate.query(queries.getFindAllSubjectRelatedToAudience(), new Object[]{id}, rowMapper);
+        return jdbcTemplate.query(properties.getProperty("findAllSubjectRelatedToAudience"), new Object[]{id}, new BeanPropertyRowMapper<>(Subject.class));
     }
 }

@@ -1,5 +1,6 @@
 package com.gmail.sergick6690;
 
+import com.gmail.sergick6690.connectionFactory.ConnectionFactory;
 import com.gmail.sergick6690.implementation.JdbcAudienceDAO;
 import com.gmail.sergick6690.implementation.JdbcSubjectDAO;
 import com.gmail.sergick6690.implementation.JdbcTeacherDAO;
@@ -12,12 +13,14 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
+import java.sql.SQLException;
 import java.util.Properties;
 
 @Configuration
 @ComponentScan("com.gmail.sergick6690")
 public class SpringConfig {
-    private  final ApplicationContext applicationContext;
+    private final ApplicationContext applicationContext;
+    private ConnectionFactory connectionFactory = new ConnectionFactory();
     private PropertyLoader propertyLoader = new PropertyLoader("Queries/PosdgreSQL.properties");
 
     @Autowired
@@ -26,8 +29,8 @@ public class SpringConfig {
     }
 
     @Bean
-    public DataSource dataSource(){
-        Properties properties = propertyLoader.loadProperty();
+    public DataSource dataSource() throws SQLException {
+        Properties properties = connectionFactory.getDBProperty();
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(properties.getProperty("driverClassName"));
         dataSource.setUrl(properties.getProperty("url"));
@@ -37,26 +40,13 @@ public class SpringConfig {
     }
 
     @Bean
-    public JdbcTemplate jdbcTemplate(){
+    public JdbcTemplate jdbcTemplate() throws SQLException {
         return new JdbcTemplate(dataSource());
     }
 
-    @Bean TablesCreator tablesCreator(){
+    @Bean
+    TablesCreator tablesCreator() {
         return new TablesCreator("Script.sql");
     }
 
-    @Bean
-    public JdbcAudienceDAO jdbcAudienceDAO(){
-        return new JdbcAudienceDAO();
-    }
-
-    @Bean
-    public JdbcSubjectDAO jdbcSubjectDAO(){
-        return new JdbcSubjectDAO();
-    }
-
-    @Bean
-    public JdbcTeacherDAO jdbcTeacherDAO(){
-        return new JdbcTeacherDAO();
-    }
 }

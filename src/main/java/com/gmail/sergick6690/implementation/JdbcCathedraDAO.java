@@ -1,40 +1,48 @@
 package com.gmail.sergick6690.implementation;
 
-import com.gmail.sergick6690.Cathedra;
+import com.gmail.sergick6690.university.Cathedra;
 import com.gmail.sergick6690.DAO.CathedraDAO;
-import com.gmail.sergick6690.qeries.CathedraQueries;
+import com.gmail.sergick6690.PropertyLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Properties;
 
+@Component
 public class JdbcCathedraDAO implements CathedraDAO {
-    @Autowired
     private JdbcTemplate jdbcTemplate;
-    private CathedraQueries queries= new CathedraQueries();
-    private BeanPropertyRowMapper<Cathedra> rowMapper= new BeanPropertyRowMapper<>(Cathedra.class);
+    private Properties properties = new PropertyLoader("Queries/cathedraQueries.properties").loadProperty();
+
+    @Autowired
+    public JdbcCathedraDAO(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+
+    }
 
     @Override
     public void addCathedra(Cathedra cathedra) {
-        jdbcTemplate.update(queries.getAddCathedra(),cathedra.getName());
+        jdbcTemplate.update(properties.getProperty("addCathedra"), cathedra.getName());
 
     }
 
     @Override
     public void removeCathedraById(int id) {
-        jdbcTemplate.update(queries.getRemoveCathedraById(),id);
+        jdbcTemplate.update(properties.getProperty("removeCathedra"), id);
 
     }
 
     @Override
-    public Cathedra findCathedraById(int id) {
-        return jdbcTemplate.query(queries.getFindCathedraById(),new Object []{id}, rowMapper)
-                .stream().findAny().orElse(null);
+    public Cathedra findCathedraById(int id) throws SQLException {
+        return jdbcTemplate.query(properties.getProperty("findCathedraByID"), new Object[]{id}, new BeanPropertyRowMapper<>(Cathedra.class))
+                .stream().findAny().orElseThrow(() -> new SQLException("Cathedra not found - " + id));
     }
 
     @Override
     public List<Cathedra> findAllCathedras() {
-        return jdbcTemplate.query(queries.getFindAllCathedras(),new BeanPropertyRowMapper<>(Cathedra.class));
+        return jdbcTemplate.query(properties.getProperty("findAll"), new BeanPropertyRowMapper<>(Cathedra.class));
     }
 }

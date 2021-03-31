@@ -1,44 +1,50 @@
 package com.gmail.sergick6690.implementation;
 
 import com.gmail.sergick6690.DAO.TeacherDAO;
-import com.gmail.sergick6690.Teacher;
-import com.gmail.sergick6690.qeries.TeacherQueries;
+import com.gmail.sergick6690.PropertyLoader;
+import com.gmail.sergick6690.university.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Properties;
 
+@Component
 public class JdbcTeacherDAO implements TeacherDAO {
-    @Autowired
     private JdbcTemplate jdbcTemplate;
-    private TeacherQueries queries = new TeacherQueries();
-    private BeanPropertyRowMapper<Teacher> rowMapper = new BeanPropertyRowMapper<>(Teacher.class);
+    private Properties properties = new PropertyLoader("Queries/teacherQueries.properties").loadProperty();
+
+    @Autowired
+    public JdbcTeacherDAO(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public void addTeacher(Teacher teacher) {
-        jdbcTemplate.update(queries.getAddTeacher(), teacher.getFirstName(), teacher.getLastNAme(), teacher.getSex()
+        jdbcTemplate.update(properties.getProperty("addTeacher"), teacher.getFirstName(), teacher.getLastNAme(), teacher.getSex()
                 , teacher.getAge(), teacher.getDegree(), teacher.getSchedule().getId());
     }
 
     @Override
     public void removeTeacherById(int id) {
-        jdbcTemplate.update(queries.getRemoveTeacherById(), id);
+        jdbcTemplate.update(properties.getProperty("removeTeacherById"), id);
     }
 
     @Override
-    public Teacher findTeacherById(int id) {
-        return jdbcTemplate.query(queries.getFindTeacherById(), new Object[]{id}, rowMapper)
-                .stream().findAny().orElse(null);
+    public Teacher findTeacherById(int id) throws SQLException {
+        return jdbcTemplate.query(properties.getProperty("findTeacherById"), new Object[]{id}, new BeanPropertyRowMapper<>(Teacher.class))
+                .stream().findAny().orElseThrow(() -> new SQLException("Teacher not found - " + id));
     }
 
     @Override
     public List<Teacher> findAllTeacher() {
-        return jdbcTemplate.query(queries.getFindTeacherById(), rowMapper);
+        return jdbcTemplate.query(properties.getProperty("findAllTeacher"), new BeanPropertyRowMapper<>(Teacher.class));
     }
 
-    @Override
-    public Integer findAllTeachersWithEqualDegree(String degree) {
-        return jdbcTemplate.queryForObject(queries.getFindAllTeachersWithEqualDegree(), Integer.class, degree);
+    public Integer findTeachersCountWithEqualDegree(String degree) {
+        return jdbcTemplate.queryForObject(properties.getProperty("findAllTeachersWithEqualDegree"), Integer.class, degree);
     }
 }

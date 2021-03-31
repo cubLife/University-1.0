@@ -1,41 +1,47 @@
 package com.gmail.sergick6690.implementation;
 
 import com.gmail.sergick6690.DAO.StudentDAO;
-import com.gmail.sergick6690.Student;
-import com.gmail.sergick6690.qeries.StudentQueries;
+import com.gmail.sergick6690.PropertyLoader;
+import com.gmail.sergick6690.university.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Properties;
 
+@Component
 public class JdbcStudentDAO implements StudentDAO {
-    @Autowired
     private JdbcTemplate jdbcTemplate;
-    private StudentQueries queries = new StudentQueries();
-    private BeanPropertyRowMapper<Student> rowMapper = new BeanPropertyRowMapper<>(Student.class);
+    private Properties properties = new PropertyLoader("Queries/studentQueries.properties").loadProperty();
 
-    @Override
-    public void addStudent(Student student) {
-        jdbcTemplate.update(queries.getAddStudent(), student.getFirstName(), student.getLastNAme()
-                , student.getSex(), student.getAge(), student.getCourse());
+    @Autowired
+    public JdbcStudentDAO(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public Student findStudentById(int id) {
-        return jdbcTemplate.query(queries.getFindStudentById(), new Object[]{id}, rowMapper)
-                .stream().findAny().orElse(null);
+    public void addStudent(Student student) {
+        jdbcTemplate.update(properties.getProperty("addStudent"), student.getFirstName(), student.getLastNAme(),
+                student.getSex(), student.getAge(), student.getCourse());
+    }
+
+    @Override
+    public Student findStudentById(int id) throws SQLException {
+        return jdbcTemplate.query(properties.getProperty("findStudentById"), new Object[]{id}, new BeanPropertyRowMapper<>(Student.class))
+                .stream().findAny().orElseThrow(() -> new SQLException("Student not found - " + id));
     }
 
     @Override
     public List<Student> findAllStudents() {
-        return jdbcTemplate.query(queries.getFindAllStudents(), rowMapper
-        );
+        return jdbcTemplate.query(properties.getProperty("findAllStudents"), new BeanPropertyRowMapper<>(Student.class));
     }
 
     @Override
     public void removeStudentById(int id) {
-        jdbcTemplate.update(queries.getRemoveStudentById(), id);
+        jdbcTemplate.update(properties.getProperty("removeStudentById"), id);
 
     }
 }

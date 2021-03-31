@@ -14,7 +14,7 @@ CREATE TABLE Faculty(
 	PRIMARY KEY (id)
 );
 CREATE TABLE Cathedra(
-	id SERIAL,
+    id INTEGER SERIAL,
 	name CHAR(35),
 	facultyId int,
 	PRIMARY KEY (id),
@@ -45,6 +45,7 @@ CREATE TABLE Audience(
 );
 CREATE TABLE Schedules(
     id SERIAL,
+   name char(15),
     PRIMARY KEY (id)
 );
 
@@ -72,8 +73,8 @@ CREATE TABLE groups(
 
 CREATE TABLE students(
 	id SERIAL,
-	firstName VARCHAR (15) NOT NULL,
-	lastName VARCHAR(15) NOT NULL,
+	firstName VARCHAR (15),
+	lastName VARCHAR(15),
 	sex VARCHAR(5),
 	age int,
 	course int,

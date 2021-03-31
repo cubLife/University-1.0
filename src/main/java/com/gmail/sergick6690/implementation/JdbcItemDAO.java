@@ -1,40 +1,48 @@
 package com.gmail.sergick6690.implementation;
 
 import com.gmail.sergick6690.DAO.ItemDAO;
-import com.gmail.sergick6690.Item;
-import com.gmail.sergick6690.qeries.ItemsQueries;
+import com.gmail.sergick6690.university.Item;
+import com.gmail.sergick6690.PropertyLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Properties;
 
+@Component
 public class JdbcItemDAO implements ItemDAO {
-    @Autowired
+
     private JdbcTemplate jdbcTemplate;
-    private ItemsQueries queries = new ItemsQueries();
-    private BeanPropertyRowMapper<Item> rowMapper = new BeanPropertyRowMapper<>(Item.class);
+    private Properties properties = new PropertyLoader("Queries/itemQueries.properties").loadProperty();
+
+    @Autowired
+    public JdbcItemDAO(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+    }
 
     @Override
     public void addItem(Item item) {
-        jdbcTemplate.update(queries.getAddItem(), item.getDate(), item.getDuration(), item.getSubject().getId(),
-                item.getAudience().getId());
+        jdbcTemplate.update(properties.getProperty("addItem"), item.getDate(), item.getDuration(), item.getSubject().getId(),
+                item.getAudience().getId(), item.getSchedule().getId());
 
     }
 
     @Override
-    public Item findItemById(int id) {
-        return jdbcTemplate.query(queries.getFindItemById(), new Object[]{id}, rowMapper)
-                .stream().findAny().orElse(null);
+    public Item findItemById(int id) throws SQLException {
+        return jdbcTemplate.query(properties.getProperty("findItemById"), new Object[]{id}, new BeanPropertyRowMapper<>(Item.class))
+                .stream().findAny().orElseThrow(() -> new SQLException("Item not found - " + id));
     }
 
     @Override
     public List<Item> findAllItems() {
-        return jdbcTemplate.query(queries.getFindAllItems(), rowMapper);
+        return jdbcTemplate.query(properties.getProperty("findAllItems"), new BeanPropertyRowMapper<>(Item.class));
     }
 
     @Override
     public void removeItemsById(int id) {
-        jdbcTemplate.update(queries.getRemoveItemsById(), id);
+        jdbcTemplate.update(properties.getProperty("removeItemsById"), id);
     }
 }

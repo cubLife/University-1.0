@@ -1,4 +1,4 @@
-package com.gmail.sergick6690;
+package com.gmail.sergick6690.university;
 
 import java.util.List;
 import java.util.Objects;

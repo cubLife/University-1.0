@@ -1,38 +1,45 @@
 package com.gmail.sergick6690.implementation;
 
 import com.gmail.sergick6690.DAO.FacultyDAO;
-import com.gmail.sergick6690.Faculty;
-import com.gmail.sergick6690.qeries.FacultyQueries;
+import com.gmail.sergick6690.university.Faculty;
+import com.gmail.sergick6690.PropertyLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Properties;
 
+@Component
 public class JdbcFacultyDAO implements FacultyDAO {
-    @Autowired
     private JdbcTemplate jdbcTemplate;
-    private FacultyQueries queries = new FacultyQueries();
-    private BeanPropertyRowMapper<Faculty> rowMapper = new BeanPropertyRowMapper<>(Faculty.class);
+    private Properties properties = new PropertyLoader("Queries/facultyQueries.properties").loadProperty();
 
-    @Override
-    public void addFaculty(Faculty faculty) {
-        jdbcTemplate.update(queries.getAddFaculty(), faculty.getName());
+    @Autowired
+    public JdbcFacultyDAO(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public Faculty findFacultyById(int id) {
-        return jdbcTemplate.query(queries.getFindFacultyById(), new Object[]{id}, rowMapper)
-                .stream().findAny().orElse(null);
+    public void addFaculty(Faculty faculty) {
+        jdbcTemplate.update(properties.getProperty("addFaculty"), faculty.getName());
+    }
+
+    @Override
+    public Faculty findFacultyById(int id) throws SQLException {
+        return jdbcTemplate.query(properties.getProperty("findFacultyById"), new Object[]{id}, new BeanPropertyRowMapper<>(Faculty.class))
+                .stream().findAny().orElseThrow(() -> new SQLException("Faculty not found - " + id));
     }
 
     @Override
     public List<Faculty> findAllFaculties() {
-        return jdbcTemplate.query(queries.getFindAllFaculties(), rowMapper);
+        return jdbcTemplate.query(properties.getProperty("findAllFaculties"), new BeanPropertyRowMapper<>(Faculty.class));
     }
 
     @Override
     public void removeFacultyById(int id) {
-        jdbcTemplate.update(queries.getRemoveFacultyById(), id);
+        jdbcTemplate.update(properties.getProperty("removeFacultyById"), id);
     }
 }

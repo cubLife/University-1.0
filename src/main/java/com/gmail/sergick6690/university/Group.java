@@ -1,4 +1,4 @@
-package com.gmail.sergick6690;
+package com.gmail.sergick6690.university;
 
 import java.util.List;
 import java.util.Objects;
@@ -7,13 +7,21 @@ public class Group {
     private int id;
     private String name;
     private List<Student> students;
-    private Schedule schedule;
+    private int scheduleId;
+    private int cathedraId;
 
-    public Group(int id, String name, List<Student> students, Schedule schedule) {
+    public Group(int id, String name, List<Student> students, int scheduleId, int cathedraId) {
         this.id = id;
         this.name = name;
         this.students = students;
-        this.schedule = schedule;
+        this.scheduleId = scheduleId;
+        this.cathedraId = cathedraId;
+    }
+
+    public Group(String name, int scheduleId, int cathedraId) {
+        this.name = name;
+        this.scheduleId = scheduleId;
+        this.cathedraId = cathedraId;
     }
 
     public Group() {
@@ -43,12 +51,20 @@ public class Group {
         this.students = students;
     }
 
-    public Schedule getSchedule() {
-        return schedule;
+    public int getScheduleId() {
+        return scheduleId;
     }
 
-    public void setSchedule(Schedule schedule) {
-        this.schedule = schedule;
+    public void setScheduleId(int scheduleId) {
+        this.scheduleId = scheduleId;
+    }
+
+    public int getCathedraId() {
+        return cathedraId;
+    }
+
+    public void setCathedraId(int cathedraId) {
+        this.cathedraId = cathedraId;
     }
 
     @Override
@@ -57,14 +73,15 @@ public class Group {
         if (!(o instanceof Group)) return false;
         Group group = (Group) o;
         return getId() == group.getId() &&
+                getScheduleId() == group.getScheduleId() &&
+                getCathedraId() == group.getCathedraId() &&
                 Objects.equals(getName(), group.getName()) &&
-                Objects.equals(getStudents(), group.getStudents()) &&
-                Objects.equals(getSchedule(), group.getSchedule());
+                Objects.equals(getStudents(), group.getStudents());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getStudents(), getSchedule());
+        return Objects.hash(getId(), getName(), getStudents(), getScheduleId(), getCathedraId());
     }
 
     @Override
@@ -73,8 +90,8 @@ public class Group {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", students=" + students +
-                ", schedule=" + schedule +
+                ", scheduleId=" + scheduleId +
+                ", cathedraId=" + cathedraId +
                 '}';
     }
-
 }

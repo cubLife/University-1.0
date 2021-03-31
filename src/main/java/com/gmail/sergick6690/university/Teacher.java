@@ -1,4 +1,4 @@
-package com.gmail.sergick6690;
+package com.gmail.sergick6690.university;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,6 +13,9 @@ public class Teacher extends Human {
         this.degree = degree;
         this.schedule = schedule;
         this.subjects = subjects;
+    }
+
+    public Teacher() {
     }
 
     public String getDegree() {

@@ -1,9 +1,9 @@
-package com.gmail.sergick6690;
+package com.gmail.sergick6690.university;
 
 import java.util.Objects;
 
 public class Student extends Human {
-    private  int groupID;
+    private int groupID;
     private int course;
 
     public Student(int id, String firstName, String lastNAme, String sex, int age, int course) {
