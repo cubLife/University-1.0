@@ -18,49 +18,50 @@ class JdbcScheduleDAOTest {
     private AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(SpringConfig.class);
     private TablesCreator creator = (TablesCreator) applicationContext.getBean("tablesCreator");
     private ScheduleDAO scheduleDAO = applicationContext.getBean(JdbcScheduleDAO.class);
+    private static final String TEST = "test";
 
     @BeforeEach
     void createTables() throws IOException, URISyntaxException {
-        creator.createTables();
+        creator.createTables("Script.sql");
     }
 
 
     @Test
     void shouldAddSchedule() {
-        scheduleDAO.addSchedule(new Schedule());
-        int expected = 1;
-        int actual = scheduleDAO.findAllSchedules().get(0).getId();
+        scheduleDAO.add(new Schedule(1, TEST, null));
+        Schedule expected = new Schedule(1, TEST, null);
+        Schedule actual = scheduleDAO.findAll().get(0);
         assertEquals(expected, actual);
     }
 
     @Test
-    void shouldFindScheduleByID() throws SQLException {
+    void shouldFindScheduleByID() throws Exception {
         for (int i = 0; i < 5; i++) {
-            scheduleDAO.addSchedule(new Schedule());
+            scheduleDAO.add(new Schedule(1, TEST, null));
         }
-        int expected = 3;
-        int actual = scheduleDAO.findScheduleByID(3).getId();
+        Schedule expected = new Schedule(3, TEST, null);
+        Schedule actual = scheduleDAO.findById(3);
         assertEquals(expected, actual);
     }
 
     @Test
     void findAllSchedules() {
         for (int i = 0; i < 5; i++) {
-            scheduleDAO.addSchedule(new Schedule());
+            scheduleDAO.add(new Schedule());
         }
         int expected = 5;
-        int actual = scheduleDAO.findAllSchedules().size();
+        int actual = scheduleDAO.findAll().size();
         assertEquals(expected, actual);
     }
 
     @Test
     void removeScheduleById() {
         for (int i = 0; i < 5; i++) {
-            scheduleDAO.addSchedule(new Schedule());
+            scheduleDAO.add(new Schedule());
         }
-        scheduleDAO.removeScheduleById(1);
+        scheduleDAO.removeById(1);
         int expected = 4;
-        int actual = scheduleDAO.findAllSchedules().size();
+        int actual = scheduleDAO.findAll().size();
         assertEquals(expected, actual);
     }
 }

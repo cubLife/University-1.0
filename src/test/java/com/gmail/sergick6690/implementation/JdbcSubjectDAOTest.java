@@ -27,32 +27,32 @@ class JdbcSubjectDAOTest {
 
     @BeforeEach
     void createTables() throws IOException, URISyntaxException {
-        creator.createTables();
+        creator.createTables("Script.sql");
     }
 
     @Test
     void addSubject() {
         Schedule schedule = new Schedule(1, TEST, null);
         Teacher teacher = new Teacher(1, TEST, TEST, TEST, 0, TEST, schedule, null);
-        scheduleDAO.addSchedule(schedule);
-        teacherDAO.addTeacher(teacher);
-        subjectDAO.addSubject(new Subject(1, TEST, 1, TEST));
-        int expected = 1;
-        int actual = subjectDAO.findAllSubjects().get(0).getId();
+        scheduleDAO.add(schedule);
+        teacherDAO.add(teacher);
+        subjectDAO.add(new Subject(1, TEST, 1, TEST));
+        Subject expected =new Subject(1, TEST, 1, TEST) ;
+        Subject actual = subjectDAO.findAll().get(0);
         assertEquals(expected, actual);
     }
 
     @Test
-    void findSubjectById() throws SQLException {
+    void findSubjectById() throws Exception {
         Schedule schedule = new Schedule(1, TEST, null);
         Teacher teacher = new Teacher(1, TEST, TEST, TEST, 0, TEST, schedule, null);
-        scheduleDAO.addSchedule(schedule);
-        teacherDAO.addTeacher(teacher);
+        scheduleDAO.add(schedule);
+        teacherDAO.add(teacher);
         for (int i = 0; i < 5; i++) {
-            subjectDAO.addSubject(new Subject(1, TEST, 1, TEST));
+            subjectDAO.add(new Subject(1, TEST, 1, TEST));
         }
-        int expected = 4;
-        int actual = subjectDAO.findSubjectById(4).getId();
+        Subject expected =new Subject(4, TEST, 1, TEST) ;
+        Subject actual = subjectDAO.findById(4);
         assertEquals(expected, actual);
     }
 
@@ -60,13 +60,13 @@ class JdbcSubjectDAOTest {
     void findAllSubjects() {
         Schedule schedule = new Schedule(1, TEST, null);
         Teacher teacher = new Teacher(1, TEST, TEST, TEST, 0, TEST, schedule, null);
-        scheduleDAO.addSchedule(schedule);
-        teacherDAO.addTeacher(teacher);
+        scheduleDAO.add(schedule);
+        teacherDAO.add(teacher);
         for (int i = 0; i < 5; i++) {
-            subjectDAO.addSubject(new Subject(1, TEST, 1, TEST));
+            subjectDAO.add(new Subject(1, TEST, 1, TEST));
         }
         int expected = 5;
-        int actual = subjectDAO.findAllSubjects().size();
+        int actual = subjectDAO.findAll().size();
         assertEquals(expected, actual);
     }
 
@@ -74,14 +74,14 @@ class JdbcSubjectDAOTest {
     void removeSubjectById() {
         Schedule schedule = new Schedule(1, TEST, null);
         Teacher teacher = new Teacher(1, TEST, TEST, TEST, 0, TEST, schedule, null);
-        scheduleDAO.addSchedule(schedule);
-        teacherDAO.addTeacher(teacher);
+        scheduleDAO.add(schedule);
+        teacherDAO.add(teacher);
         for (int i = 0; i < 5; i++) {
-            subjectDAO.addSubject(new Subject(1, TEST, 1, TEST));
+            subjectDAO.add(new Subject(1, TEST, 1, TEST));
         }
-        subjectDAO.removeSubjectById(1);
+        subjectDAO.removeById(1);
         int expected = 4;
-        int actual = subjectDAO.findAllSubjects().size();
+        int actual = subjectDAO.findAll().size();
         assertEquals(expected, actual);
     }
 
@@ -92,14 +92,14 @@ class JdbcSubjectDAOTest {
         Subject subject = new Subject(1, TEST, 1, TEST);
         Audience audience = new Audience(1, 0);
         Audience audience1 = new Audience(2, 1);
-        teacherDAO.addTeacher(teacher);
-        scheduleDAO.addSchedule(schedule);
-        subjectDAO.addSubject(subject);
-        audienceDAO.addAudience(audience);
-        audienceDAO.addAudience(audience1);
+        teacherDAO.add(teacher);
+        scheduleDAO.add(schedule);
+        subjectDAO.add(subject);
+        audienceDAO.add(audience);
+        audienceDAO.add(audience1);
         for (int i = 0; i < 5; i++) {
-            itemDAO.addItem(new Item(subject, new Date(), audience, 1, schedule));
-            itemDAO.addItem(new Item(subject, new Date(), audience1, 1, schedule));
+            itemDAO.add(new Item(subject, new Date(), audience, 1, schedule));
+            itemDAO.add(new Item(subject, new Date(), audience1, 1, schedule));
         }
         int expected = 5;
         int actual = subjectDAO.findAllSubjectRelatedToAudience(2).size();

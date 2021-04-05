@@ -19,48 +19,49 @@ class JdbcStudentDAOTest {
     private AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(SpringConfig.class);
     private TablesCreator creator = (TablesCreator) applicationContext.getBean("tablesCreator");
     private StudentDAO studentDAO = applicationContext.getBean(JdbcStudentDAO.class);
+    private static final String TEST = "test";
 
     @BeforeEach
     void createTables() throws IOException, URISyntaxException {
-        creator.createTables();
+        creator.createTables("Script.sql");
     }
 
     @Test
     void shouldAddStudent() {
-        studentDAO.addStudent(new Student());
-        int expected = 1;
-        int actual = studentDAO.findAllStudents().get(0).getId();
+        studentDAO.add(new Student(1,TEST,TEST,TEST, 0 , 0));
+        Student expected = new Student(1,TEST,TEST,TEST, 0 , 0);
+        Student actual = studentDAO.findAll().get(0);
         assertEquals(expected, actual);
     }
 
     @Test
-    void findStudentById() throws SQLException {
+    void findStudentById() throws Exception {
         for (int i = 0; i < 5; i++) {
-            studentDAO.addStudent(new Student());
+            studentDAO.add(new Student(1,TEST,TEST,TEST, 0 , 0));
         }
-        int expected = 3;
-        int actual = studentDAO.findStudentById(3).getId();
+        Student expected = new Student(3,TEST,TEST,TEST, 0 , 0);
+        Student actual = studentDAO.findById(3);
         assertEquals(expected, actual);
     }
 
     @Test
     void findAllStudents() {
         for (int i = 0; i < 5; i++) {
-            studentDAO.addStudent(new Student());
+            studentDAO.add(new Student());
         }
         int expected = 5;
-        int actual = studentDAO.findAllStudents().size();
+        int actual = studentDAO.findAll().size();
         assertEquals(expected, actual);
     }
 
     @Test
     void removeStudentById() {
         for (int i = 0; i < 5; i++) {
-            studentDAO.addStudent(new Student());
+            studentDAO.add(new Student());
         }
-        studentDAO.removeStudentById(1);
+        studentDAO.removeById(1);
         int expected = 4;
-        int actual = studentDAO.findAllStudents().size();
+        int actual = studentDAO.findAll().size();
         assertEquals(expected, actual);
     }
 }

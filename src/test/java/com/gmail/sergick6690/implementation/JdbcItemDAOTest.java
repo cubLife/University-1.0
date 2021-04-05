@@ -27,7 +27,7 @@ class JdbcItemDAOTest {
 
     @BeforeEach
     void createTables() throws IOException, URISyntaxException {
-        creator.createTables();
+        creator.createTables("Script.sql");
     }
 
     @Test
@@ -36,31 +36,31 @@ class JdbcItemDAOTest {
         Teacher teacher = new Teacher(1, TEST, TEST, TEST, 0, TEST, schedule, null);
         Subject subject = new Subject(1, TEST, 1, TEST);
         Audience audience = new Audience(1, 0);
-        teacherDAO.addTeacher(teacher);
-        scheduleDAO.addSchedule(schedule);
-        subjectDAO.addSubject(subject);
-        audienceDAO.addAudience(audience);
-        itemDAO.addItem(new Item(subject, new Date(), audience, 1, schedule));
-        int expected = 1;
-        int actual = itemDAO.findAllItems().get(0).getId();
+        teacherDAO.add(teacher);
+        scheduleDAO.add(schedule);
+        subjectDAO.add(subject);
+        audienceDAO.add(audience);
+        itemDAO.add(new Item(subject, null, audience, 1, schedule));
+        Item expected = new Item(1,null, null, null, 1, null);
+        Item actual = itemDAO.findAll().get(0);
         assertEquals(expected, actual);
     }
 
     @Test
-    void shouldFindItemById() throws SQLException {
+    void shouldFindItemById() throws Exception {
         Schedule schedule = new Schedule(1, TEST, null);
         Teacher teacher = new Teacher(1, TEST, TEST, TEST, 0, TEST, schedule, null);
         Subject subject = new Subject(1, TEST, 1, TEST);
         Audience audience = new Audience(1, 0);
-        teacherDAO.addTeacher(teacher);
-        scheduleDAO.addSchedule(schedule);
-        subjectDAO.addSubject(subject);
-        audienceDAO.addAudience(audience);
+        teacherDAO.add(teacher);
+        scheduleDAO.add(schedule);
+        subjectDAO.add(subject);
+        audienceDAO.add(audience);
         for (int i = 0; i < 5; i++) {
-            itemDAO.addItem(new Item(subject, new Date(), audience, 1, schedule));
+            itemDAO.add(new Item(subject, null, audience, 1, schedule));
         }
-        int expected = 3;
-        int actual = itemDAO.findItemById(3).getId();
+        Item expected = new Item(3,null, null, null, 1, null);
+        Item actual = itemDAO.findById(3);
         assertEquals(expected, actual);
     }
 
@@ -70,15 +70,15 @@ class JdbcItemDAOTest {
         Teacher teacher = new Teacher(1, TEST, TEST, TEST, 0, TEST, schedule, null);
         Subject subject = new Subject(1, TEST, 1, TEST);
         Audience audience = new Audience(1, 0);
-        teacherDAO.addTeacher(teacher);
-        scheduleDAO.addSchedule(schedule);
-        subjectDAO.addSubject(subject);
-        audienceDAO.addAudience(audience);
+        teacherDAO.add(teacher);
+        scheduleDAO.add(schedule);
+        subjectDAO.add(subject);
+        audienceDAO.add(audience);
         for (int i = 0; i < 5; i++) {
-            itemDAO.addItem(new Item(subject, new Date(), audience, 1, schedule));
+            itemDAO.add(new Item(subject, new Date(), audience, 1, schedule));
         }
         int expected = 5;
-        int actual = itemDAO.findAllItems().size();
+        int actual = itemDAO.findAll().size();
         assertEquals(expected, actual);
     }
 
@@ -88,16 +88,16 @@ class JdbcItemDAOTest {
         Teacher teacher = new Teacher(1, TEST, TEST, TEST, 0, TEST, schedule, null);
         Subject subject = new Subject(1, TEST, 1, TEST);
         Audience audience = new Audience(1, 0);
-        teacherDAO.addTeacher(teacher);
-        scheduleDAO.addSchedule(schedule);
-        subjectDAO.addSubject(subject);
-        audienceDAO.addAudience(audience);
+        teacherDAO.add(teacher);
+        scheduleDAO.add(schedule);
+        subjectDAO.add(subject);
+        audienceDAO.add(audience);
         for (int i = 0; i < 5; i++) {
-            itemDAO.addItem(new Item(subject, new Date(), audience, 1, schedule));
+            itemDAO.add(new Item(subject, new Date(), audience, 1, schedule));
         }
-        itemDAO.removeItemsById(1);
+        itemDAO.removeById(1);
         int expected = 4;
-        int actual = itemDAO.findAllItems().size();
+        int actual = itemDAO.findAll().size();
         assertEquals(expected, actual);
     }
 }

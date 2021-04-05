@@ -23,27 +23,27 @@ public class JdbcTeacherDAO implements TeacherDAO {
     }
 
     @Override
-    public void addTeacher(Teacher teacher) {
+    public void add(Teacher teacher) {
         jdbcTemplate.update(properties.getProperty("addTeacher"), teacher.getFirstName(), teacher.getLastNAme(), teacher.getSex()
                 , teacher.getAge(), teacher.getDegree(), teacher.getSchedule().getId());
     }
 
     @Override
-    public void removeTeacherById(int id) {
+    public void removeById(int id) {
         jdbcTemplate.update(properties.getProperty("removeTeacherById"), id);
     }
 
     @Override
-    public Teacher findTeacherById(int id) throws SQLException {
+    public Teacher findById(int id) throws SQLException {
         return jdbcTemplate.query(properties.getProperty("findTeacherById"), new Object[]{id}, new BeanPropertyRowMapper<>(Teacher.class))
                 .stream().findAny().orElseThrow(() -> new SQLException("Teacher not found - " + id));
     }
 
     @Override
-    public List<Teacher> findAllTeacher() {
+    public List<Teacher> findAll() {
         return jdbcTemplate.query(properties.getProperty("findAllTeacher"), new BeanPropertyRowMapper<>(Teacher.class));
     }
-
+    @Override
     public Integer findTeachersCountWithEqualDegree(String degree) {
         return jdbcTemplate.queryForObject(properties.getProperty("findAllTeachersWithEqualDegree"), Integer.class, degree);
     }

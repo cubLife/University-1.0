@@ -26,6 +26,6 @@ class TablesCreatorTest {
 
     @Test
     void createTables() throws IOException, URISyntaxException {
-        doNothing().when(creator).createTables();
+        doNothing().when(creator).createTables("Script.sql");
     }
 }

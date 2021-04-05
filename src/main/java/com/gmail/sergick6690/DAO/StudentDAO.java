@@ -5,12 +5,24 @@ import com.gmail.sergick6690.university.Student;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface StudentDAO {
-    public void addStudent(Student student);
+public interface StudentDAO extends CRUD<Student> {
+    @Override
+    default void add(Student obj) {
 
-    public Student findStudentById(int id) throws SQLException;
+    }
 
-    public List<Student> findAllStudents();
+    @Override
+    default Student findById(int id) throws Exception {
+        return null;
+    }
 
-    public void removeStudentById(int id);
+    @Override
+    default List<Student> findAll() {
+        return null;
+    }
+
+    @Override
+    default void removeById(int id) {
+
+    }
 }

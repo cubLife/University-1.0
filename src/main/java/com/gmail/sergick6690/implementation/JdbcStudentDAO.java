@@ -23,24 +23,24 @@ public class JdbcStudentDAO implements StudentDAO {
     }
 
     @Override
-    public void addStudent(Student student) {
+    public void add(Student student) {
         jdbcTemplate.update(properties.getProperty("addStudent"), student.getFirstName(), student.getLastNAme(),
                 student.getSex(), student.getAge(), student.getCourse());
     }
 
     @Override
-    public Student findStudentById(int id) throws SQLException {
+    public Student findById(int id) throws SQLException {
         return jdbcTemplate.query(properties.getProperty("findStudentById"), new Object[]{id}, new BeanPropertyRowMapper<>(Student.class))
                 .stream().findAny().orElseThrow(() -> new SQLException("Student not found - " + id));
     }
 
     @Override
-    public List<Student> findAllStudents() {
+    public List<Student> findAll() {
         return jdbcTemplate.query(properties.getProperty("findAllStudents"), new BeanPropertyRowMapper<>(Student.class));
     }
 
     @Override
-    public void removeStudentById(int id) {
+    public void removeById(int id) {
         jdbcTemplate.update(properties.getProperty("removeStudentById"), id);
 
     }

@@ -1,7 +1,8 @@
 package com.gmail.sergick6690.university;
 
-import java.util.Objects;
+import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 public class Audience {
     private int id;
     private int number;

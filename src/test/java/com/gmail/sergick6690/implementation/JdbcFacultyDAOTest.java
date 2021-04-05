@@ -18,48 +18,49 @@ class JdbcFacultyDAOTest {
     private AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(SpringConfig.class);
     private TablesCreator creator= (TablesCreator) applicationContext.getBean("tablesCreator");
     private FacultyDAO facultyDAO =applicationContext.getBean(JdbcFacultyDAO.class);
+    private static final String TEST="test";
 
     @BeforeEach
     void createTables() throws IOException, URISyntaxException {
-        creator.createTables();
+        creator.createTables("Script.sql");
     }
 
     @Test
     void shouldAddFaculty() {
-        facultyDAO.addFaculty(new Faculty());
-        int expected=1;
-        int actual= facultyDAO.findAllFaculties().get(0).getId();
+        facultyDAO.add(new Faculty(1,TEST,null));
+        Faculty expected = new Faculty(1,TEST, null);
+        Faculty actual= facultyDAO.findAll().get(0);
         assertEquals(expected,actual);
     }
 
     @Test
-    void shouldFindFacultyById() throws SQLException {
+    void shouldFindFacultyById() throws Exception {
         for (int i=0;i<5;i++) {
-            facultyDAO.addFaculty(new Faculty());
+            facultyDAO.add(new Faculty(1,TEST,null));
         }
-        int expected=4;
-       int actual= facultyDAO.findFacultyById(4).getId();
+        Faculty expected= (new Faculty(4,TEST,null));
+       Faculty actual= facultyDAO.findById(4);
         assertEquals(expected,actual);
     }
 
     @Test
     void shouldFindAllFaculties() {
         for (int i=0;i<5;i++) {
-            facultyDAO.addFaculty(new Faculty());
+            facultyDAO.add(new Faculty());
         }
         int expected=5;
-        int actual= facultyDAO.findAllFaculties().size();
+        int actual= facultyDAO.findAll().size();
         assertEquals(expected,actual);
     }
 
     @Test
     void shouldRemoveFacultyById() {
         for (int i=0;i<5;i++) {
-            facultyDAO.addFaculty(new Faculty());
+            facultyDAO.add(new Faculty());
         }
-        facultyDAO.removeFacultyById(1);
+        facultyDAO.removeById(1);
         int expected=4;
-        int actual= facultyDAO.findAllFaculties().size();
+        int actual= facultyDAO.findAll().size();
         assertEquals(expected,actual);
     }
 }

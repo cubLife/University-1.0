@@ -23,24 +23,24 @@ public class JdbcAudienceDAO implements AudienceDAO {
     }
 
     @Override
-    public void addAudience(Audience audience) {
+    public void add(Audience audience) {
         jdbcTemplate.update(properties.getProperty("addAudience"), audience.getNumber());
 
     }
 
     @Override
-    public Audience findAudienceById(int id) throws SQLException {
+    public Audience findById(int id) throws SQLException {
         return jdbcTemplate.query(properties.getProperty("findAudienceById"), new Object[]{id}, new BeanPropertyRowMapper<>(Audience.class))
                 .stream().findAny().orElseThrow(() -> new SQLException("Audience not found - " + id));
     }
 
     @Override
-    public List<Audience> findAllAudience() {
+    public List<Audience> findAll() {
         return jdbcTemplate.query(properties.getProperty("findAllAudience"), new BeanPropertyRowMapper<>(Audience.class));
     }
 
     @Override
-    public void removeAudienceById(int id) {
+    public void removeById(int id) {
         jdbcTemplate.update(properties.getProperty("removeAudience"), id);
     }
 

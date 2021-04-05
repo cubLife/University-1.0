@@ -26,62 +26,62 @@ class JdbcTeacherDAOTest {
 
     @BeforeEach
     void createTables() throws IOException, URISyntaxException {
-        creator.createTables();
+        creator.createTables("Script.sql");
     }
 
     @Test
     void shouldAddTeacher() {
         Schedule schedule = new Schedule(1, TEST, null);
-        scheduleDAO.addSchedule(schedule);
-        teacherDAO.addTeacher(new Teacher(1, TEST, TEST, TEST, 0, TEST, schedule, null));
-        int expected = 1;
-        int actual = teacherDAO.findAllTeacher().get(0).getId();
+        scheduleDAO.add(schedule);
+        teacherDAO.add(new Teacher(1, TEST, TEST, TEST, 0, TEST, schedule, null));
+        Teacher expected =new Teacher(1, TEST, TEST, TEST, 0, TEST, null, null);
+        Teacher actual = teacherDAO.findAll().get(0);
         assertEquals(expected, actual);
     }
 
     @Test
     void shouldRemoveTeacherById() {
         Schedule schedule = new Schedule(1, TEST, null);
-        scheduleDAO.addSchedule(schedule);
+        scheduleDAO.add(schedule);
         for (int i = 0; i < 5; i++) {
-            teacherDAO.addTeacher(new Teacher(1, TEST, TEST, TEST, 0, TEST, schedule, null));
+            teacherDAO.add(new Teacher(1, TEST, TEST, TEST, 0, TEST, schedule, null));
         }
         int expected = 5;
-        int actual = teacherDAO.findAllTeacher().size();
+        int actual = teacherDAO.findAll().size();
         assertEquals(expected, actual);
     }
 
     @Test
-    void shouldFindTeacherById() throws SQLException {
+    void shouldFindTeacherById() throws Exception {
         Schedule schedule = new Schedule(1, TEST, null);
-        scheduleDAO.addSchedule(schedule);
+        scheduleDAO.add(schedule);
         for (int i = 0; i < 5; i++) {
-            teacherDAO.addTeacher(new Teacher(1, TEST, TEST, TEST, 0, TEST, schedule, null));
+            teacherDAO.add(new Teacher(1, TEST, TEST, TEST, 0, TEST, schedule, null));
         }
-        int expected = 4;
-        int actual = teacherDAO.findTeacherById(4).getId();
+        Teacher expected =new Teacher(4, TEST, TEST, TEST, 0, TEST, null, null);
+        Teacher actual = teacherDAO.findById(4);
         assertEquals(expected, actual);
     }
 
     @Test
     void shouldFindAllTeacher() {
         Schedule schedule = new Schedule(1, TEST, null);
-        scheduleDAO.addSchedule(schedule);
+        scheduleDAO.add(schedule);
         for (int i = 0; i < 5; i++) {
-            teacherDAO.addTeacher(new Teacher(1, TEST, TEST, TEST, 0, TEST, schedule, null));
+            teacherDAO.add(new Teacher(1, TEST, TEST, TEST, 0, TEST, schedule, null));
         }
         int expected = 5;
-        int actual = teacherDAO.findAllTeacher().size();
+        int actual = teacherDAO.findAll().size();
         assertEquals(expected, actual);
     }
 
     @Test
     void shouldFindAllTeachersWithEqualDegree() {
         Schedule schedule = new Schedule(1, TEST, null);
-        scheduleDAO.addSchedule(schedule);
+        scheduleDAO.add(schedule);
         for (int i = 0; i < 5; i++) {
-            teacherDAO.addTeacher(new Teacher(1, TEST, TEST, TEST, 0, TEST, schedule, null));
-            teacherDAO.addTeacher(new Teacher(1, TEST, TEST, TEST, 0, "", schedule, null));
+            teacherDAO.add(new Teacher(1, TEST, TEST, TEST, 0, TEST, schedule, null));
+            teacherDAO.add(new Teacher(1, TEST, TEST, TEST, 0, "", schedule, null));
         }
         int expected = 5;
         int actual = teacherDAO.findTeachersCountWithEqualDegree(TEST);

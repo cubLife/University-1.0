@@ -19,13 +19,11 @@ import java.util.Properties;
 @Configuration
 @ComponentScan("com.gmail.sergick6690")
 public class SpringConfig {
-    private final ApplicationContext applicationContext;
-    private ConnectionFactory connectionFactory = new ConnectionFactory();
-    private PropertyLoader propertyLoader = new PropertyLoader("Queries/PosdgreSQL.properties");
+    private ConnectionFactory connectionFactory;
 
     @Autowired
-    public SpringConfig(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
+    public SpringConfig(ConnectionFactory connectionFactory) {
+        this.connectionFactory=connectionFactory;
     }
 
     @Bean
@@ -42,11 +40,6 @@ public class SpringConfig {
     @Bean
     public JdbcTemplate jdbcTemplate() throws SQLException {
         return new JdbcTemplate(dataSource());
-    }
-
-    @Bean
-    TablesCreator tablesCreator() {
-        return new TablesCreator("Script.sql");
     }
 
 }

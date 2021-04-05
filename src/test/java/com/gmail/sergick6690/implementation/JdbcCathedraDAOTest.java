@@ -18,49 +18,50 @@ class JdbcCathedraDAOTest {
   private   AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(SpringConfig.class);
    private TablesCreator creator= (TablesCreator) applicationContext.getBean("tablesCreator");
     private CathedraDAO cathedraDAO =applicationContext.getBean(JdbcCathedraDAO.class);
+    private  final String TEST="test";
 
     @BeforeEach
     void createTables() throws IOException, URISyntaxException {
-        creator.createTables();
+        creator.createTables("Script.sql");
     }
 
     @Test
     void shouldAddCathedra() {
-        cathedraDAO.addCathedra(new Cathedra());
-        int expected = 1;
-        int actual = cathedraDAO.findAllCathedras().get(0).getId();
+        cathedraDAO.add(new Cathedra(1,TEST,null));
+        Cathedra expected = new Cathedra(1,TEST,null);
+        Cathedra actual = cathedraDAO.findAll().get(0);
         assertEquals(expected,actual);
     }
 
     @Test
     void shouldRremoveCathedraById() {
         for (int i=0;i<5;i++){
-            cathedraDAO.addCathedra(new Cathedra());
+            cathedraDAO.add(new Cathedra());
         }
-        cathedraDAO.removeCathedraById(1);
+        cathedraDAO.removeById(1);
         int expected =4;
-        int actual = cathedraDAO.findAllCathedras().size();
+        int actual = cathedraDAO.findAll().size();
         assertEquals(expected,actual);
 
     }
 
     @Test
-    void shouldFindCathedraById() throws SQLException {
+    void shouldFindCathedraById() throws Exception {
         for (int i=0;i<5;i++){
-            cathedraDAO.addCathedra(new Cathedra());
+            cathedraDAO.add(new Cathedra(1,TEST,null));
         }
-        int expected =4;
-        int actual = cathedraDAO.findCathedraById(4).getId();
+        Cathedra expected = new Cathedra(4,TEST,null);
+        Cathedra actual = cathedraDAO.findById(4);
         assertEquals(expected,actual);
     }
 
     @Test
     void shouldFindAllCathedras() {
         for (int i=0;i<5;i++){
-            cathedraDAO.addCathedra(new Cathedra());
+            cathedraDAO.add(new Cathedra());
         }
         int expected =5;
-        int actual = cathedraDAO.findAllCathedras().size();
+        int actual = cathedraDAO.findAll().size();
         assertEquals(expected,actual);
     }
 }

@@ -23,24 +23,23 @@ public class JdbcScheduleDAO implements ScheduleDAO {
     }
 
     @Override
-    public void addSchedule(Schedule schedule) {
+    public void add(Schedule schedule) {
         jdbcTemplate.update(properties.getProperty("addSchedule"), schedule.getName());
 
     }
 
-    @Override
-    public Schedule findScheduleByID(int id) throws SQLException {
+    public Schedule findById(int id) throws SQLException {
         return jdbcTemplate.query(properties.getProperty("findScheduleByID"), new Object[]{id}, new BeanPropertyRowMapper<>(Schedule.class))
                 .stream().findAny().orElseThrow(() -> new SQLException("Schedule not found - " + id));
     }
 
     @Override
-    public List<Schedule> findAllSchedules() {
+    public List<Schedule> findAll() {
         return jdbcTemplate.query(properties.getProperty("findAllSchedules"), new BeanPropertyRowMapper<>(Schedule.class));
     }
 
     @Override
-    public void removeScheduleById(int id) {
+    public void removeById(int id) {
         jdbcTemplate.update(properties.getProperty("removeScheduleById"), id);
     }
 }

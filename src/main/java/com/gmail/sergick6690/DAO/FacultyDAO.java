@@ -5,12 +5,24 @@ import com.gmail.sergick6690.university.Faculty;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface FacultyDAO {
-    public void addFaculty(Faculty faculty);
+public interface FacultyDAO extends CRUD<Faculty> {
+    @Override
+    default void add(Faculty obj) {
 
-    public Faculty findFacultyById(int id) throws SQLException;
+    }
 
-    public List<Faculty> findAllFaculties();
+    @Override
+    default Faculty findById(int id) throws Exception {
+        return null;
+    }
 
-    public void removeFacultyById(int id);
+    @Override
+    default List<Faculty> findAll() {
+        return null;
+    }
+
+    @Override
+    default void removeById(int id) {
+
+    }
 }

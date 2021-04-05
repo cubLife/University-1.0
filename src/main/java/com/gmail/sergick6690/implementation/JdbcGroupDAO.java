@@ -23,23 +23,23 @@ public class JdbcGroupDAO implements GroupDAO {
     }
 
     @Override
-    public void addGroup(Group group) {
+    public void add(Group group) {
         jdbcTemplate.update(properties.getProperty("addGroup"), group.getName(), group.getScheduleId(), group.getCathedraId());
     }
 
     @Override
-    public Group findGroupById(int id) throws SQLException {
+    public Group findById(int id) throws SQLException {
         return jdbcTemplate.query(properties.getProperty("findGroupById"), new Object[]{id}, new BeanPropertyRowMapper<>(Group.class))
                 .stream().findAny().orElseThrow(() -> new SQLException("Group not found - " + id));
     }
 
     @Override
-    public List<Group> findAllGroups() {
+    public List<Group> findAll() {
         return jdbcTemplate.query(properties.getProperty("findAllGroups"), new BeanPropertyRowMapper<>(Group.class));
     }
 
     @Override
-    public void removeGroupById(int id) {
+    public void removeById(int id) {
         jdbcTemplate.update(properties.getProperty("removeGroupById"), id);
     }
 

@@ -23,23 +23,23 @@ public class JdbcFacultyDAO implements FacultyDAO {
     }
 
     @Override
-    public void addFaculty(Faculty faculty) {
+    public void add(Faculty faculty) {
         jdbcTemplate.update(properties.getProperty("addFaculty"), faculty.getName());
     }
 
     @Override
-    public Faculty findFacultyById(int id) throws SQLException {
+    public Faculty findById(int id) throws SQLException {
         return jdbcTemplate.query(properties.getProperty("findFacultyById"), new Object[]{id}, new BeanPropertyRowMapper<>(Faculty.class))
                 .stream().findAny().orElseThrow(() -> new SQLException("Faculty not found - " + id));
     }
 
     @Override
-    public List<Faculty> findAllFaculties() {
+    public List<Faculty> findAll() {
         return jdbcTemplate.query(properties.getProperty("findAllFaculties"), new BeanPropertyRowMapper<>(Faculty.class));
     }
 
     @Override
-    public void removeFacultyById(int id) {
+    public void removeById(int id) {
         jdbcTemplate.update(properties.getProperty("removeFacultyById"), id);
     }
 }

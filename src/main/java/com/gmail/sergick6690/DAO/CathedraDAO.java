@@ -5,14 +5,24 @@ import com.gmail.sergick6690.university.Cathedra;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface CathedraDAO {
-    public void addCathedra(Cathedra cathedra);
+public interface CathedraDAO  extends CRUD<Cathedra>{
+    @Override
+    default void add(Cathedra obj) {
 
-    public void removeCathedraById(int id);
+    }
 
-    public Cathedra findCathedraById(int id) throws SQLException;
+    @Override
+    default Cathedra findById(int id) throws Exception {
+        return null;
+    }
 
-    public List<Cathedra> findAllCathedras();
+    @Override
+    default List<Cathedra> findAll() {
+        return null;
+    }
 
+    @Override
+    default void removeById(int id) {
 
+    }
 }

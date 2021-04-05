@@ -5,12 +5,24 @@ import com.gmail.sergick6690.university.Item;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface ItemDAO {
-    public void addItem(Item item);
+public interface ItemDAO extends CRUD<Item> {
+    @Override
+    default void add(Item obj) {
 
-    public Item findItemById(int id) throws SQLException;
+    }
 
-    public List<Item> findAllItems();
+    @Override
+    default Item findById(int id) throws Exception {
+        return null;
+    }
 
-    public void removeItemsById(int id);
+    @Override
+    default List<Item> findAll() {
+        return null;
+    }
+
+    @Override
+    default void removeById(int id) {
+
+    }
 }

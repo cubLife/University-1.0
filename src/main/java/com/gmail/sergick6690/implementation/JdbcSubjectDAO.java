@@ -23,23 +23,23 @@ public class JdbcSubjectDAO implements SubjectDAO {
     }
 
     @Override
-    public void addSubject(Subject subject) {
+    public void add(Subject subject) {
         jdbcTemplate.update(properties.getProperty("addSubject"), subject.getName(), subject.getDescription(), subject.getTeacherId());
     }
 
     @Override
-    public Subject findSubjectById(int id) throws SQLException {
+    public Subject findById(int id) throws SQLException {
         return jdbcTemplate.query(properties.getProperty("findSubjectById"), new Object[]{id}, new BeanPropertyRowMapper<>(Subject.class))
                 .stream().findAny().orElseThrow(() -> new SQLException("Subject not found - " + id));
     }
 
     @Override
-    public List<Subject> findAllSubjects() {
+    public List<Subject> findAll() {
         return jdbcTemplate.query(properties.getProperty("findAllSubjects"), new BeanPropertyRowMapper<>(Subject.class));
     }
 
     @Override
-    public void removeSubjectById(int id) {
+    public void removeById(int id) {
         jdbcTemplate.update(properties.getProperty("removeSubjectById"), id);
     }
 

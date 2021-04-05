@@ -24,25 +24,25 @@ public class JdbcCathedraDAO implements CathedraDAO {
     }
 
     @Override
-    public void addCathedra(Cathedra cathedra) {
+    public void add(Cathedra cathedra) {
         jdbcTemplate.update(properties.getProperty("addCathedra"), cathedra.getName());
 
     }
 
     @Override
-    public void removeCathedraById(int id) {
+    public void removeById(int id) {
         jdbcTemplate.update(properties.getProperty("removeCathedra"), id);
 
     }
 
     @Override
-    public Cathedra findCathedraById(int id) throws SQLException {
+    public Cathedra findById(int id) throws SQLException {
         return jdbcTemplate.query(properties.getProperty("findCathedraByID"), new Object[]{id}, new BeanPropertyRowMapper<>(Cathedra.class))
                 .stream().findAny().orElseThrow(() -> new SQLException("Cathedra not found - " + id));
     }
 
     @Override
-    public List<Cathedra> findAllCathedras() {
+    public List<Cathedra> findAll() {
         return jdbcTemplate.query(properties.getProperty("findAll"), new BeanPropertyRowMapper<>(Cathedra.class));
     }
 }

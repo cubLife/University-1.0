@@ -27,64 +27,64 @@ class JdbcGroupDAOTest {
 
     @BeforeEach
     void createTables() throws IOException, URISyntaxException {
-        creator.createTables();
+        creator.createTables("Script.sql");
     }
 
     @Test
     void shouldAddGroup() {
-        cathedraDAO.addCathedra(new Cathedra());
-        scheduleDAO.addSchedule(new Schedule());
-        groupDAO.addGroup(new Group(TEST, 1, 1));
-        int expected = 1;
-        int actual = groupDAO.findAllGroups().get(0).getId();
-        //  assertEquals(expected,actual);
+        cathedraDAO.add(new Cathedra());
+        scheduleDAO.add(new Schedule());
+        groupDAO.add(new Group(TEST, 1, 1));
+        Group expected = new Group(1,TEST,null, 1, 1);
+        Group actual = groupDAO.findAll().get(0);
+        assertEquals(expected,actual);
     }
 
     @Test
-    void shouldFindGroupById() {
-        cathedraDAO.addCathedra(new Cathedra());
-        scheduleDAO.addSchedule(new Schedule());
+    void shouldFindGroupById() throws Exception {
+        cathedraDAO.add(new Cathedra());
+        scheduleDAO.add(new Schedule());
         for (int i = 0; i < 5; i++) {
-            groupDAO.addGroup(new Group(TEST, 1, 1));
+            groupDAO.add(new Group(TEST, 1, 1));
         }
-        int expected = 3;
-        int actual = groupDAO.findAllGroups().get(2).getId();
+        Group expected = new Group(2,TEST,null, 1, 1);
+        Group actual = groupDAO.findById(2);
         assertEquals(expected, actual);
     }
 
     @Test
     void findAllGroups() {
-        cathedraDAO.addCathedra(new Cathedra());
-        scheduleDAO.addSchedule(new Schedule());
+        cathedraDAO.add(new Cathedra());
+        scheduleDAO.add(new Schedule());
         for (int i = 0; i < 5; i++) {
-            groupDAO.addGroup(new Group(TEST, 1, 1));
+            groupDAO.add(new Group(TEST, 1, 1));
         }
         int expected = 5;
-        int actual = groupDAO.findAllGroups().size();
+        int actual = groupDAO.findAll().size();
         assertEquals(expected, actual);
     }
 
     @Test
     void removeGroupById() {
-        cathedraDAO.addCathedra(new Cathedra());
-        scheduleDAO.addSchedule(new Schedule());
+        cathedraDAO.add(new Cathedra());
+        scheduleDAO.add(new Schedule());
         for (int i = 0; i < 5; i++) {
-            groupDAO.addGroup(new Group(TEST, 1, 1));
+            groupDAO.add(new Group(TEST, 1, 1));
         }
-        groupDAO.removeGroupById(1);
+        groupDAO.removeById(1);
         int expected = 4;
-        int actual = groupDAO.findAllGroups().size();
+        int actual = groupDAO.findAll().size();
         assertEquals(expected, actual);
     }
 
     @Test
     void findAllGroupsRelatedToCathedra() {
-        cathedraDAO.addCathedra(new Cathedra());
-        cathedraDAO.addCathedra(new Cathedra());
-        scheduleDAO.addSchedule(new Schedule());
+        cathedraDAO.add(new Cathedra());
+        cathedraDAO.add(new Cathedra());
+        scheduleDAO.add(new Schedule());
         for (int i = 0; i < 5; i++) {
-            groupDAO.addGroup(new Group(TEST, 1, 1));
-            groupDAO.addGroup(new Group(TEST, 1, 2));
+            groupDAO.add(new Group(TEST, 1, 1));
+            groupDAO.add(new Group(TEST, 1, 2));
         }
         int expected = 5;
         int actual = groupDAO.findAllGroupsRelatedToCathedra(1).size();

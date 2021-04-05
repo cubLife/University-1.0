@@ -5,12 +5,24 @@ import com.gmail.sergick6690.university.Schedule;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface ScheduleDAO {
-    public void addSchedule(Schedule schedule);
+public interface ScheduleDAO  extends CRUD<Schedule>{
+    @Override
+    default void add(Schedule obj) {
 
-    public Schedule findScheduleByID(int id) throws SQLException;
+    }
 
-    public List<Schedule> findAllSchedules();
+    @Override
+    default Schedule findById(int id) throws Exception {
+        return null;
+    }
 
-    public void removeScheduleById(int id);
+    @Override
+    default List<Schedule> findAll() {
+        return null;
+    }
+
+    @Override
+    default void removeById(int id) {
+
+    }
 }
