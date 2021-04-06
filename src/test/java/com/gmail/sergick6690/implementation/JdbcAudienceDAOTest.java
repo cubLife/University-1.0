@@ -17,17 +17,16 @@ import java.net.URISyntaxException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@Component
 class JdbcAudienceDAOTest {
-    AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(SpringConfig.class);
-    @Autowired
-TablesCreator creator;
-@Autowired
-    JdbcAudienceDAO audienceDAO;
+    TablesCreator creator;
+    AudienceDAO audienceDAO;
 
-//    @Autowired
-//    public JdbcAudienceDAOTest( JdbcAudienceDAO audienceDAO){
-//        this.audienceDAO=audienceDAO;
-//}
+    @Autowired
+    public JdbcAudienceDAOTest(TablesCreator creator, AudienceDAO audienceDAO) {
+        this.creator = creator;
+        this.audienceDAO = audienceDAO;
+    }
 
     @BeforeEach
     void createTables() throws IOException, URISyntaxException {
