@@ -27,12 +27,11 @@ public class JdbcItemDAO implements ItemDAO {
     public void add(Item item) {
         jdbcTemplate.update(properties.getProperty("addItem"), item.getDate(), item.getDuration(), item.getSubject().getId(),
                 item.getAudience().getId(), item.getSchedule().getId());
-
     }
 
     @Override
     public Item findById(int id) throws SQLException {
-        return jdbcTemplate.query(properties.getProperty("findItemById"), new Object[]{id}, new BeanPropertyRowMapper<>(Item.class))
+        return jdbcTemplate.query(properties.getProperty("findItemById"), new BeanPropertyRowMapper<>(Item.class), id)
                 .stream().findAny().orElseThrow(() -> new SQLException("Item not found - " + id));
     }
 

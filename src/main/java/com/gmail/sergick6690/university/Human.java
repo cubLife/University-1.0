@@ -21,7 +21,6 @@ public class Human {
     }
 
     public Human() {
-
     }
 
     public int getId() {

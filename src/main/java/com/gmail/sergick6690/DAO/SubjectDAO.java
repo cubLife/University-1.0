@@ -5,14 +5,13 @@ import com.gmail.sergick6690.university.Subject;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface SubjectDAO  extends CRUD<Subject>{
+public interface SubjectDAO extends CrudMethods<Subject> {
     @Override
     default void add(Subject obj) {
-
     }
 
     @Override
-    default Subject findById(int id) throws Exception {
+    default Subject findById(int id) throws SQLException {
         return null;
     }
 
@@ -23,7 +22,6 @@ public interface SubjectDAO  extends CRUD<Subject>{
 
     @Override
     default void removeById(int id) {
-
     }
 
     public List<Subject> findAllSubjectRelatedToAudience(int id);

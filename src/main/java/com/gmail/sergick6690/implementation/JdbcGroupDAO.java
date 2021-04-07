@@ -29,7 +29,7 @@ public class JdbcGroupDAO implements GroupDAO {
 
     @Override
     public Group findById(int id) throws SQLException {
-        return jdbcTemplate.query(properties.getProperty("findGroupById"), new Object[]{id}, new BeanPropertyRowMapper<>(Group.class))
+        return jdbcTemplate.query(properties.getProperty("findGroupById"), new BeanPropertyRowMapper<>(Group.class), id)
                 .stream().findAny().orElseThrow(() -> new SQLException("Group not found - " + id));
     }
 
@@ -45,6 +45,6 @@ public class JdbcGroupDAO implements GroupDAO {
 
     @Override
     public List<Group> findAllGroupsRelatedToCathedra(int id) {
-        return jdbcTemplate.query(properties.getProperty("findAllGroupsRelatedToCathedra"), new Object[]{id}, new BeanPropertyRowMapper<>(Group.class));
+        return jdbcTemplate.query(properties.getProperty("findAllGroupsRelatedToCathedra"), new BeanPropertyRowMapper<>(Group.class), id);
     }
 }

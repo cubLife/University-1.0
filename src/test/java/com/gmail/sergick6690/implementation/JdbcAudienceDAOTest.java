@@ -6,16 +6,20 @@ import com.gmail.sergick6690.TablesCreator;
 import com.gmail.sergick6690.university.Audience;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith({SpringExtension.class, MockitoExtension.class})
+@ContextConfiguration(classes = SpringConfig.class)
 @Component
 class JdbcAudienceDAOTest {
     TablesCreator creator;
@@ -38,7 +42,6 @@ class JdbcAudienceDAOTest {
         Audience expected = new Audience(1, 0);
         Audience actual = audienceDAO.findAll().get(0);
         assertEquals(expected, actual);
-
     }
 
     @Test

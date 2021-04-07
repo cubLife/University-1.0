@@ -5,15 +5,14 @@ import com.gmail.sergick6690.university.Teacher;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface TeacherDAO extends CRUD<Teacher> {
+public interface TeacherDAO extends CrudMethods<Teacher> {
 
     @Override
     default void add(Teacher obj) {
-
     }
 
     @Override
-    default Teacher findById(int id) throws Exception {
+    default Teacher findById(int id) throws SQLException {
         return null;
     }
 
@@ -24,7 +23,6 @@ public interface TeacherDAO extends CRUD<Teacher> {
 
     @Override
     default void removeById(int id) {
-
     }
 
     public Integer findTeachersCountWithEqualDegree(String degree);

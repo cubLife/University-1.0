@@ -25,12 +25,11 @@ public class JdbcAudienceDAO implements AudienceDAO {
     @Override
     public void add(Audience audience) {
         jdbcTemplate.update(properties.getProperty("addAudience"), audience.getNumber());
-
     }
 
     @Override
     public Audience findById(int id) throws SQLException {
-        return jdbcTemplate.query(properties.getProperty("findAudienceById"), new Object[]{id}, new BeanPropertyRowMapper<>(Audience.class))
+        return jdbcTemplate.query(properties.getProperty("findAudienceById"), new BeanPropertyRowMapper<>(Audience.class), id)
                 .stream().findAny().orElseThrow(() -> new SQLException("Audience not found - " + id));
     }
 
@@ -43,5 +42,4 @@ public class JdbcAudienceDAO implements AudienceDAO {
     public void removeById(int id) {
         jdbcTemplate.update(properties.getProperty("removeAudience"), id);
     }
-
 }

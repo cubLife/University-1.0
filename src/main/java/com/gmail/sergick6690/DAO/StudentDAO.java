@@ -5,14 +5,13 @@ import com.gmail.sergick6690.university.Student;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface StudentDAO extends CRUD<Student> {
+public interface StudentDAO extends CrudMethods<Student> {
     @Override
     default void add(Student obj) {
-
     }
 
     @Override
-    default Student findById(int id) throws Exception {
+    default Student findById(int id) throws SQLException {
         return null;
     }
 
@@ -23,6 +22,5 @@ public interface StudentDAO extends CRUD<Student> {
 
     @Override
     default void removeById(int id) {
-
     }
 }

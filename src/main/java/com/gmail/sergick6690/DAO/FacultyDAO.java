@@ -5,14 +5,13 @@ import com.gmail.sergick6690.university.Faculty;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface FacultyDAO extends CRUD<Faculty> {
+public interface FacultyDAO extends CrudMethods<Faculty> {
     @Override
     default void add(Faculty obj) {
-
     }
 
     @Override
-    default Faculty findById(int id) throws Exception {
+    default Faculty findById(int id) throws SQLException {
         return null;
     }
 
@@ -23,6 +22,5 @@ public interface FacultyDAO extends CRUD<Faculty> {
 
     @Override
     default void removeById(int id) {
-
     }
 }

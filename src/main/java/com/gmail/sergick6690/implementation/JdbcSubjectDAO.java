@@ -29,7 +29,7 @@ public class JdbcSubjectDAO implements SubjectDAO {
 
     @Override
     public Subject findById(int id) throws SQLException {
-        return jdbcTemplate.query(properties.getProperty("findSubjectById"), new Object[]{id}, new BeanPropertyRowMapper<>(Subject.class))
+        return jdbcTemplate.query(properties.getProperty("findSubjectById"), new BeanPropertyRowMapper<>(Subject.class), id)
                 .stream().findAny().orElseThrow(() -> new SQLException("Subject not found - " + id));
     }
 
@@ -45,6 +45,6 @@ public class JdbcSubjectDAO implements SubjectDAO {
 
     @Override
     public List<Subject> findAllSubjectRelatedToAudience(int id) {
-        return jdbcTemplate.query(properties.getProperty("findAllSubjectRelatedToAudience"), new Object[]{id}, new BeanPropertyRowMapper<>(Subject.class));
+        return jdbcTemplate.query(properties.getProperty("findAllSubjectRelatedToAudience"), new BeanPropertyRowMapper<>(Subject.class), id);
     }
 }

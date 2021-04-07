@@ -5,14 +5,13 @@ import com.gmail.sergick6690.university.Item;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface ItemDAO extends CRUD<Item> {
+public interface ItemDAO extends CrudMethods<Item> {
     @Override
     default void add(Item obj) {
-
     }
 
     @Override
-    default Item findById(int id) throws Exception {
+    default Item findById(int id) throws SQLException {
         return null;
     }
 
@@ -23,6 +22,5 @@ public interface ItemDAO extends CRUD<Item> {
 
     @Override
     default void removeById(int id) {
-
     }
 }

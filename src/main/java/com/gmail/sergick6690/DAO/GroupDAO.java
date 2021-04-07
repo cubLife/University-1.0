@@ -5,14 +5,13 @@ import com.gmail.sergick6690.university.Group;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface GroupDAO extends CRUD<Group> {
+public interface GroupDAO extends CrudMethods<Group> {
     @Override
     default void add(Group obj) {
-
     }
 
     @Override
-    default Group findById(int id) throws Exception {
+    default Group findById(int id) throws SQLException {
         return null;
     }
 
@@ -23,7 +22,6 @@ public interface GroupDAO extends CRUD<Group> {
 
     @Override
     default void removeById(int id) {
-
     }
 
     public List<Group> findAllGroupsRelatedToCathedra(int id);

@@ -4,22 +4,21 @@ import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Repository;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URI;
-
 import java.net.URISyntaxException;
 import java.util.Objects;
+
 @Component
 public class TablesCreator {
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
     public TablesCreator(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate=jdbcTemplate;
+        this.jdbcTemplate = jdbcTemplate;
     }
 
     public void createTables(String propertyPath) throws IOException, URISyntaxException {

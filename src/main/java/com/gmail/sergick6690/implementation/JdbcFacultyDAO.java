@@ -29,7 +29,7 @@ public class JdbcFacultyDAO implements FacultyDAO {
 
     @Override
     public Faculty findById(int id) throws SQLException {
-        return jdbcTemplate.query(properties.getProperty("findFacultyById"), new Object[]{id}, new BeanPropertyRowMapper<>(Faculty.class))
+        return jdbcTemplate.query(properties.getProperty("findFacultyById"), new BeanPropertyRowMapper<>(Faculty.class), id)
                 .stream().findAny().orElseThrow(() -> new SQLException("Faculty not found - " + id));
     }
 

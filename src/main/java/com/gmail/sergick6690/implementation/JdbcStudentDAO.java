@@ -30,7 +30,7 @@ public class JdbcStudentDAO implements StudentDAO {
 
     @Override
     public Student findById(int id) throws SQLException {
-        return jdbcTemplate.query(properties.getProperty("findStudentById"), new Object[]{id}, new BeanPropertyRowMapper<>(Student.class))
+        return jdbcTemplate.query(properties.getProperty("findStudentById"), new BeanPropertyRowMapper<>(Student.class), id)
                 .stream().findAny().orElseThrow(() -> new SQLException("Student not found - " + id));
     }
 
@@ -42,6 +42,5 @@ public class JdbcStudentDAO implements StudentDAO {
     @Override
     public void removeById(int id) {
         jdbcTemplate.update(properties.getProperty("removeStudentById"), id);
-
     }
 }

@@ -5,14 +5,13 @@ import com.gmail.sergick6690.university.Schedule;
 import java.sql.SQLException;
 import java.util.List;
 
-public interface ScheduleDAO  extends CRUD<Schedule>{
+public interface ScheduleDAO  extends CrudMethods<Schedule> {
     @Override
     default void add(Schedule obj) {
-
     }
 
     @Override
-    default Schedule findById(int id) throws Exception {
+    default Schedule findById(int id) throws SQLException {
         return null;
     }
 
@@ -23,6 +22,5 @@ public interface ScheduleDAO  extends CRUD<Schedule>{
 
     @Override
     default void removeById(int id) {
-
     }
 }

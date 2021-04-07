@@ -10,20 +10,33 @@ import com.gmail.sergick6690.university.Group;
 import com.gmail.sergick6690.university.Schedule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith({SpringExtension.class, MockitoExtension.class})
+@ContextConfiguration(classes = SpringConfig.class)
 class JdbcGroupDAOTest {
-    private AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(SpringConfig.class);
-    private TablesCreator creator = (TablesCreator) applicationContext.getBean("tablesCreator");
-    private GroupDAO groupDAO = applicationContext.getBean(JdbcGroupDAO.class);
-    private ScheduleDAO scheduleDAO = applicationContext.getBean(JdbcScheduleDAO.class);
-    private CathedraDAO cathedraDAO = applicationContext.getBean(JdbcCathedraDAO.class);
+    private TablesCreator creator;
+    private GroupDAO groupDAO;
+    private ScheduleDAO scheduleDAO;
+    private CathedraDAO cathedraDAO;
     private static final String TEST = "test";
+
+    @Autowired
+    public JdbcGroupDAOTest(TablesCreator creator, GroupDAO groupDAO, ScheduleDAO scheduleDAO, CathedraDAO cathedraDAO) {
+        this.creator = creator;
+        this.groupDAO = groupDAO;
+        this.scheduleDAO = scheduleDAO;
+        this.cathedraDAO = cathedraDAO;
+    }
 
     @BeforeEach
     void createTables() throws IOException, URISyntaxException {
@@ -35,9 +48,9 @@ class JdbcGroupDAOTest {
         cathedraDAO.add(new Cathedra());
         scheduleDAO.add(new Schedule());
         groupDAO.add(new Group(TEST, 1, 1));
-        Group expected = new Group(1,TEST,null, 1, 1);
+        Group expected = new Group(1, TEST, null, 1, 1);
         Group actual = groupDAO.findAll().get(0);
-        assertEquals(expected,actual);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -47,7 +60,7 @@ class JdbcGroupDAOTest {
         for (int i = 0; i < 5; i++) {
             groupDAO.add(new Group(TEST, 1, 1));
         }
-        Group expected = new Group(2,TEST,null, 1, 1);
+        Group expected = new Group(2, TEST, null, 1, 1);
         Group actual = groupDAO.findById(2);
         assertEquals(expected, actual);
     }

@@ -3,11 +3,9 @@ package com.gmail.sergick6690.connectionFactory;
 import com.gmail.sergick6690.PropertyLoader;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
+
 @Component
 public class ConnectionFactory {
     private final Properties properties = new PropertyLoader("dbName.properties").loadProperty();

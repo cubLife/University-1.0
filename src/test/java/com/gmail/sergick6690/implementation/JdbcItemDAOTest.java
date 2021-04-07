@@ -6,24 +6,39 @@ import com.gmail.sergick6690.TablesCreator;
 import com.gmail.sergick6690.university.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.sql.SQLException;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+@ExtendWith({SpringExtension.class, MockitoExtension.class})
+@ContextConfiguration(classes = SpringConfig.class)
 class JdbcItemDAOTest {
-    private AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(SpringConfig.class);
-    private TablesCreator creator = (TablesCreator) applicationContext.getBean("tablesCreator");
-    private ItemDAO itemDAO = applicationContext.getBean(ItemDAO.class);
-    private ScheduleDAO scheduleDAO = applicationContext.getBean(JdbcScheduleDAO.class);
-    private SubjectDAO subjectDAO = applicationContext.getBean(JdbcSubjectDAO.class);
-    private AudienceDAO audienceDAO = applicationContext.getBean(JdbcAudienceDAO.class);
-    private TeacherDAO teacherDAO = applicationContext.getBean(JdbcTeacherDAO.class);
+    private TablesCreator creator;
+    private ItemDAO itemDAO;
+    private ScheduleDAO scheduleDAO;
+    private SubjectDAO subjectDAO;
+    private AudienceDAO audienceDAO;
+    private TeacherDAO teacherDAO;
     private static final String TEST = "Test";
+
+    @Autowired
+    public JdbcItemDAOTest(TablesCreator creator, ItemDAO itemDAO, ScheduleDAO scheduleDAO,
+                           SubjectDAO subjectDAO, AudienceDAO audienceDAO, TeacherDAO teacherDAO) {
+        this.creator = creator;
+        this.itemDAO = itemDAO;
+        this.scheduleDAO = scheduleDAO;
+        this.subjectDAO = subjectDAO;
+        this.audienceDAO = audienceDAO;
+        this.teacherDAO = teacherDAO;
+    }
 
     @BeforeEach
     void createTables() throws IOException, URISyntaxException {
@@ -41,7 +56,7 @@ class JdbcItemDAOTest {
         subjectDAO.add(subject);
         audienceDAO.add(audience);
         itemDAO.add(new Item(subject, null, audience, 1, schedule));
-        Item expected = new Item(1,null, null, null, 1, null);
+        Item expected = new Item(1, null, null, null, 1, null);
         Item actual = itemDAO.findAll().get(0);
         assertEquals(expected, actual);
     }
@@ -59,7 +74,7 @@ class JdbcItemDAOTest {
         for (int i = 0; i < 5; i++) {
             itemDAO.add(new Item(subject, null, audience, 1, schedule));
         }
-        Item expected = new Item(3,null, null, null, 1, null);
+        Item expected = new Item(3, null, null, null, 1, null);
         Item actual = itemDAO.findById(3);
         assertEquals(expected, actual);
     }

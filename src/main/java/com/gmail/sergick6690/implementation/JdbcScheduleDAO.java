@@ -25,11 +25,10 @@ public class JdbcScheduleDAO implements ScheduleDAO {
     @Override
     public void add(Schedule schedule) {
         jdbcTemplate.update(properties.getProperty("addSchedule"), schedule.getName());
-
     }
 
     public Schedule findById(int id) throws SQLException {
-        return jdbcTemplate.query(properties.getProperty("findScheduleByID"), new Object[]{id}, new BeanPropertyRowMapper<>(Schedule.class))
+        return jdbcTemplate.query(properties.getProperty("findScheduleByID"), new BeanPropertyRowMapper<>(Schedule.class), id)
                 .stream().findAny().orElseThrow(() -> new SQLException("Schedule not found - " + id));
     }
 

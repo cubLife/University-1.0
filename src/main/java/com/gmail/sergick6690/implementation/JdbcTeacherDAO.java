@@ -35,7 +35,7 @@ public class JdbcTeacherDAO implements TeacherDAO {
 
     @Override
     public Teacher findById(int id) throws SQLException {
-        return jdbcTemplate.query(properties.getProperty("findTeacherById"), new Object[]{id}, new BeanPropertyRowMapper<>(Teacher.class))
+        return jdbcTemplate.query(properties.getProperty("findTeacherById"),new BeanPropertyRowMapper<>(Teacher.class), id)
                 .stream().findAny().orElseThrow(() -> new SQLException("Teacher not found - " + id));
     }
 
