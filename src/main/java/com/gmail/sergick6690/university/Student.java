@@ -1,12 +1,20 @@
-package com.gmail.sergick6690;
+package com.gmail.sergick6690.university;
+
+import lombok.Builder;
 
 import java.util.Objects;
 
 public class Student extends Human {
+    private int groupID;
     private int course;
 
-    public Student(int id, String firstName, String lastNAme, String sex, int age, int course) {
+    public Student() {
+    }
+
+    @Builder
+    private Student(int id, String firstName, String lastNAme, String sex, int age, int course, int groupID) {
         super(id, firstName, lastNAme, sex, age);
+        this.groupID = groupID;
         this.course = course;
     }
 
@@ -32,10 +40,5 @@ public class Student extends Human {
         return Objects.hash(super.hashCode(), getCourse());
     }
 
-    @Override
-    public String toString() {
-        return "Student{" +
-                "course=" + course +
-                '}';
-    }
+
 }

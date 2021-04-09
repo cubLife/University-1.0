@@ -1,10 +1,13 @@
-package com.gmail.sergick6690;
+package com.gmail.sergick6690.university;
 
 import java.util.Objects;
 
 public class Audience {
     private int id;
     private int number;
+
+    public Audience() {
+    }
 
     public Audience(int id, int number) {
         this.id = id;

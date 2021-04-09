@@ -1,4 +1,6 @@
-package com.gmail.sergick6690;
+package com.gmail.sergick6690.university;
+
+import lombok.Builder;
 
 import java.util.List;
 import java.util.Objects;
@@ -8,7 +10,11 @@ public class Teacher extends Human {
     private Schedule schedule;
     private List<Subject> subjects;
 
-    public Teacher(int id, String firstName, String lastNAme, String sex, int age, String degree, Schedule schedule, List<Subject> subjects) {
+    public Teacher() {
+    }
+
+    @Builder
+    private Teacher(int id, String firstName, String lastNAme, String sex, int age, String degree, Schedule schedule, List<Subject> subjects) {
         super(id, firstName, lastNAme, sex, age);
         this.degree = degree;
         this.schedule = schedule;

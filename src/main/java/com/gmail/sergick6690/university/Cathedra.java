@@ -1,4 +1,4 @@
-package com.gmail.sergick6690;
+package com.gmail.sergick6690.university;
 
 import java.util.List;
 import java.util.Objects;
@@ -7,6 +7,9 @@ public class Cathedra {
     private int id;
     private String name;
     private List<Group> groups;
+
+    public Cathedra() {
+    }
 
     public Cathedra(int id, String name, List<Group> groups) {
         this.id = id;
