@@ -3,12 +3,12 @@ package com.gmail.sergick6690.implementation;
 import com.gmail.sergick6690.DAO.ItemDAO;
 import com.gmail.sergick6690.university.Item;
 import com.gmail.sergick6690.PropertyLoader;
+import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Properties;
 
@@ -17,6 +17,10 @@ public class JdbcItemDAO implements ItemDAO {
 
     private JdbcTemplate jdbcTemplate;
     private Properties properties = new PropertyLoader("Queries/itemQueries.properties").loadProperty();
+    private static final String ADD = "addItem";
+    private static final String FIND_BY_ID = "findItemById";
+    private static final String FIND_ALL = "findAllItems";
+    private static final String REMOVE = "removeItemsById";
 
     @Autowired
     public JdbcItemDAO(JdbcTemplate jdbcTemplate) {
@@ -25,23 +29,23 @@ public class JdbcItemDAO implements ItemDAO {
 
     @Override
     public void add(Item item) {
-        jdbcTemplate.update(properties.getProperty("addItem"), item.getDate(), item.getDuration(), item.getSubject().getId(),
+        jdbcTemplate.update(properties.getProperty(ADD), item.getDate(), item.getDuration(), item.getSubject().getId(),
                 item.getAudience().getId(), item.getSchedule().getId());
     }
 
     @Override
-    public Item findById(int id) throws SQLException {
-        return jdbcTemplate.query(properties.getProperty("findItemById"), new BeanPropertyRowMapper<>(Item.class), id)
-                .stream().findAny().orElseThrow(() -> new SQLException("Item not found - " + id));
+    public Item findById(int id) throws NotImplementedException {
+        return jdbcTemplate.query(properties.getProperty(FIND_BY_ID), new BeanPropertyRowMapper<>(Item.class), id)
+                .stream().findAny().orElseThrow(() -> new NotImplementedException("Item not found - " + id));
     }
 
     @Override
     public List<Item> findAll() {
-        return jdbcTemplate.query(properties.getProperty("findAllItems"), new BeanPropertyRowMapper<>(Item.class));
+        return jdbcTemplate.query(properties.getProperty(FIND_ALL), new BeanPropertyRowMapper<>(Item.class));
     }
 
     @Override
     public void removeById(int id) {
-        jdbcTemplate.update(properties.getProperty("removeItemsById"), id);
+        jdbcTemplate.update(properties.getProperty(REMOVE), id);
     }
 }

@@ -4,6 +4,7 @@ import com.gmail.sergick6690.DAO.AudienceDAO;
 import com.gmail.sergick6690.SpringConfig;
 import com.gmail.sergick6690.TablesCreator;
 import com.gmail.sergick6690.university.Audience;
+import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,8 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ContextConfiguration(classes = SpringConfig.class)
 @Component
 class JdbcAudienceDAOTest {
-    TablesCreator creator;
-    AudienceDAO audienceDAO;
+    private TablesCreator creator;
+    private AudienceDAO audienceDAO;
 
     @Autowired
     public JdbcAudienceDAOTest(TablesCreator creator, AudienceDAO audienceDAO) {
@@ -45,7 +46,7 @@ class JdbcAudienceDAOTest {
     }
 
     @Test
-    void shouldFindAudienceById() throws Exception {
+    void shouldFindAudienceById() throws NotImplementedException {
         for (int i = 0; i <= 5; i++) {
             audienceDAO.add(new Audience());
         }

@@ -8,6 +8,7 @@ import com.gmail.sergick6690.TablesCreator;
 import com.gmail.sergick6690.university.Cathedra;
 import com.gmail.sergick6690.university.Group;
 import com.gmail.sergick6690.university.Schedule;
+import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -54,7 +55,7 @@ class JdbcGroupDAOTest {
     }
 
     @Test
-    void shouldFindGroupById() throws Exception {
+    void shouldFindGroupById() throws NotImplementedException {
         cathedraDAO.add(new Cathedra());
         scheduleDAO.add(new Schedule());
         for (int i = 0; i < 5; i++) {

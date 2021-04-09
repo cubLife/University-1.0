@@ -8,14 +8,14 @@ public class Subject {
     private int teacherId;
     private String description;
 
+    public Subject() {
+    }
+
     public Subject(int id, String name, int teacherId, String description) {
         this.id = id;
         this.name = name;
         this.teacherId = teacherId;
         this.description = description;
-    }
-
-    public Subject() {
     }
 
     public int getId() {

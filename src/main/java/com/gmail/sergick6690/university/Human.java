@@ -1,7 +1,12 @@
 package com.gmail.sergick6690.university;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 import java.util.Objects;
 
+@Getter
+@AllArgsConstructor
 public class Human {
     private int id;
     private String firstName;
@@ -9,18 +14,10 @@ public class Human {
     private String sex;
     private int age;
 
-    public Human(int id, String firstName, String lastNAme, String sex, int age) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastNAme = lastNAme;
-        this.sex = sex;
-        this.age = age;
+    public Human() {
     }
 
     public Human(String firstName, String lastNAme, String sex, int age) {
-    }
-
-    public Human() {
     }
 
     public int getId() {

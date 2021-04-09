@@ -8,6 +8,9 @@ public class Schedule {
     private String name;
     private List<Item> items;
 
+    public Schedule() {
+    }
+
     public Schedule(int id, String name, List<Item> items) {
         this.id = id;
         this.name = name;
@@ -16,9 +19,6 @@ public class Schedule {
 
     public Schedule(String name) {
         this.name = name;
-    }
-
-    public Schedule() {
     }
 
     public int getId() {

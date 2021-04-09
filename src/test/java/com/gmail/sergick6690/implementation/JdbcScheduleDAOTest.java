@@ -4,6 +4,7 @@ import com.gmail.sergick6690.DAO.ScheduleDAO;
 import com.gmail.sergick6690.SpringConfig;
 import com.gmail.sergick6690.TablesCreator;
 import com.gmail.sergick6690.university.Schedule;
+import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,7 +45,7 @@ class JdbcScheduleDAOTest {
     }
 
     @Test
-    void shouldFindScheduleByID() throws Exception {
+    void shouldFindScheduleByID() throws NotImplementedException {
         for (int i = 0; i < 5; i++) {
             scheduleDAO.add(new Schedule(1, TEST, null));
         }

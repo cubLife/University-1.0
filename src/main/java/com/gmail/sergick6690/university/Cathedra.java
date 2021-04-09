@@ -8,13 +8,13 @@ public class Cathedra {
     private String name;
     private List<Group> groups;
 
+    public Cathedra() {
+    }
+
     public Cathedra(int id, String name, List<Group> groups) {
         this.id = id;
         this.name = name;
         this.groups = groups;
-    }
-
-    public Cathedra() {
     }
 
     public int getId() {

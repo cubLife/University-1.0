@@ -1,8 +1,8 @@
 package com.gmail.sergick6690.DAO;
 
 import com.gmail.sergick6690.university.Subject;
+import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface SubjectDAO extends CrudMethods<Subject> {
@@ -11,7 +11,7 @@ public interface SubjectDAO extends CrudMethods<Subject> {
     }
 
     @Override
-    default Subject findById(int id) throws SQLException {
+    default Subject findById(int id) throws NotImplementedException {
         return null;
     }
 

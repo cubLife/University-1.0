@@ -6,12 +6,12 @@ public class Audience {
     private int id;
     private int number;
 
+    public Audience() {
+    }
+
     public Audience(int id, int number) {
         this.id = id;
         this.number = number;
-    }
-
-    public Audience() {
     }
 
     public int getId() {

@@ -10,6 +10,9 @@ public class Group {
     private int scheduleId;
     private int cathedraId;
 
+    public Group() {
+    }
+
     public Group(int id, String name, List<Student> students, int scheduleId, int cathedraId) {
         this.id = id;
         this.name = name;
@@ -22,9 +25,6 @@ public class Group {
         this.name = name;
         this.scheduleId = scheduleId;
         this.cathedraId = cathedraId;
-    }
-
-    public Group() {
     }
 
     public int getId() {

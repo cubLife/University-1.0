@@ -4,6 +4,7 @@ import com.gmail.sergick6690.DAO.CathedraDAO;
 import com.gmail.sergick6690.SpringConfig;
 import com.gmail.sergick6690.TablesCreator;
 import com.gmail.sergick6690.university.Cathedra;
+import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -55,7 +56,7 @@ class JdbcCathedraDAOTest {
     }
 
     @Test
-    void shouldFindCathedraById() throws Exception {
+    void shouldFindCathedraById() throws NotImplementedException {
         for (int i = 0; i < 5; i++) {
             cathedraDAO.add(new Cathedra(1, TEST, null));
         }

@@ -4,6 +4,7 @@ import com.gmail.sergick6690.DAO.*;
 import com.gmail.sergick6690.SpringConfig;
 import com.gmail.sergick6690.TablesCreator;
 import com.gmail.sergick6690.university.*;
+import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,24 +48,42 @@ class JdbcItemDAOTest {
 
     @Test
     void shouldAddItem() {
-        Schedule schedule = new Schedule(1, TEST, null);
-        Teacher teacher = new Teacher(1, TEST, TEST, TEST, 0, TEST, schedule, null);
-        Subject subject = new Subject(1, TEST, 1, TEST);
-        Audience audience = new Audience(1, 0);
-        teacherDAO.add(teacher);
-        scheduleDAO.add(schedule);
-        subjectDAO.add(subject);
-        audienceDAO.add(audience);
-        itemDAO.add(new Item(subject, null, audience, 1, schedule));
+        generateTestData();
         Item expected = new Item(1, null, null, null, 1, null);
         Item actual = itemDAO.findAll().get(0);
         assertEquals(expected, actual);
     }
 
     @Test
-    void shouldFindItemById() throws Exception {
+    void shouldFindItemById() throws NotImplementedException {
+        generateTestData();
+        Item expected = new Item(3, null, null, null, 1, null);
+        Item actual = itemDAO.findById(3);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void shouldFindAllItems() {
+        generateTestData();
+        int expected = 5;
+        int actual = itemDAO.findAll().size();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void shouldRemoveItemsById() {
+        generateTestData();
+        itemDAO.removeById(1);
+        int expected = 4;
+        int actual = itemDAO.findAll().size();
+        assertEquals(expected, actual);
+    }
+
+    private void generateTestData() {
         Schedule schedule = new Schedule(1, TEST, null);
-        Teacher teacher = new Teacher(1, TEST, TEST, TEST, 0, TEST, schedule, null);
+        Teacher teacher = Teacher.builder().id(1).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).degree(TEST).
+                schedule(schedule).subjects(null).build();
+        ;
         Subject subject = new Subject(1, TEST, 1, TEST);
         Audience audience = new Audience(1, 0);
         teacherDAO.add(teacher);
@@ -74,45 +93,5 @@ class JdbcItemDAOTest {
         for (int i = 0; i < 5; i++) {
             itemDAO.add(new Item(subject, null, audience, 1, schedule));
         }
-        Item expected = new Item(3, null, null, null, 1, null);
-        Item actual = itemDAO.findById(3);
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void shouldFindAllItems() {
-        Schedule schedule = new Schedule(1, TEST, null);
-        Teacher teacher = new Teacher(1, TEST, TEST, TEST, 0, TEST, schedule, null);
-        Subject subject = new Subject(1, TEST, 1, TEST);
-        Audience audience = new Audience(1, 0);
-        teacherDAO.add(teacher);
-        scheduleDAO.add(schedule);
-        subjectDAO.add(subject);
-        audienceDAO.add(audience);
-        for (int i = 0; i < 5; i++) {
-            itemDAO.add(new Item(subject, new Date(), audience, 1, schedule));
-        }
-        int expected = 5;
-        int actual = itemDAO.findAll().size();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void shouldRemoveItemsById() {
-        Schedule schedule = new Schedule(1, TEST, null);
-        Teacher teacher = new Teacher(1, TEST, TEST, TEST, 0, TEST, schedule, null);
-        Subject subject = new Subject(1, TEST, 1, TEST);
-        Audience audience = new Audience(1, 0);
-        teacherDAO.add(teacher);
-        scheduleDAO.add(schedule);
-        subjectDAO.add(subject);
-        audienceDAO.add(audience);
-        for (int i = 0; i < 5; i++) {
-            itemDAO.add(new Item(subject, new Date(), audience, 1, schedule));
-        }
-        itemDAO.removeById(1);
-        int expected = 4;
-        int actual = itemDAO.findAll().size();
-        assertEquals(expected, actual);
     }
 }

@@ -11,6 +11,9 @@ public class Item {
     private int duration;
     private Schedule schedule;
 
+    public Item() {
+    }
+
     public Item(int id, Subject subject, Date date, Audience audience, int duration, Schedule schedule) {
         this.id = id;
         this.subject = subject;
@@ -31,9 +34,6 @@ public class Item {
     public Item(Subject subject, Audience audience) {
         this.subject = subject;
         this.audience = audience;
-    }
-
-    public Item() {
     }
 
     public int getId() {

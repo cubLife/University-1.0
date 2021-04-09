@@ -4,6 +4,7 @@ import com.gmail.sergick6690.DAO.FacultyDAO;
 import com.gmail.sergick6690.SpringConfig;
 import com.gmail.sergick6690.TablesCreator;
 import com.gmail.sergick6690.university.Faculty;
+import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,7 +45,7 @@ class JdbcFacultyDAOTest {
     }
 
     @Test
-    void shouldFindFacultyById() throws Exception {
+    void shouldFindFacultyById() throws NotImplementedException {
         for (int i = 0; i < 5; i++) {
             facultyDAO.add(new Faculty(1, TEST, null));
         }
