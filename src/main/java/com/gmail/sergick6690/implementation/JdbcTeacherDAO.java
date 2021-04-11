@@ -7,12 +7,12 @@ import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Properties;
 
-@Component
+@Repository
 public class JdbcTeacherDAO implements TeacherDAO {
     private JdbcTemplate jdbcTemplate;
     private Properties properties = new PropertyLoader("Queries/teacherQueries.properties").loadProperty();

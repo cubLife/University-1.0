@@ -1,18 +1,18 @@
 package com.gmail.sergick6690.implementation;
 
 import com.gmail.sergick6690.DAO.GroupDAO;
-import com.gmail.sergick6690.university.Group;
 import com.gmail.sergick6690.PropertyLoader;
+import com.gmail.sergick6690.university.Group;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Properties;
 
-@Component
+@Repository
 public class JdbcGroupDAO implements GroupDAO {
     private JdbcTemplate jdbcTemplate;
     private Properties properties = new PropertyLoader("Queries/groupQueries.properties").loadProperty();
