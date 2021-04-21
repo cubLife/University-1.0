@@ -26,4 +26,8 @@ public interface TeacherDAO extends CrudMethods<Teacher> {
     }
 
     public Integer findTeachersCountWithEqualDegree(String degree);
+
+    public void removeSchedule(int teacherId);
+
+    public void assignSchedule(int teacherId, int scheduleId);
 }

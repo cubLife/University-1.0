@@ -21,6 +21,8 @@ public class JdbcTeacherDAO implements TeacherDAO {
     private static final String FIND_ALL = "findAllTeacher";
     private static final String REMOVE = "removeTeacherById";
     private static final String FIND_WITH_EQUAL_DEGREE = "findAllTeachersWithEqualDegree";
+    private static final String REMOVE_SCHEDULE = "removeSchedule";
+    private static final String ASSIGN_SCHEDULE = "assignSchedule";
 
     @Autowired
     public JdbcTeacherDAO(JdbcTemplate jdbcTemplate) {
@@ -30,7 +32,7 @@ public class JdbcTeacherDAO implements TeacherDAO {
     @Override
     public void add(Teacher teacher) {
         jdbcTemplate.update(properties.getProperty(ADD), teacher.getFirstName(), teacher.getLastNAme(), teacher.getSex(),
-                teacher.getAge(), teacher.getDegree(), teacher.getSchedule().getId());
+                teacher.getAge(), teacher.getDegree(), teacher.getScheduleId());
     }
 
     @Override
@@ -52,5 +54,15 @@ public class JdbcTeacherDAO implements TeacherDAO {
     @Override
     public Integer findTeachersCountWithEqualDegree(String degree) {
         return jdbcTemplate.queryForObject(properties.getProperty(FIND_WITH_EQUAL_DEGREE), Integer.class, degree);
+    }
+
+    @Override
+    public void removeSchedule(int teacherId) {
+        jdbcTemplate.update(properties.getProperty(REMOVE_SCHEDULE), teacherId);
+    }
+
+    @Override
+    public void assignSchedule(int teacherId, int scheduleId) {
+        jdbcTemplate.update(properties.getProperty(ASSIGN_SCHEDULE), scheduleId, teacherId);
     }
 }

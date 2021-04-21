@@ -25,4 +25,8 @@ public interface SubjectDAO extends CrudMethods<Subject> {
     }
 
     public List<Subject> findAllSubjectRelatedToAudience(int id);
+
+    public void assignTeacher(int subjectId, int teacherId);
+
+    public void removeTeacher(int subjectId);
 }

@@ -21,7 +21,8 @@ public class JdbcSubjectDAO implements SubjectDAO {
     private static final String FIND_ALL = "findAllSubjects";
     private static final String REMOVE = "removeSubjectById";
     private static final String FIND_RELATED_TO_AUDIENCE = "findAllSubjectRelatedToAudience";
-
+    private static final String ASSIGN_TEACHER = "assignTeacher";
+    private static final String REMOVE_TEACHER= "removeTeacher";
     @Autowired
     public JdbcSubjectDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -51,5 +52,15 @@ public class JdbcSubjectDAO implements SubjectDAO {
     @Override
     public List<Subject> findAllSubjectRelatedToAudience(int id) {
         return jdbcTemplate.query(properties.getProperty(FIND_RELATED_TO_AUDIENCE), new BeanPropertyRowMapper<>(Subject.class), id);
+    }
+
+    @Override
+    public void assignTeacher(int subjectId, int teacherId) {
+        jdbcTemplate.update(properties.getProperty(ASSIGN_TEACHER), teacherId, subjectId);
+    }
+
+    @Override
+    public void removeTeacher(int subjectId) {
+        jdbcTemplate.update(properties.getProperty(REMOVE_TEACHER), subjectId);
     }
 }

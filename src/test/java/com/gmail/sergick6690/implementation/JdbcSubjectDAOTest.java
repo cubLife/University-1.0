@@ -50,7 +50,7 @@ class JdbcSubjectDAOTest {
     void shouldAddSubject() {
         Schedule schedule = new Schedule(1, TEST, null);
         Teacher teacher = Teacher.builder().id(1).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).degree(TEST).
-                schedule(schedule).subjects(null).build();
+                scheduleId(1).subjects(null).build();
         scheduleDAO.add(schedule);
         teacherDAO.add(teacher);
         subjectDAO.add(new Subject(1, TEST, 1, TEST));
@@ -92,16 +92,35 @@ class JdbcSubjectDAOTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void shouldAssignTeacher() {
+        generateTestData();
+        subjectDAO.assignTeacher(1, 2);
+        int expected = 2;
+        int actual = subjectDAO.findById(1).getTeacherId();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldRemoveTeacher() {
+        generateTestData();
+        subjectDAO.assignTeacher(1, 2);
+        subjectDAO.removeTeacher(1);
+        int expected = 1;
+        int actual = subjectDAO.findById(1).getTeacherId();
+        assertEquals(expected, actual);
+    }
+
     private void generateTestData() {
         Schedule schedule = new Schedule(1, TEST, null);
         Teacher teacher = Teacher.builder().id(1).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).degree(TEST).
-                schedule(schedule).subjects(null).build();
-        ;
+                scheduleId(1).build();
         Audience audience = new Audience(1, 0);
         Audience audience1 = new Audience(2, 1);
         Subject subject = new Subject(1, TEST, 1, TEST);
-        teacherDAO.add(teacher);
         scheduleDAO.add(schedule);
+        teacherDAO.add(teacher);
+        teacherDAO.add(teacher);
         audienceDAO.add(audience);
         audienceDAO.add(audience1);
         for (int i = 0; i < 5; i++) {

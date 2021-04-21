@@ -82,12 +82,11 @@ class JdbcItemDAOTest {
     private void generateTestData() {
         Schedule schedule = new Schedule(1, TEST, null);
         Teacher teacher = Teacher.builder().id(1).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).degree(TEST).
-                schedule(schedule).subjects(null).build();
-        ;
+                scheduleId(1).subjects(null).build();
         Subject subject = new Subject(1, TEST, 1, TEST);
         Audience audience = new Audience(1, 0);
-        teacherDAO.add(teacher);
         scheduleDAO.add(schedule);
+        teacherDAO.add(teacher);
         subjectDAO.add(subject);
         audienceDAO.add(audience);
         for (int i = 0; i < 5; i++) {

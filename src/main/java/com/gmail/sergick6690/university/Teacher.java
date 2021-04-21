@@ -7,17 +7,17 @@ import java.util.Objects;
 
 public class Teacher extends Human {
     private String degree;
-    private Schedule schedule;
+    private int scheduleId;
     private List<Subject> subjects;
 
     public Teacher() {
     }
 
     @Builder
-    private Teacher(int id, String firstName, String lastNAme, String sex, int age, String degree, Schedule schedule, List<Subject> subjects) {
+    private Teacher(int id, String firstName, String lastNAme, String sex, int age, String degree, int scheduleId, List<Subject> subjects) {
         super(id, firstName, lastNAme, sex, age);
         this.degree = degree;
-        this.schedule = schedule;
+        this.scheduleId = scheduleId;
         this.subjects = subjects;
     }
 
@@ -29,12 +29,12 @@ public class Teacher extends Human {
         this.degree = degree;
     }
 
-    public Schedule getSchedule() {
-        return schedule;
+    public int getScheduleId() {
+        return scheduleId;
     }
 
-    public void setSchedule(Schedule schedule) {
-        this.schedule = schedule;
+    public void setScheduleId(int scheduleId) {
+        this.scheduleId = scheduleId;
     }
 
     public List<Subject> getSubjects() {
@@ -52,20 +52,20 @@ public class Teacher extends Human {
         if (!super.equals(o)) return false;
         Teacher teacher = (Teacher) o;
         return Objects.equals(getDegree(), teacher.getDegree()) &&
-                Objects.equals(getSchedule(), teacher.getSchedule()) &&
+                Objects.equals(getScheduleId(), teacher.getScheduleId()) &&
                 Objects.equals(getSubjects(), teacher.getSubjects());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getDegree(), getSchedule(), getSubjects());
+        return Objects.hash(super.hashCode(), getDegree(), getScheduleId(), getSubjects());
     }
 
     @Override
     public String toString() {
         return "Teacher{" +
                 "degree='" + degree + '\'' +
-                ", schedule=" + schedule +
+                ", schedule=" + scheduleId +
                 ", subjects=" + subjects +
                 '}';
     }

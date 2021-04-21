@@ -23,4 +23,12 @@ public interface StudentDAO extends CrudMethods<Student> {
     @Override
     default void removeById(int id) {
     }
+
+    public void assignGroup(int studentId, int groupId);
+
+    public void removeFromGroup(int studentId);
+
+    public void assignCourse(int studentId, int course);
+
+    public void removeFromCourse(int studentId);
 }

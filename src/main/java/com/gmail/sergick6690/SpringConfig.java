@@ -1,7 +1,9 @@
 package com.gmail.sergick6690;
 
+
 import com.gmail.sergick6690.connectionFactory.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -10,15 +12,16 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
 import java.util.Properties;
-
 @Configuration
 @ComponentScan("com.gmail.sergick6690")
 public class SpringConfig {
     private final ConnectionFactory connectionFactory;
+    private ApplicationContext context;
 
     @Autowired
-    public SpringConfig(ConnectionFactory connectionFactory) {
+    public SpringConfig(ConnectionFactory connectionFactory, ApplicationContext context) {
         this.connectionFactory = connectionFactory;
+        this.context=context;
     }
 
     @Bean

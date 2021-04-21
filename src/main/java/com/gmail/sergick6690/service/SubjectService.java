@@ -44,4 +44,17 @@ public class SubjectService implements CrudMethods<Subject> {
     public List<Subject> findAllSubjectRelatedToAudience(int id) {
         return subjectDAO.findAllSubjectRelatedToAudience(id);
     }
+
+    public void assignTeacher(int subjectId, int teacherId) {
+        subjectDAO.assignTeacher(subjectId, teacherId);
+    }
+
+    public void removeTeacher(int subjectId) {
+        subjectDAO.removeTeacher(subjectId);
+    }
+
+    public void changeTeacher(int subjectId, int teacherId) {
+        subjectDAO.removeTeacher(subjectId);
+        assignTeacher(subjectId, teacherId);
+    }
 }

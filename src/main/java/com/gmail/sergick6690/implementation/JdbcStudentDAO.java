@@ -20,6 +20,10 @@ public class JdbcStudentDAO implements StudentDAO {
     private static final String FIND_BY_ID = "findStudentById";
     private static final String FIND_ALL = "findAllStudents";
     private static final String REMOVE = "removeStudentById";
+    private static final String ASSIGN_GROUP = "assignGroup";
+    private static final String REMOVE_FROM_GROUP = "removeFromGroup";
+    private static final String ASSIGN_COURSE = "assignCourse";
+    private static final String REMOVE_FROM_COURSE = "removeFromCourse";
 
     @Autowired
     public JdbcStudentDAO(JdbcTemplate jdbcTemplate) {
@@ -29,7 +33,7 @@ public class JdbcStudentDAO implements StudentDAO {
     @Override
     public void add(Student student) {
         jdbcTemplate.update(properties.getProperty(ADD), student.getFirstName(), student.getLastNAme(),
-                student.getSex(), student.getAge(), student.getCourse());
+                student.getSex(), student.getAge(), student.getGroupID(), student.getCourse());
     }
 
     @Override
@@ -46,5 +50,26 @@ public class JdbcStudentDAO implements StudentDAO {
     @Override
     public void removeById(int id) {
         jdbcTemplate.update(properties.getProperty(REMOVE), id);
+    }
+
+    @Override
+    public void assignGroup(int studentId, int groupId) {
+        jdbcTemplate.update(properties.getProperty(ASSIGN_GROUP), groupId, studentId);
+    }
+
+    @Override
+    public void removeFromGroup(int studentId) {
+        jdbcTemplate.update(properties.getProperty(REMOVE_FROM_GROUP), studentId);
+
+    }
+
+    @Override
+    public void assignCourse(int studentId, int course) {
+        jdbcTemplate.update(properties.getProperty(ASSIGN_COURSE), course, studentId);
+    }
+
+    @Override
+    public void removeFromCourse(int studentId) {
+        jdbcTemplate.update(properties.getProperty(REMOVE_FROM_COURSE), studentId);
     }
 }

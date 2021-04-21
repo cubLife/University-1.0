@@ -45,16 +45,16 @@ class JdbcTeacherDAOTest {
         Schedule schedule = new Schedule(1, TEST, null);
         scheduleDAO.add(schedule);
         teacherDAO.add(Teacher.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).degree(TEST).
-                schedule(schedule).subjects(null).build());
+                scheduleId(1).subjects(null).build());
         Teacher expected = Teacher.builder().id(1).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).degree(TEST).
-                schedule(null).subjects(null).build();
+                scheduleId(1).subjects(null).build();
         Teacher actual = teacherDAO.findAll().get(0);
         assertEquals(expected, actual);
     }
 
     @Test
     void shouldRemoveTeacherById() {
-      generateTestData();
+        generateTestData();
         int expected = 10;
         int actual = teacherDAO.findAll().size();
         assertEquals(expected, actual);
@@ -64,7 +64,7 @@ class JdbcTeacherDAOTest {
     void shouldFindTeacherById() throws NotImplementedException {
         generateTestData();
         Teacher expected = Teacher.builder().id(5).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).degree(TEST).
-                schedule(null).subjects(null).build();
+                scheduleId(1).subjects(null).build();
         Teacher actual = teacherDAO.findById(5);
         assertEquals(expected, actual);
     }
@@ -85,14 +85,34 @@ class JdbcTeacherDAOTest {
         assertEquals(expected, actual);
     }
 
+    @Test
+    public void removeSchedule() {
+        generateTestData();
+        teacherDAO.assignSchedule(1, 2);
+        teacherDAO.removeSchedule(1);
+        int expected = 1;
+        int actual = teacherDAO.findById(1).getScheduleId();
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldAssignSchedule() {
+        generateTestData();
+        teacherDAO.assignSchedule(1, 2);
+        int expected = 2;
+        int actual = teacherDAO.findById(1).getScheduleId();
+        assertEquals(expected, actual);
+    }
+
     private void generateTestData() {
         Schedule schedule = new Schedule(1, TEST, null);
         scheduleDAO.add(schedule);
+        scheduleDAO.add(schedule);
         for (int i = 0; i < 5; i++) {
             teacherDAO.add(Teacher.builder().id(1).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).degree(TEST).
-                    schedule(schedule).subjects(null).build());
+                    scheduleId(1).subjects(null).build());
             teacherDAO.add(Teacher.builder().id(1).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).degree(TEST + 1).
-                    schedule(schedule).subjects(null).build());
+                    scheduleId(1).subjects(null).build());
         }
     }
 }

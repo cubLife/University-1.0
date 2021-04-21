@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @ContextConfiguration(classes = SpringConfig.class)
-@Component
 class JdbcAudienceDAOTest {
     private TablesCreator creator;
     private AudienceDAO audienceDAO;

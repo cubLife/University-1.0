@@ -44,4 +44,17 @@ public class TeacherService implements CrudMethods<Teacher> {
     public Integer findTeachersCountWithEqualDegree(String degree) {
         return teacherDAO.findTeachersCountWithEqualDegree(degree);
     }
+
+    public void removeSchedule(int teacherId) {
+        teacherDAO.removeSchedule(teacherId);
+    }
+
+    public void assignSchedule(int teacherId, int scheduleId) {
+        teacherDAO.assignSchedule(teacherId, scheduleId);
+    }
+
+    public void changeSchedule(int teacherId, int scheduleId) {
+        teacherDAO.removeSchedule(teacherId);
+        teacherDAO.assignSchedule(teacherId, scheduleId);
+    }
 }
