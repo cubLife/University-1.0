@@ -3,6 +3,7 @@ package com.gmail.sergick6690.implementation;
 import com.gmail.sergick6690.DAO.*;
 import com.gmail.sergick6690.SpringConfig;
 import com.gmail.sergick6690.TablesCreator;
+import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.*;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.sql.SQLException;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -47,7 +49,7 @@ class JdbcItemDAOTest {
     }
 
     @Test
-    void shouldAddItem() {
+    void shouldAddItem() throws DaoException, SQLException {
         generateTestData();
         Item expected = new Item(1, null, null, null, 1, null);
         Item actual = itemDAO.findAll().get(0);
@@ -55,7 +57,7 @@ class JdbcItemDAOTest {
     }
 
     @Test
-    void shouldFindItemById() throws NotImplementedException {
+    void shouldFindItemById() throws NotImplementedException, DaoException, SQLException {
         generateTestData();
         Item expected = new Item(3, null, null, null, 1, null);
         Item actual = itemDAO.findById(3);
@@ -63,7 +65,7 @@ class JdbcItemDAOTest {
     }
 
     @Test
-    void shouldFindAllItems() {
+    void shouldFindAllItems() throws DaoException, SQLException {
         generateTestData();
         int expected = 5;
         int actual = itemDAO.findAll().size();
@@ -71,7 +73,7 @@ class JdbcItemDAOTest {
     }
 
     @Test
-    void shouldRemoveItemsById() {
+    void shouldRemoveItemsById() throws DaoException, SQLException {
         generateTestData();
         itemDAO.removeById(1);
         int expected = 4;
@@ -79,7 +81,7 @@ class JdbcItemDAOTest {
         assertEquals(expected, actual);
     }
 
-    private void generateTestData() {
+    private void generateTestData() throws DaoException, SQLException {
         Schedule schedule = new Schedule(1, TEST, null);
         Teacher teacher = Teacher.builder().id(1).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).degree(TEST).
                 scheduleId(1).subjects(null).build();

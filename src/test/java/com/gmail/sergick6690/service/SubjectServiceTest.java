@@ -1,7 +1,10 @@
 package com.gmail.sergick6690.service;
 
+import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.implementation.JdbcSubjectDAO;
 import com.gmail.sergick6690.university.Subject;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InOrder;
@@ -22,35 +25,37 @@ class SubjectServiceTest {
 
 
     @Test
-    void shouldInvokeAdd() {
+    void shouldInvokeAdd() throws ServiceException, DaoException {
         service.add(new Subject());
         verify(dao).add(new Subject());
     }
 
     @Test
-    void shouldFindById() {
+    void shouldFindById() throws ServiceException, DaoException {
         service.findById(ID);
         verify(dao).findById(ID);
     }
 
     @Test
-    void shouldInvokeFindAll() {
+    void shouldInvokeFindAll() throws ServiceException, DaoException {
         service.findAll();
         verify(dao).findAll();
     }
 
     @Test
-    void shouldInvokeRemoveById() {
+    void shouldInvokeRemoveById() throws ServiceException, DaoException {
         service.removeById(ID);
         verify(dao).removeById(ID);
     }
 
+    @SneakyThrows
     @Test
-    void shouldInvokeFindAllSubjectRelatedToAudience() {
+    void shouldInvokeFindAllSubjectRelatedToAudience() throws ServiceException {
         service.findAllSubjectRelatedToAudience(ID);
         verify(dao).findAllSubjectRelatedToAudience(ID);
     }
 
+    @SneakyThrows
     @Test
     void assignTeacher() {
         service.assignTeacher(ID, ID);
@@ -58,13 +63,13 @@ class SubjectServiceTest {
     }
 
     @Test
-    void removeTeacher() {
+    void removeTeacher() throws ServiceException, DaoException {
         service.removeTeacher(ID);
         verify(dao).removeTeacher(ID);
     }
 
     @Test
-    void shouldInvokeChangeTeacher() {
+    void shouldInvokeChangeTeacher() throws ServiceException, DaoException {
         InOrder inOrder = Mockito.inOrder(dao);
         service.changeTeacher(ID, ID);
         inOrder.verify(dao).removeTeacher(ID);

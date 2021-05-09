@@ -1,28 +1,28 @@
 package com.gmail.sergick6690.DAO;
 
+import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Group;
-import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 
 import java.util.List;
 
 public interface GroupDAO extends CrudMethods<Group> {
     @Override
-    default void add(Group obj) {
+    default void add(Group obj) throws DaoException {
     }
 
     @Override
-    default Group findById(int id) throws NotImplementedException {
+    default Group findById(int id) throws DaoException {
         return null;
     }
 
     @Override
-    default List<Group> findAll() {
+    default List<Group> findAll() throws DaoException {
         return null;
     }
 
     @Override
-    default void removeById(int id) {
+    default void removeById(int id) throws DaoException {
     }
 
-    public List<Group> findAllGroupsRelatedToCathedra(int id);
+    public List<Group> findAllGroupsRelatedToCathedra(int id) throws DaoException;
 }

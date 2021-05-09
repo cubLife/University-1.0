@@ -3,6 +3,7 @@ package com.gmail.sergick6690.implementation;
 import com.gmail.sergick6690.DAO.ScheduleDAO;
 import com.gmail.sergick6690.SpringConfig;
 import com.gmail.sergick6690.TablesCreator;
+import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Schedule;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +38,7 @@ class JdbcScheduleDAOTest {
     }
 
     @Test
-    void shouldAddSchedule() {
+    void shouldAddSchedule() throws DaoException {
         scheduleDAO.add(new Schedule(1, TEST, null));
         Schedule expected = new Schedule(1, TEST, null);
         Schedule actual = scheduleDAO.findAll().get(0);
@@ -45,7 +46,7 @@ class JdbcScheduleDAOTest {
     }
 
     @Test
-    void shouldFindScheduleByID() throws NotImplementedException {
+    void shouldFindScheduleByID() throws NotImplementedException, DaoException {
         for (int i = 0; i < 5; i++) {
             scheduleDAO.add(new Schedule(1, TEST, null));
         }
@@ -55,7 +56,7 @@ class JdbcScheduleDAOTest {
     }
 
     @Test
-    void findAllSchedules() {
+    void findAllSchedules() throws DaoException {
         for (int i = 0; i < 5; i++) {
             scheduleDAO.add(new Schedule());
         }
@@ -65,7 +66,7 @@ class JdbcScheduleDAOTest {
     }
 
     @Test
-    void removeScheduleById() {
+    void removeScheduleById() throws DaoException {
         for (int i = 0; i < 5; i++) {
             scheduleDAO.add(new Schedule());
         }

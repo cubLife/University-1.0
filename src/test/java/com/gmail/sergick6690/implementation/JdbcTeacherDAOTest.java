@@ -4,6 +4,7 @@ import com.gmail.sergick6690.DAO.ScheduleDAO;
 import com.gmail.sergick6690.DAO.TeacherDAO;
 import com.gmail.sergick6690.SpringConfig;
 import com.gmail.sergick6690.TablesCreator;
+import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Schedule;
 import com.gmail.sergick6690.university.Teacher;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
@@ -41,7 +42,7 @@ class JdbcTeacherDAOTest {
     }
 
     @Test
-    void shouldAddTeacher() {
+    void shouldAddTeacher() throws DaoException {
         Schedule schedule = new Schedule(1, TEST, null);
         scheduleDAO.add(schedule);
         teacherDAO.add(Teacher.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).degree(TEST).
@@ -53,7 +54,7 @@ class JdbcTeacherDAOTest {
     }
 
     @Test
-    void shouldRemoveTeacherById() {
+    void shouldRemoveTeacherById() throws DaoException {
         generateTestData();
         int expected = 10;
         int actual = teacherDAO.findAll().size();
@@ -61,7 +62,7 @@ class JdbcTeacherDAOTest {
     }
 
     @Test
-    void shouldFindTeacherById() throws NotImplementedException {
+    void shouldFindTeacherById() throws NotImplementedException, DaoException {
         generateTestData();
         Teacher expected = Teacher.builder().id(5).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).degree(TEST).
                 scheduleId(1).subjects(null).build();
@@ -70,7 +71,7 @@ class JdbcTeacherDAOTest {
     }
 
     @Test
-    void shouldFindAllTeacher() {
+    void shouldFindAllTeacher() throws DaoException {
         generateTestData();
         int expected = 10;
         int actual = teacherDAO.findAll().size();
@@ -78,7 +79,7 @@ class JdbcTeacherDAOTest {
     }
 
     @Test
-    void shouldFindAllTeachersWithEqualDegree() {
+    void shouldFindAllTeachersWithEqualDegree() throws DaoException {
         generateTestData();
         int expected = 5;
         int actual = teacherDAO.findTeachersCountWithEqualDegree(TEST);
@@ -86,7 +87,7 @@ class JdbcTeacherDAOTest {
     }
 
     @Test
-    public void removeSchedule() {
+    public void removeSchedule() throws DaoException {
         generateTestData();
         teacherDAO.assignSchedule(1, 2);
         teacherDAO.removeSchedule(1);
@@ -96,7 +97,7 @@ class JdbcTeacherDAOTest {
     }
 
     @Test
-    public void shouldAssignSchedule() {
+    public void shouldAssignSchedule() throws DaoException {
         generateTestData();
         teacherDAO.assignSchedule(1, 2);
         int expected = 2;
@@ -104,7 +105,7 @@ class JdbcTeacherDAOTest {
         assertEquals(expected, actual);
     }
 
-    private void generateTestData() {
+    private void generateTestData() throws DaoException {
         Schedule schedule = new Schedule(1, TEST, null);
         scheduleDAO.add(schedule);
         scheduleDAO.add(schedule);

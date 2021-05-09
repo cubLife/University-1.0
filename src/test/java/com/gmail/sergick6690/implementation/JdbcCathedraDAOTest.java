@@ -3,6 +3,7 @@ package com.gmail.sergick6690.implementation;
 import com.gmail.sergick6690.DAO.CathedraDAO;
 import com.gmail.sergick6690.SpringConfig;
 import com.gmail.sergick6690.TablesCreator;
+import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Cathedra;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +38,7 @@ class JdbcCathedraDAOTest {
     }
 
     @Test
-    void shouldAddCathedra() {
+    void shouldAddCathedra() throws DaoException {
         cathedraDAO.add(new Cathedra(1, TEST, null));
         Cathedra expected = new Cathedra(1, TEST, null);
         Cathedra actual = cathedraDAO.findAll().get(0);
@@ -45,7 +46,7 @@ class JdbcCathedraDAOTest {
     }
 
     @Test
-    void shouldRremoveCathedraById() {
+    void shouldRremoveCathedraById() throws DaoException {
         for (int i = 0; i < 5; i++) {
             cathedraDAO.add(new Cathedra());
         }
@@ -56,7 +57,7 @@ class JdbcCathedraDAOTest {
     }
 
     @Test
-    void shouldFindCathedraById() throws NotImplementedException {
+    void shouldFindCathedraById() throws NotImplementedException, DaoException {
         for (int i = 0; i < 5; i++) {
             cathedraDAO.add(new Cathedra(1, TEST, null));
         }
@@ -66,7 +67,7 @@ class JdbcCathedraDAOTest {
     }
 
     @Test
-    void shouldFindAllCathedras() {
+    void shouldFindAllCathedras() throws DaoException {
         for (int i = 0; i < 5; i++) {
             cathedraDAO.add(new Cathedra());
         }

@@ -1,5 +1,7 @@
 package com.gmail.sergick6690.service;
 
+import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.implementation.JdbcCathedraDAO;
 import com.gmail.sergick6690.university.Cathedra;
 import org.junit.jupiter.api.Test;
@@ -21,25 +23,25 @@ class CathedraServiceTest {
 
 
     @Test
-    void shouldInvokeAdd() {
+    void shouldInvokeAdd() throws ServiceException, DaoException {
         service.add(new Cathedra());
         verify(dao).add(new Cathedra());
     }
 
     @Test
-    void shouldInvokeFindById() {
+    void shouldInvokeFindById() throws ServiceException, DaoException {
         service.findById(ID);
         verify(dao).findById(ID);
     }
 
     @Test
-    void shouldInvokeFindAll() {
+    void shouldInvokeFindAll() throws ServiceException, DaoException {
         service.findAll();
         verify(dao).findAll();
     }
 
     @Test
-    void shouldRemoveById() {
+    void shouldRemoveById() throws ServiceException, DaoException {
         service.removeById(ID);
         verify(dao).removeById(ID);
     }

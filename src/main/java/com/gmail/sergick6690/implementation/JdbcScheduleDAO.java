@@ -2,8 +2,8 @@ package com.gmail.sergick6690.implementation;
 
 import com.gmail.sergick6690.DAO.ScheduleDAO;
 import com.gmail.sergick6690.PropertyLoader;
+import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Schedule;
-import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -27,22 +27,35 @@ public class JdbcScheduleDAO implements ScheduleDAO {
     }
 
     @Override
-    public void add(Schedule schedule) {
-        jdbcTemplate.update(properties.getProperty(ADD), schedule.getName());
+    public void add(Schedule schedule) throws DaoException {
+        try {
+            jdbcTemplate.update(properties.getProperty(ADD), schedule.getName());
+        } catch (Exception e) {
+            throw new DaoException("Can't add schedule - " + schedule, e);
+        }
     }
 
-    public Schedule findById(int id) throws NotImplementedException {
+    @Override
+    public Schedule findById(int id) throws DaoException {
         return jdbcTemplate.query(properties.getProperty(FIND_BY_ID), new BeanPropertyRowMapper<>(Schedule.class), id)
-                .stream().findAny().orElseThrow(() -> new NotImplementedException("Schedule not found - " + id));
+                .stream().findAny().orElseThrow(() -> new DaoException("Schedule not found - " + id));
     }
 
     @Override
-    public List<Schedule> findAll() {
-        return jdbcTemplate.query(properties.getProperty(FIND_ALL), new BeanPropertyRowMapper<>(Schedule.class));
+    public List<Schedule> findAll() throws DaoException {
+        try {
+            return jdbcTemplate.query(properties.getProperty(FIND_ALL), new BeanPropertyRowMapper<>(Schedule.class));
+        } catch (Exception e) {
+            throw new DaoException("Can't find any schedule", e);
+        }
     }
 
     @Override
-    public void removeById(int id) {
-        jdbcTemplate.update(properties.getProperty(REMOVE), id);
+    public void removeById(int id) throws DaoException {
+        try {
+            jdbcTemplate.update(properties.getProperty(REMOVE), id);
+        } catch (Exception e) {
+            throw new DaoException("Can't remove schedule with id - " + id, e);
+        }
     }
 }

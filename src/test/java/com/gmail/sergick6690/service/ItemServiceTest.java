@@ -1,5 +1,7 @@
 package com.gmail.sergick6690.service;
 
+import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.implementation.JdbcItemDAO;
 import com.gmail.sergick6690.university.Item;
 import org.junit.jupiter.api.Test;
@@ -20,25 +22,25 @@ class ItemServiceTest {
 
 
     @Test
-    void shouldInvokeAdd() {
+    void shouldInvokeAdd() throws ServiceException, DaoException {
         service.add(new Item());
         verify(dao).add(new Item());
     }
 
     @Test
-    void findById() {
+    void findById() throws ServiceException, DaoException {
         service.findById(ID);
         verify(dao).findById(ID);
     }
 
     @Test
-    void shouldInvokeFindAll() {
+    void shouldInvokeFindAll() throws ServiceException, DaoException {
         service.findAll();
         verify(dao).findAll();
     }
 
     @Test
-    void shouldRemoveById() {
+    void shouldRemoveById() throws ServiceException, DaoException {
         service.removeById(ID);
         verify(dao).removeById(ID);
     }

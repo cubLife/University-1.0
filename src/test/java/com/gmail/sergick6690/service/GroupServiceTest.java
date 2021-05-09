@@ -1,5 +1,7 @@
 package com.gmail.sergick6690.service;
 
+import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.implementation.JdbcGroupDAO;
 import com.gmail.sergick6690.university.Group;
 import org.junit.jupiter.api.Test;
@@ -21,31 +23,31 @@ class GroupServiceTest {
 
 
     @Test
-    void shouldInvokeAdd() {
+    void shouldInvokeAdd() throws ServiceException, DaoException {
         service.add(new Group());
         verify(dao).add(new Group());
     }
 
     @Test
-    void shouldFindById() {
+    void shouldFindById() throws ServiceException, DaoException {
         service.findById(ID);
         verify(dao).findById(ID);
     }
 
     @Test
-    void shouldInvokeFindAll() {
+    void shouldInvokeFindAll() throws ServiceException, DaoException {
         service.findAll();
         verify(dao).findAll();
     }
 
     @Test
-    void shouldRemoveById() {
+    void shouldRemoveById() throws ServiceException, DaoException {
         service.removeById(ID);
         verify(dao).removeById(ID);
     }
 
     @Test
-    void shouldInvokeFindAllGroupsRelatedToCathedra() {
+    void shouldInvokeFindAllGroupsRelatedToCathedra() throws DaoException, ServiceException {
         service.findAllGroupsRelatedToCathedra(ID);
         verify(dao).findAllGroupsRelatedToCathedra(ID);
     }

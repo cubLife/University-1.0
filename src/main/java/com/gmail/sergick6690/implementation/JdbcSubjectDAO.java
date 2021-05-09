@@ -2,8 +2,8 @@ package com.gmail.sergick6690.implementation;
 
 import com.gmail.sergick6690.DAO.SubjectDAO;
 import com.gmail.sergick6690.PropertyLoader;
+import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Subject;
-import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -22,45 +22,70 @@ public class JdbcSubjectDAO implements SubjectDAO {
     private static final String REMOVE = "removeSubjectById";
     private static final String FIND_RELATED_TO_AUDIENCE = "findAllSubjectRelatedToAudience";
     private static final String ASSIGN_TEACHER = "assignTeacher";
-    private static final String REMOVE_TEACHER= "removeTeacher";
+    private static final String REMOVE_TEACHER = "removeTeacher";
+
     @Autowired
     public JdbcSubjectDAO(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
     @Override
-    public void add(Subject subject) {
-        jdbcTemplate.update(properties.getProperty(ADD), subject.getName(), subject.getDescription(), subject.getTeacherId());
+    public void add(Subject subject) throws DaoException {
+        try {
+            jdbcTemplate.update(properties.getProperty(ADD), subject.getName(), subject.getDescription(), subject.getTeacherId());
+        } catch (Exception e) {
+            throw new DaoException("Can't add subject - " + subject, e);
+        }
     }
 
     @Override
-    public Subject findById(int id) throws NotImplementedException {
+    public Subject findById(int id) throws DaoException {
         return jdbcTemplate.query(properties.getProperty(FIND_BY_ID), new BeanPropertyRowMapper<>(Subject.class), id)
-                .stream().findAny().orElseThrow(() -> new NotImplementedException("Subject not found - " + id));
+                .stream().findAny().orElseThrow(() -> new DaoException("Subject not found - " + id));
     }
 
     @Override
-    public List<Subject> findAll() {
-        return jdbcTemplate.query(properties.getProperty(FIND_ALL), new BeanPropertyRowMapper<>(Subject.class));
+    public List<Subject> findAll() throws DaoException {
+        try {
+            return jdbcTemplate.query(properties.getProperty(FIND_ALL), new BeanPropertyRowMapper<>(Subject.class));
+        } catch (Exception e) {
+            throw new DaoException("Can't find any subject", e);
+        }
     }
 
     @Override
-    public void removeById(int id) {
-        jdbcTemplate.update(properties.getProperty(REMOVE), id);
+    public void removeById(int id) throws DaoException {
+        try {
+            jdbcTemplate.update(properties.getProperty(REMOVE), id);
+        } catch (Exception e) {
+            throw new DaoException("Can't remove subject with id - " + id, e);
+        }
     }
 
     @Override
-    public List<Subject> findAllSubjectRelatedToAudience(int id) {
-        return jdbcTemplate.query(properties.getProperty(FIND_RELATED_TO_AUDIENCE), new BeanPropertyRowMapper<>(Subject.class), id);
+    public List<Subject> findAllSubjectRelatedToAudience(int id) throws DaoException {
+        try {
+            return jdbcTemplate.query(properties.getProperty(FIND_RELATED_TO_AUDIENCE), new BeanPropertyRowMapper<>(Subject.class), id);
+        } catch (Exception e) {
+            throw new DaoException("Can't find any subjaect related to audience where audience id - " + id, e);
+        }
     }
 
     @Override
-    public void assignTeacher(int subjectId, int teacherId) {
-        jdbcTemplate.update(properties.getProperty(ASSIGN_TEACHER), teacherId, subjectId);
+    public void assignTeacher(int subjectId, int teacherId) throws DaoException {
+        try {
+            jdbcTemplate.update(properties.getProperty(ASSIGN_TEACHER), teacherId, subjectId);
+        } catch (Exception e) {
+            throw new DaoException("Can't asign teacher with id - " + teacherId + "for subject with id - " + subjectId, e);
+        }
     }
 
     @Override
-    public void removeTeacher(int subjectId) {
-        jdbcTemplate.update(properties.getProperty(REMOVE_TEACHER), subjectId);
+    public void removeTeacher(int subjectId) throws DaoException {
+        try {
+            jdbcTemplate.update(properties.getProperty(REMOVE_TEACHER), subjectId);
+        } catch (Exception e) {
+            throw new DaoException("Can't remove teacher from subject where sublect id - " + subjectId, e);
+        }
     }
 }

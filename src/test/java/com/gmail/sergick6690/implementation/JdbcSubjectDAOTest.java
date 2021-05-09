@@ -3,6 +3,7 @@ package com.gmail.sergick6690.implementation;
 import com.gmail.sergick6690.DAO.*;
 import com.gmail.sergick6690.SpringConfig;
 import com.gmail.sergick6690.TablesCreator;
+import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.*;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.sql.SQLException;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -47,7 +49,7 @@ class JdbcSubjectDAOTest {
     }
 
     @Test
-    void shouldAddSubject() {
+    void shouldAddSubject() throws DaoException {
         Schedule schedule = new Schedule(1, TEST, null);
         Teacher teacher = Teacher.builder().id(1).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).degree(TEST).
                 scheduleId(1).subjects(null).build();
@@ -60,7 +62,7 @@ class JdbcSubjectDAOTest {
     }
 
     @Test
-    void findSubjectById() throws NotImplementedException {
+    void findSubjectById() throws NotImplementedException, DaoException, SQLException {
         generateTestData();
         Subject expected = new Subject(4, TEST, 1, TEST);
         Subject actual = subjectDAO.findById(4);
@@ -68,7 +70,7 @@ class JdbcSubjectDAOTest {
     }
 
     @Test
-    void findAllSubjects() {
+    void findAllSubjects() throws DaoException, SQLException {
         generateTestData();
         int expected = 5;
         int actual = subjectDAO.findAll().size();
@@ -76,7 +78,7 @@ class JdbcSubjectDAOTest {
     }
 
     @Test
-    void removeSubjectById() {
+    void removeSubjectById() throws DaoException, SQLException {
         generateTestData();
         subjectDAO.removeById(2);
         int expected = 4;
@@ -85,7 +87,7 @@ class JdbcSubjectDAOTest {
     }
 
     @Test
-    void findAllSubjectRelatedToAudience() {
+    void findAllSubjectRelatedToAudience() throws DaoException, SQLException {
         generateTestData();
         int expected = 5;
         int actual = subjectDAO.findAllSubjectRelatedToAudience(2).size();
@@ -93,7 +95,7 @@ class JdbcSubjectDAOTest {
     }
 
     @Test
-    public void shouldAssignTeacher() {
+    public void shouldAssignTeacher() throws DaoException, SQLException {
         generateTestData();
         subjectDAO.assignTeacher(1, 2);
         int expected = 2;
@@ -102,7 +104,7 @@ class JdbcSubjectDAOTest {
     }
 
     @Test
-    public void shouldRemoveTeacher() {
+    public void shouldRemoveTeacher() throws DaoException, SQLException {
         generateTestData();
         subjectDAO.assignTeacher(1, 2);
         subjectDAO.removeTeacher(1);
@@ -111,7 +113,7 @@ class JdbcSubjectDAOTest {
         assertEquals(expected, actual);
     }
 
-    private void generateTestData() {
+    private void generateTestData() throws DaoException, SQLException {
         Schedule schedule = new Schedule(1, TEST, null);
         Teacher teacher = Teacher.builder().id(1).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).degree(TEST).
                 scheduleId(1).build();

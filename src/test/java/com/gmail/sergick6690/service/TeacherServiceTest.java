@@ -1,5 +1,7 @@
 package com.gmail.sergick6690.service;
 
+import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.implementation.JdbcTeacherDAO;
 import com.gmail.sergick6690.university.Teacher;
 import org.junit.jupiter.api.Test;
@@ -24,49 +26,49 @@ class TeacherServiceTest {
 
 
     @Test
-    void shouldInvokeAdd() {
+    void shouldInvokeAdd() throws ServiceException, DaoException {
         service.add(Teacher.builder().build());
         verify(dao).add(Teacher.builder().build());
     }
 
     @Test
-    void shouldInvokeFindById() {
+    void shouldInvokeFindById() throws ServiceException, DaoException {
         service.findById(ID);
         verify(dao).findById(ID);
     }
 
     @Test
-    void shouldInvokeFindAll() {
+    void shouldInvokeFindAll() throws ServiceException, DaoException {
         service.findAll();
         verify(dao).findAll();
     }
 
     @Test
-    void shouldInvokeRemoveById() {
+    void shouldInvokeRemoveById() throws ServiceException, DaoException {
         service.removeById(ID);
         verify(dao).removeById(ID);
     }
 
     @Test
-    void shouldInvokeFindTeachersCountWithEqualDegree() {
+    void shouldInvokeFindTeachersCountWithEqualDegree() throws ServiceException, DaoException {
         service.findTeachersCountWithEqualDegree(TEST);
         verify(dao).findTeachersCountWithEqualDegree(TEST);
     }
 
     @Test
-    void shouldInvokeRemoveSchedule() {
+    void shouldInvokeRemoveSchedule() throws ServiceException, DaoException {
         service.removeSchedule(ID);
         verify(dao).removeSchedule(ID);
     }
 
     @Test
-    void shouldInvokeAssignSchedule() {
+    void shouldInvokeAssignSchedule() throws ServiceException, DaoException {
         service.assignSchedule(ID, ID);
         verify(dao).assignSchedule(ID, ID);
     }
 
     @Test
-    void shouldInvokeChangeSchedule() {
+    void shouldInvokeChangeSchedule() throws ServiceException, DaoException {
         InOrder inOrder = Mockito.inOrder(dao);
         service.changeSchedule(ID, ID);
         inOrder.verify(dao).removeSchedule(ID);

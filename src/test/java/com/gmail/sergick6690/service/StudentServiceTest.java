@@ -1,5 +1,7 @@
 package com.gmail.sergick6690.service;
 
+import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.implementation.JdbcStudentDAO;
 import com.gmail.sergick6690.university.Student;
 import org.junit.jupiter.api.Test;
@@ -22,55 +24,55 @@ class StudentServiceTest {
 
 
     @Test
-    void shouldInvokeAdd() {
+    void shouldInvokeAdd() throws ServiceException, DaoException {
         service.add(Student.builder().build());
         verify(dao).add(Student.builder().build());
     }
 
     @Test
-    void shouldFindById() {
+    void shouldFindById() throws ServiceException, DaoException {
         service.findById(ID);
         verify(dao).findById(ID);
     }
 
     @Test
-    void shouldFindAll() {
+    void shouldFindAll() throws ServiceException, DaoException {
         service.findAll();
         verify(dao).findAll();
     }
 
     @Test
-    void shouldRemoveById() {
+    void shouldRemoveById() throws ServiceException, DaoException {
         service.removeById(ID);
         verify(dao).removeById(ID);
     }
 
     @Test
-    void shouldAssignGroup() {
+    void shouldAssignGroup() throws ServiceException, DaoException {
         service.assignGroup(ID, ID);
         verify(dao).assignGroup(ID, ID);
     }
 
     @Test
-    void shouldRemoveFromGroup() {
+    void shouldRemoveFromGroup() throws ServiceException, DaoException {
         service.removeFromGroup(ID);
         verify(dao).removeFromGroup(ID);
     }
 
     @Test
-    void shouldAssignCourse() {
+    void shouldAssignCourse() throws ServiceException, DaoException {
         service.assignCourse(ID, ID);
         verify(dao).assignCourse(ID, ID);
     }
 
     @Test
-    void shouldRemoveFromCourse() {
+    void shouldRemoveFromCourse() throws ServiceException, DaoException {
         service.removeFromCourse(ID);
         verify(dao).removeFromCourse(ID);
     }
 
     @Test
-    void shouldInvokeChangeGroup() {
+    void shouldInvokeChangeGroup() throws ServiceException, DaoException {
         InOrder inOrder = Mockito.inOrder(dao);
         service.changeGroup(ID, ID);
         inOrder.verify(dao).removeFromGroup(ID);
@@ -79,7 +81,7 @@ class StudentServiceTest {
     }
 
     @Test
-    void shouldInvokeChangeCourse() {
+    void shouldInvokeChangeCourse() throws ServiceException, DaoException {
         InOrder inOrder = Mockito.inOrder(dao);
         service.changeCourse(ID, ID);
         inOrder.verify(dao).removeFromCourse(ID);

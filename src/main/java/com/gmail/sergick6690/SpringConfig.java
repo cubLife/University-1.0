@@ -12,16 +12,15 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
 import java.util.Properties;
+
 @Configuration
 @ComponentScan("com.gmail.sergick6690")
 public class SpringConfig {
     private final ConnectionFactory connectionFactory;
-    private ApplicationContext context;
 
     @Autowired
-    public SpringConfig(ConnectionFactory connectionFactory, ApplicationContext context) {
+    public SpringConfig(ConnectionFactory connectionFactory) {
         this.connectionFactory = connectionFactory;
-        this.context=context;
     }
 
     @Bean

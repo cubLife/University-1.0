@@ -5,6 +5,7 @@ import com.gmail.sergick6690.DAO.GroupDAO;
 import com.gmail.sergick6690.DAO.ScheduleDAO;
 import com.gmail.sergick6690.SpringConfig;
 import com.gmail.sergick6690.TablesCreator;
+import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Cathedra;
 import com.gmail.sergick6690.university.Group;
 import com.gmail.sergick6690.university.Schedule;
@@ -45,7 +46,7 @@ class JdbcGroupDAOTest {
     }
 
     @Test
-    void shouldAddGroup() {
+    void shouldAddGroup() throws DaoException {
         cathedraDAO.add(new Cathedra());
         scheduleDAO.add(new Schedule());
         groupDAO.add(new Group(TEST, 1, 1));
@@ -55,7 +56,7 @@ class JdbcGroupDAOTest {
     }
 
     @Test
-    void shouldFindGroupById() throws NotImplementedException {
+    void shouldFindGroupById() throws NotImplementedException, DaoException {
         cathedraDAO.add(new Cathedra());
         scheduleDAO.add(new Schedule());
         for (int i = 0; i < 5; i++) {
@@ -67,7 +68,7 @@ class JdbcGroupDAOTest {
     }
 
     @Test
-    void findAllGroups() {
+    void findAllGroups() throws DaoException {
         cathedraDAO.add(new Cathedra());
         scheduleDAO.add(new Schedule());
         for (int i = 0; i < 5; i++) {
@@ -79,7 +80,7 @@ class JdbcGroupDAOTest {
     }
 
     @Test
-    void removeGroupById() {
+    void removeGroupById() throws DaoException {
         cathedraDAO.add(new Cathedra());
         scheduleDAO.add(new Schedule());
         for (int i = 0; i < 5; i++) {
@@ -92,7 +93,7 @@ class JdbcGroupDAOTest {
     }
 
     @Test
-    void findAllGroupsRelatedToCathedra() {
+    void findAllGroupsRelatedToCathedra() throws DaoException {
         cathedraDAO.add(new Cathedra());
         cathedraDAO.add(new Cathedra());
         scheduleDAO.add(new Schedule());

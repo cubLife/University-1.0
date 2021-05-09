@@ -2,8 +2,8 @@ package com.gmail.sergick6690.implementation;
 
 import com.gmail.sergick6690.DAO.CathedraDAO;
 import com.gmail.sergick6690.PropertyLoader;
+import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Cathedra;
-import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -27,23 +27,35 @@ public class JdbcCathedraDAO implements CathedraDAO {
     }
 
     @Override
-    public void add(Cathedra cathedra) {
-        jdbcTemplate.update(properties.getProperty(ADD), cathedra.getName());
+    public void add(Cathedra cathedra) throws DaoException {
+        try {
+            jdbcTemplate.update(properties.getProperty(ADD), cathedra.getName());
+        } catch (Exception e) {
+            throw new DaoException("Cant add cathedra - " + cathedra, e);
+        }
     }
 
     @Override
-    public void removeById(int id) {
-        jdbcTemplate.update(properties.getProperty(REMOVE), id);
+    public void removeById(int id) throws DaoException {
+        try {
+            jdbcTemplate.update(properties.getProperty(REMOVE), id);
+        } catch (Exception e) {
+            throw new DaoException("Cant remove cathedra with id - " + id, e);
+        }
     }
 
     @Override
-    public Cathedra findById(int id) throws NotImplementedException {
+    public Cathedra findById(int id) throws DaoException {
         return jdbcTemplate.query(properties.getProperty(FIND_BY_ID), new BeanPropertyRowMapper<>(Cathedra.class), id)
-                .stream().findAny().orElseThrow(() -> new NotImplementedException("Cathedra not found - " + id));
+                .stream().findAny().orElseThrow(() -> new DaoException("Cathedra not found - " + id));
     }
 
     @Override
-    public List<Cathedra> findAll() {
-        return jdbcTemplate.query(properties.getProperty(FIND_ALL), new BeanPropertyRowMapper<>(Cathedra.class));
+    public List<Cathedra> findAll() throws DaoException {
+        try {
+            return jdbcTemplate.query(properties.getProperty(FIND_ALL), new BeanPropertyRowMapper<>(Cathedra.class));
+        } catch (Exception e) {
+            throw new DaoException("Can't find any cathedras", e);
+        }
     }
 }

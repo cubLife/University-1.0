@@ -3,6 +3,7 @@ package com.gmail.sergick6690.implementation;
 import com.gmail.sergick6690.DAO.FacultyDAO;
 import com.gmail.sergick6690.SpringConfig;
 import com.gmail.sergick6690.TablesCreator;
+import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Faculty;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,7 +38,7 @@ class JdbcFacultyDAOTest {
     }
 
     @Test
-    void shouldAddFaculty() {
+    void shouldAddFaculty() throws DaoException {
         facultyDAO.add(new Faculty(1, TEST, null));
         Faculty expected = new Faculty(1, TEST, null);
         Faculty actual = facultyDAO.findAll().get(0);
@@ -45,7 +46,7 @@ class JdbcFacultyDAOTest {
     }
 
     @Test
-    void shouldFindFacultyById() throws NotImplementedException {
+    void shouldFindFacultyById() throws NotImplementedException, DaoException {
         for (int i = 0; i < 5; i++) {
             facultyDAO.add(new Faculty(1, TEST, null));
         }
@@ -55,7 +56,7 @@ class JdbcFacultyDAOTest {
     }
 
     @Test
-    void shouldFindAllFaculties() {
+    void shouldFindAllFaculties() throws DaoException {
         for (int i = 0; i < 5; i++) {
             facultyDAO.add(new Faculty());
         }
@@ -65,7 +66,7 @@ class JdbcFacultyDAOTest {
     }
 
     @Test
-    void shouldRemoveFacultyById() {
+    void shouldRemoveFacultyById() throws DaoException {
         for (int i = 0; i < 5; i++) {
             facultyDAO.add(new Faculty());
         }

@@ -2,8 +2,8 @@ package com.gmail.sergick6690.implementation;
 
 import com.gmail.sergick6690.DAO.ItemDAO;
 import com.gmail.sergick6690.PropertyLoader;
+import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Item;
-import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -28,24 +28,36 @@ public class JdbcItemDAO implements ItemDAO {
     }
 
     @Override
-    public void add(Item item) {
-        jdbcTemplate.update(properties.getProperty(ADD), item.getDate(), item.getDuration(), item.getSubject().getId(),
-                item.getAudience().getId(), item.getSchedule().getId());
+    public void add(Item item) throws DaoException {
+        try {
+            jdbcTemplate.update(properties.getProperty(ADD), item.getDate(), item.getDuration(), item.getSubject().getId(),
+                    item.getAudience().getId(), item.getSchedule().getId());
+        } catch (Exception e) {
+            throw new DaoException("Can't add item - " + item, e);
+        }
     }
 
     @Override
-    public Item findById(int id) throws NotImplementedException {
+    public Item findById(int id) throws DaoException {
         return jdbcTemplate.query(properties.getProperty(FIND_BY_ID), new BeanPropertyRowMapper<>(Item.class), id)
-                .stream().findAny().orElseThrow(() -> new NotImplementedException("Item not found - " + id));
+                .stream().findAny().orElseThrow(() -> new DaoException("Item not found - " + id));
     }
 
     @Override
-    public List<Item> findAll() {
-        return jdbcTemplate.query(properties.getProperty(FIND_ALL), new BeanPropertyRowMapper<>(Item.class));
+    public List<Item> findAll() throws DaoException {
+        try {
+            return jdbcTemplate.query(properties.getProperty(FIND_ALL), new BeanPropertyRowMapper<>(Item.class));
+        } catch (Exception e) {
+            throw new DaoException("Can't find any items", e);
+        }
     }
 
     @Override
-    public void removeById(int id) {
-        jdbcTemplate.update(properties.getProperty(REMOVE), id);
+    public void removeById(int id) throws DaoException {
+        try {
+            jdbcTemplate.update(properties.getProperty(REMOVE), id);
+        } catch (Exception e) {
+            throw new DaoException("Can't remove item with id - " + id, e);
+        }
     }
 }

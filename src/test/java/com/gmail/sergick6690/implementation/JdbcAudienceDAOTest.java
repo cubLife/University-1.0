@@ -3,19 +3,19 @@ package com.gmail.sergick6690.implementation;
 import com.gmail.sergick6690.DAO.AudienceDAO;
 import com.gmail.sergick6690.SpringConfig;
 import com.gmail.sergick6690.TablesCreator;
+import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Audience;
-import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -37,7 +37,7 @@ class JdbcAudienceDAOTest {
     }
 
     @Test
-    void shouldAddAudience() {
+    void shouldAddAudience() throws SQLException, DaoException {
         audienceDAO.add(new Audience());
         Audience expected = new Audience(1, 0);
         Audience actual = audienceDAO.findAll().get(0);
@@ -45,7 +45,7 @@ class JdbcAudienceDAOTest {
     }
 
     @Test
-    void shouldFindAudienceById() throws NotImplementedException {
+    void shouldFindAudienceById() throws DaoException, SQLException {
         for (int i = 0; i <= 5; i++) {
             audienceDAO.add(new Audience());
         }
@@ -55,7 +55,7 @@ class JdbcAudienceDAOTest {
     }
 
     @Test
-    void shouldFindAllAudience() {
+    void shouldFindAllAudience() throws SQLException, DaoException {
         for (int i = 0; i <= 5; i++) {
             audienceDAO.add(new Audience());
         }
@@ -66,7 +66,7 @@ class JdbcAudienceDAOTest {
 
 
     @Test
-    void ShouldRemoveAudienceById() {
+    void ShouldRemoveAudienceById() throws DaoException {
         for (int i = 0; i <= 5; i++) {
             audienceDAO.add(new Audience());
         }

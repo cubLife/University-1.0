@@ -6,6 +6,7 @@ import com.gmail.sergick6690.DAO.ScheduleDAO;
 import com.gmail.sergick6690.DAO.StudentDAO;
 import com.gmail.sergick6690.SpringConfig;
 import com.gmail.sergick6690.TablesCreator;
+import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Cathedra;
 import com.gmail.sergick6690.university.Group;
 import com.gmail.sergick6690.university.Schedule;
@@ -50,7 +51,7 @@ class JdbcStudentDAOTest {
     }
 
     @Test
-    void shouldAddStudent() {
+    void shouldAddStudent() throws DaoException {
         createTestData();
         studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).groupID(1).course(0).build());
         Student expected = Student.builder().id(1).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).groupID(1).course(0).build();
@@ -59,7 +60,7 @@ class JdbcStudentDAOTest {
     }
 
     @Test
-    void shouldFindStudentById() throws NotImplementedException {
+    void shouldFindStudentById() throws NotImplementedException, DaoException {
         createTestData();
         for (int i = 0; i < 5; i++) {
             studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).groupID(1).course(0).build());
@@ -70,7 +71,7 @@ class JdbcStudentDAOTest {
     }
 
     @Test
-    void shouldFindAllStudents() {
+    void shouldFindAllStudents() throws DaoException {
         createTestData();
         for (int i = 0; i < 5; i++) {
             studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).groupID(1).course(0).build());
@@ -81,7 +82,7 @@ class JdbcStudentDAOTest {
     }
 
     @Test
-    void shouldRemoveStudentById() {
+    void shouldRemoveStudentById() throws DaoException {
         createTestData();
         for (int i = 0; i < 5; i++) {
             studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).groupID(1).course(0).build());
@@ -93,7 +94,7 @@ class JdbcStudentDAOTest {
     }
 
     @Test
-    public void shouldAssignGroup() {
+    public void shouldAssignGroup() throws DaoException {
         createTestData();
         studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).groupID(1).course(0).build());
         studentDAO.assignGroup(1, 2);
@@ -103,7 +104,7 @@ class JdbcStudentDAOTest {
     }
 
     @Test
-    void shouldRemoveFromGroup() {
+    void shouldRemoveFromGroup() throws DaoException {
         createTestData();
         studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).groupID(2).course(0).build());
         studentDAO.removeFromGroup(1);
@@ -113,7 +114,7 @@ class JdbcStudentDAOTest {
     }
 
     @Test
-    void shouldAssignCourse() {
+    void shouldAssignCourse() throws DaoException {
         createTestData();
         studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).groupID(1).course(0).build());
         studentDAO.assignCourse(1, 3);
@@ -123,7 +124,7 @@ class JdbcStudentDAOTest {
     }
 
     @Test
-    public void shouldRemoveFromCourse() {
+    public void shouldRemoveFromCourse() throws DaoException {
         createTestData();
         studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).groupID(1).course(3).build());
         studentDAO.removeFromCourse(1);
@@ -132,7 +133,7 @@ class JdbcStudentDAOTest {
         assertEquals(expected, actual);
     }
 
-    private void createTestData() {
+    private void createTestData() throws DaoException {
         scheduleDAO.add(new Schedule());
         cathedraDAO.add(new Cathedra());
         groupDAO.add(new Group(TEST, 1, 1));

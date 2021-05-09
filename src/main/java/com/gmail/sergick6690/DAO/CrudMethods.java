@@ -1,17 +1,17 @@
 package com.gmail.sergick6690.DAO;
 
-import org.apache.maven.surefire.shared.lang3.NotImplementedException;
+import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.exceptions.ServiceException;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface CrudMethods<T> {
 
-    public void add(T obj);
+    public void add(T obj) throws DaoException, ServiceException;
 
-    public T findById(int id) throws NotImplementedException;
+    public T findById(int id) throws DaoException, ServiceException;
 
-    public List<T> findAll();
+    public List<T> findAll() throws DaoException, ServiceException;
 
-    public void removeById(int id);
+    public void removeById(int id) throws DaoException, ServiceException;
 }
