@@ -5,7 +5,7 @@ import com.gmail.sergick6690.university.Faculty;
 
 import java.util.List;
 
-public interface FacultyDAO extends CrudMethods<Faculty> {
+public interface FacultyDAO extends GenericDao<Faculty> {
     @Override
     default void add(Faculty obj) throws DaoException {
     }

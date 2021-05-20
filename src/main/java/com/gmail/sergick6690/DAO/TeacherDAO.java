@@ -5,7 +5,7 @@ import com.gmail.sergick6690.university.Teacher;
 
 import java.util.List;
 
-public interface TeacherDAO extends CrudMethods<Teacher> {
+public interface TeacherDAO extends GenericDao<Teacher> {
 
     @Override
     default void add(Teacher obj) throws DaoException {

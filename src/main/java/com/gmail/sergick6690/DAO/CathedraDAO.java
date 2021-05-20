@@ -5,7 +5,7 @@ import com.gmail.sergick6690.university.Cathedra;
 
 import java.util.List;
 
-public interface CathedraDAO extends CrudMethods<Cathedra> {
+public interface CathedraDAO extends GenericDao<Cathedra> {
     @Override
     default void add(Cathedra obj) throws DaoException {
     }

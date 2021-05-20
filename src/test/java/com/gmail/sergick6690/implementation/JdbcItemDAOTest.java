@@ -9,6 +9,7 @@ import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -16,10 +17,11 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.sql.SQLException;
-import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doThrow;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @ContextConfiguration(classes = SpringConfig.class)
@@ -30,6 +32,8 @@ class JdbcItemDAOTest {
     private SubjectDAO subjectDAO;
     private AudienceDAO audienceDAO;
     private TeacherDAO teacherDAO;
+    @Mock
+    private JdbcItemDAO mockJdbcItemDAO;
     private static final String TEST = "Test";
 
     @Autowired
@@ -49,7 +53,7 @@ class JdbcItemDAOTest {
     }
 
     @Test
-    void shouldAddItem() throws DaoException, SQLException {
+    void shouldAddItem() throws DaoException {
         generateTestData();
         Item expected = new Item(1, null, null, null, 1, null);
         Item actual = itemDAO.findAll().get(0);
@@ -57,7 +61,7 @@ class JdbcItemDAOTest {
     }
 
     @Test
-    void shouldFindItemById() throws NotImplementedException, DaoException, SQLException {
+    void shouldFindItemById() throws NotImplementedException, DaoException {
         generateTestData();
         Item expected = new Item(3, null, null, null, 1, null);
         Item actual = itemDAO.findById(3);
@@ -65,7 +69,7 @@ class JdbcItemDAOTest {
     }
 
     @Test
-    void shouldFindAllItems() throws DaoException, SQLException {
+    void shouldFindAllItems() throws DaoException {
         generateTestData();
         int expected = 5;
         int actual = itemDAO.findAll().size();
@@ -73,7 +77,7 @@ class JdbcItemDAOTest {
     }
 
     @Test
-    void shouldRemoveItemsById() throws DaoException, SQLException {
+    void shouldRemoveItemsById() throws DaoException {
         generateTestData();
         itemDAO.removeById(1);
         int expected = 4;
@@ -81,7 +85,39 @@ class JdbcItemDAOTest {
         assertEquals(expected, actual);
     }
 
-    private void generateTestData() throws DaoException, SQLException {
+    @Test
+    void shouldThrowDaoExceptionWhenAddItemMethodCall() throws DaoException {
+        doThrow(DaoException.class).when(mockJdbcItemDAO).add(new Item());
+        assertThrows(DaoException.class, () -> {
+            mockJdbcItemDAO.add(new Item());
+        });
+    }
+
+    @Test
+    void shouldThrowDaoExceptionWhenFindByIdItemMethodCall() throws DaoException {
+        doThrow(DaoException.class).when(mockJdbcItemDAO).findById(anyInt());
+        assertThrows(DaoException.class, () -> {
+            mockJdbcItemDAO.findById(0);
+        });
+    }
+
+    @Test
+    void shouldThrowDaoExceptionWhenFindAllItemMethodCall() throws DaoException {
+        doThrow(DaoException.class).when(mockJdbcItemDAO).findAll();
+        assertThrows(DaoException.class, () -> {
+            mockJdbcItemDAO.findAll();
+        });
+    }
+
+    @Test
+    void shouldThrowDaoExceptionWhenRemoveByIdMethodCall() throws DaoException {
+        doThrow(DaoException.class).when(mockJdbcItemDAO).removeById(anyInt());
+        assertThrows(DaoException.class, () -> {
+            mockJdbcItemDAO.removeById(anyInt());
+        });
+    }
+
+    private void generateTestData() throws DaoException {
         Schedule schedule = new Schedule(1, TEST, null);
         Teacher teacher = Teacher.builder().id(1).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).degree(TEST).
                 scheduleId(1).subjects(null).build();

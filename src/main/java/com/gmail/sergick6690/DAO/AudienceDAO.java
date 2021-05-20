@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public interface AudienceDAO extends CrudMethods<Audience> {
+public interface AudienceDAO extends GenericDao<Audience> {
     @Override
     default void add(Audience obj) throws DaoException{
     }

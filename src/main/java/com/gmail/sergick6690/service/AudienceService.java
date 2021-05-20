@@ -1,6 +1,6 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.DAO.CrudMethods;
+import com.gmail.sergick6690.DAO.GenericDao;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.implementation.JdbcAudienceDAO;
@@ -15,7 +15,7 @@ import java.util.List;
 import static java.lang.String.format;
 
 @Service
-public class AudienceService implements CrudMethods<Audience> {
+public class AudienceService implements GenericDao<Audience> {
     private JdbcAudienceDAO audienceDAO;
     private static final Logger ERROR = LoggerFactory.getLogger("com.gmail.sergick6690.error");
     private static final Logger DEBUG = LoggerFactory.getLogger("com.gmail.sergick6690.debug");
@@ -38,7 +38,6 @@ public class AudienceService implements CrudMethods<Audience> {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
-
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.gmail.sergick6690.university.Schedule;
 
 import java.util.List;
 
-public interface ScheduleDAO  extends CrudMethods<Schedule> {
+public interface ScheduleDAO  extends GenericDao<Schedule> {
     @Override
     default void add(Schedule obj) throws DaoException {
     }

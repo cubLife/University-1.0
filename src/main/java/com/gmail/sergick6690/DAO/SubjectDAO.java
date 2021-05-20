@@ -5,7 +5,7 @@ import com.gmail.sergick6690.university.Subject;
 
 import java.util.List;
 
-public interface SubjectDAO extends CrudMethods<Subject> {
+public interface SubjectDAO extends GenericDao<Subject> {
     @Override
     default void add(Subject obj) throws DaoException {
     }

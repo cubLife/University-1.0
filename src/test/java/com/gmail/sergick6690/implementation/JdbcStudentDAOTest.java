@@ -15,6 +15,7 @@ import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -25,6 +26,9 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.doThrow;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @ContextConfiguration(classes = SpringConfig.class)
@@ -34,6 +38,8 @@ class JdbcStudentDAOTest {
     private GroupDAO groupDAO;
     private CathedraDAO cathedraDAO;
     private ScheduleDAO scheduleDAO;
+    @Mock
+    private JdbcStudentDAO mockStudentDAO;
     private static final String TEST = "test";
 
     @Autowired
@@ -131,6 +137,70 @@ class JdbcStudentDAOTest {
         int expected = 0;
         int actual = studentDAO.findById(1).getCourse();
         assertEquals(expected, actual);
+    }
+
+    @Test
+    void shouldThrowDaoExceptionWhenAddStudentMethodCall() throws DaoException {
+        doThrow(DaoException.class).when(mockStudentDAO).add(new Student());
+        assertThrows(DaoException.class, () -> {
+            mockStudentDAO.add(new Student());
+        });
+    }
+
+    @Test
+    void shouldThrowDaoExceptionWhenFindStudentByIdMethodCall() throws DaoException {
+        doThrow(DaoException.class).when(mockStudentDAO).findById(anyInt());
+        assertThrows(DaoException.class, () -> {
+            mockStudentDAO.findById(anyInt());
+        });
+    }
+
+    @Test
+    void shouldThrowDaoExceptionWhenFindAllStudentMethodCall() throws DaoException {
+        doThrow(DaoException.class).when(mockStudentDAO).findAll();
+        assertThrows(DaoException.class, () -> {
+            mockStudentDAO.findAll();
+        });
+    }
+
+    @Test
+    void shouldThrowDaoExceptionWhenRemoveStudentByIdMethodCall() throws DaoException {
+        doThrow(DaoException.class).when(mockStudentDAO).removeById(anyInt());
+        assertThrows(DaoException.class, () -> {
+            mockStudentDAO.removeById(anyInt());
+        });
+    }
+
+    @Test
+    void shouldThrowDaoExceptionWhenAssignCourseMethodCall() throws DaoException {
+        doThrow(DaoException.class).when(mockStudentDAO).assignCourse(anyInt(), anyInt());
+        assertThrows(DaoException.class, () -> {
+            mockStudentDAO.assignCourse(anyInt(), anyInt());
+        });
+    }
+
+    @Test
+    void shouldThrowDaoExceptionWhenAssignGroupMethodCall() throws DaoException {
+        doThrow(DaoException.class).when(mockStudentDAO).assignGroup(anyInt(), anyInt());
+        assertThrows(DaoException.class, () -> {
+            mockStudentDAO.assignGroup(anyInt(), anyInt());
+        });
+    }
+
+    @Test
+    void shouldThrowDaoExceptionWhenRemoveFromCourseMethodCall() throws DaoException {
+        doThrow(DaoException.class).when(mockStudentDAO).removeFromCourse(anyInt());
+        assertThrows(DaoException.class, () -> {
+            mockStudentDAO.removeFromCourse(anyInt());
+        });
+    }
+
+    @Test
+    void shouldThrowDaoExceptionWhenRemoveFromGroupMethodCall() throws DaoException {
+        doThrow(DaoException.class).when(mockStudentDAO).removeFromGroup(anyInt());
+        assertThrows(DaoException.class, () -> {
+            mockStudentDAO.removeFromGroup(anyInt());
+        });
     }
 
     private void createTestData() throws DaoException {

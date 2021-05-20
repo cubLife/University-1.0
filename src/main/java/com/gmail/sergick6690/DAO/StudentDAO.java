@@ -5,7 +5,7 @@ import com.gmail.sergick6690.university.Student;
 
 import java.util.List;
 
-public interface StudentDAO extends CrudMethods<Student> {
+public interface StudentDAO extends GenericDao<Student> {
     @Override
     default void add(Student obj) throws DaoException {
     }

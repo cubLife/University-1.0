@@ -1,6 +1,6 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.DAO.CrudMethods;
+import com.gmail.sergick6690.DAO.GenericDao;
 import com.gmail.sergick6690.DAO.SubjectDAO;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.exceptions.ServiceException;
@@ -16,7 +16,7 @@ import java.util.List;
 import static java.lang.String.format;
 
 @Service
-public class SubjectService implements CrudMethods<Subject> {
+public class SubjectService implements GenericDao<Subject> {
     private SubjectDAO subjectDAO;
     private static final Logger ERROR = LoggerFactory.getLogger("com.gmail.sergick6690.error");
     private static final Logger DEBUG = LoggerFactory.getLogger("com.gmail.sergick6690.debug");

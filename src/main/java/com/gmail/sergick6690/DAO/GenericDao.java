@@ -5,7 +5,7 @@ import com.gmail.sergick6690.exceptions.ServiceException;
 
 import java.util.List;
 
-public interface CrudMethods<T> {
+public interface GenericDao<T> {
 
     public void add(T obj) throws DaoException, ServiceException;
 

@@ -5,7 +5,7 @@ import com.gmail.sergick6690.university.Group;
 
 import java.util.List;
 
-public interface GroupDAO extends CrudMethods<Group> {
+public interface GroupDAO extends GenericDao<Group> {
     @Override
     default void add(Group obj) throws DaoException {
     }

@@ -31,8 +31,7 @@ public class JdbcAudienceDAO implements AudienceDAO {
         try {
             jdbcTemplate.update(properties.getProperty(ADD), audience.getNumber());
         } catch (Exception e) {
-            throw new DaoException(e.getMessage(), e);
-
+            throw new DaoException("Cant't add audience", e);
         }
     }
 
@@ -48,7 +47,6 @@ public class JdbcAudienceDAO implements AudienceDAO {
             return jdbcTemplate.query(properties.getProperty(FIND_ALL), new BeanPropertyRowMapper<>(Audience.class));
         } catch (Exception e) {
             throw new DaoException("Can't find any audiences", e);
-
         }
     }
 

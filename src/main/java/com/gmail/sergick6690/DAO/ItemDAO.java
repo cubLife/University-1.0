@@ -5,7 +5,7 @@ import com.gmail.sergick6690.university.Item;
 
 import java.util.List;
 
-public interface ItemDAO extends CrudMethods<Item> {
+public interface ItemDAO extends GenericDao<Item> {
     @Override
     default void add(Item obj) throws DaoException {
     }

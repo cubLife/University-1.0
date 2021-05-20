@@ -12,7 +12,6 @@ import static org.mockito.Mockito.doNothing;
 
 @MockitoSettings(strictness = Strictness.LENIENT)
 class TablesCreatorTest {
-
     @Mock
     private TablesCreator creator;
 

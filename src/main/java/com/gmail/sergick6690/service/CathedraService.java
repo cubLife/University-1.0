@@ -1,6 +1,6 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.DAO.CrudMethods;
+import com.gmail.sergick6690.DAO.GenericDao;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.implementation.JdbcCathedraDAO;
@@ -15,7 +15,7 @@ import java.util.List;
 import static java.lang.String.format;
 
 @Service
-public class CathedraService implements CrudMethods<Cathedra> {
+public class CathedraService implements GenericDao<Cathedra> {
     private JdbcCathedraDAO cathedraDAO;
     private static final Logger ERROR = LoggerFactory.getLogger("com.gmail.sergick6690.error");
     private static final Logger DEBUG = LoggerFactory.getLogger("com.gmail.sergick6690.debug");
