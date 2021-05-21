@@ -3,7 +3,6 @@ package com.gmail.sergick6690.connectionFactory;
 import com.gmail.sergick6690.PropertyLoader;
 import org.springframework.stereotype.Component;
 
-import java.sql.SQLException;
 import java.util.Properties;
 
 @Component

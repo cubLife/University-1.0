@@ -1,16 +1,16 @@
 package com.gmail.sergick6690;
 
+
 import com.gmail.sergick6690.connectionFactory.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
-import java.sql.SQLException;
 import java.util.Properties;
 
 @Configuration
@@ -24,7 +24,7 @@ public class SpringConfig {
     }
 
     @Bean
-    public DataSource dataSource() throws SQLException {
+    public DataSource dataSource() {
         Properties properties = connectionFactory.getDBProperty();
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(properties.getProperty("driverClassName"));
@@ -35,7 +35,7 @@ public class SpringConfig {
     }
 
     @Bean
-    public JdbcTemplate jdbcTemplate() throws SQLException {
+    public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(dataSource());
     }
 }

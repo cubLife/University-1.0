@@ -1,0 +1,45 @@
+<configuration>
+    <property name="LOG_DIR" value="LogFile" />
+    <appender name="DEBUG" class="ch.qos.logback.core.FileAppender">
+        <file>${LOG_DIR}/Debug log.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="INFO" class="ch.qos.logback.core.FileAppender">
+        <file>${LOG_DIR}/Info log.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="ERROR" class="ch.qos.logback.core.FileAppender">
+        <file>${LOG_DIR}/Error log.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="TRACE" class="ch.qos.logback.core.FileAppender">
+        <file>${LOG_DIR}/Trace log.log</file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="com.gmail.sergick6690.debug" level="DEBUG" additivity="true">
+    <appender-ref ref="DEBUG"/>
+    </logger>
+    <logger name="com.gmail.sergick6690.info" level="INFO" additivity="true">
+    <appender-ref ref="INFO"/>
+    </logger>
+    <logger name="com.gmail.sergick6690.error" level="ERROR" additivity="true">
+        <appender-ref ref="ERROR" />
+    </logger>
+
+
+    <root level="trace">
+        <appender-ref ref="TRACE" />
+   </root>
+</configuration>

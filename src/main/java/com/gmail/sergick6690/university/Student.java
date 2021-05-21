@@ -18,6 +18,14 @@ public class Student extends Human {
         this.course = course;
     }
 
+    public int getGroupID() {
+        return groupID;
+    }
+
+    public void setGroupID(int groupID) {
+        this.groupID = groupID;
+    }
+
     public int getCourse() {
         return course;
     }
@@ -32,13 +40,20 @@ public class Student extends Human {
         if (!(o instanceof Student)) return false;
         if (!super.equals(o)) return false;
         Student student = (Student) o;
-        return getCourse() == student.getCourse();
+        return getGroupID() == student.getGroupID() &&
+                getCourse() == student.getCourse();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getCourse());
+        return Objects.hash(super.hashCode(), getGroupID(), getCourse());
     }
 
-
+    @Override
+    public String toString() {
+        return super.toString()+ "Student{" +
+                "groupID=" + groupID +
+                ", course=" + course +
+                '}';
+    }
 }

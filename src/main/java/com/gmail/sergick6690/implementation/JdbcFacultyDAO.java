@@ -1,18 +1,18 @@
 package com.gmail.sergick6690.implementation;
 
 import com.gmail.sergick6690.DAO.FacultyDAO;
-import com.gmail.sergick6690.university.Faculty;
 import com.gmail.sergick6690.PropertyLoader;
-import org.apache.maven.surefire.shared.lang3.NotImplementedException;
+import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.university.Faculty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Properties;
 
-@Component
+@Repository
 public class JdbcFacultyDAO implements FacultyDAO {
     private JdbcTemplate jdbcTemplate;
     private Properties properties = new PropertyLoader("Queries/facultyQueries.properties").loadProperty();
@@ -27,23 +27,35 @@ public class JdbcFacultyDAO implements FacultyDAO {
     }
 
     @Override
-    public void add(Faculty faculty) {
-        jdbcTemplate.update(properties.getProperty(ADD), faculty.getName());
+    public void add(Faculty faculty) throws DaoException {
+        try {
+            jdbcTemplate.update(properties.getProperty(ADD), faculty.getName());
+        } catch (Exception e) {
+            throw new DaoException("Can't add faculty - " + faculty, e);
+        }
     }
 
     @Override
-    public Faculty findById(int id) throws NotImplementedException {
+    public Faculty findById(int id) throws DaoException {
         return jdbcTemplate.query(properties.getProperty(FIND_BY_ID), new BeanPropertyRowMapper<>(Faculty.class), id)
-                .stream().findAny().orElseThrow(() -> new NotImplementedException("Faculty not found - " + id));
+                .stream().findAny().orElseThrow(() -> new DaoException("Faculty not found - " + id));
     }
 
     @Override
-    public List<Faculty> findAll() {
-        return jdbcTemplate.query(properties.getProperty(FIND_ALL), new BeanPropertyRowMapper<>(Faculty.class));
+    public List<Faculty> findAll() throws DaoException {
+        try {
+            return jdbcTemplate.query(properties.getProperty(FIND_ALL), new BeanPropertyRowMapper<>(Faculty.class));
+        } catch (Exception e) {
+            throw new DaoException("Can't find any faculties", e);
+        }
     }
 
     @Override
-    public void removeById(int id) {
-        jdbcTemplate.update(properties.getProperty(REMOVE), id);
+    public void removeById(int id) throws DaoException {
+        try {
+            jdbcTemplate.update(properties.getProperty(REMOVE), id);
+        } catch (Exception e) {
+            throw new DaoException("Can't remove faculty with id - " + id, e);
+        }
     }
 }
