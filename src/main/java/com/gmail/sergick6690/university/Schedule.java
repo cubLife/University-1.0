@@ -47,18 +47,20 @@ public class Schedule {
         if (!(o instanceof Schedule)) return false;
         Schedule schedule = (Schedule) o;
         return getId() == schedule.getId() &&
+                Objects.equals(getName(), schedule.getName()) &&
                 Objects.equals(getItems(), schedule.getItems());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getItems());
+        return Objects.hash(getId(), getName(), getItems());
     }
 
     @Override
     public String toString() {
         return "Schedule{" +
                 "id=" + id +
+                ", name=" + name +
                 ", items=" + items +
                 '}';
     }

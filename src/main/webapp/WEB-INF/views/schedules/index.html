@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>schedules</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+</head>
+<body>
+<h1 class="navbar-brand" style="text-align: center">Schedules menu</h1>
+<div class="container-fluid">
+    <a class="nav-link active" th:href="@{/all/schedules}">Show all schedules</a>
+    <br/>
+</div>
+<p>Find Schedule by id</p>
+<nav class="navbar navbar-light bg-light" aria-label>
+    <div class="container-fluid">
+        <form class="d-flex" th:method="POST" action="/show/schedule">
+            <input class="form-control me-2" type="number" placeholder="Schedule id" aria-label="Schedule id"
+                   name="id"/>
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+</body>
+</html>

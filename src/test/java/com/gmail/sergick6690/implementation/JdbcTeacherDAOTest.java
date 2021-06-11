@@ -2,11 +2,10 @@ package com.gmail.sergick6690.implementation;
 
 import com.gmail.sergick6690.DAO.ScheduleDAO;
 import com.gmail.sergick6690.DAO.TeacherDAO;
-import com.gmail.sergick6690.SpringConfig;
+import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.TablesCreator;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Schedule;
-import com.gmail.sergick6690.university.Subject;
 import com.gmail.sergick6690.university.Teacher;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.BeforeEach;

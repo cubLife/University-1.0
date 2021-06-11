@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>subjects</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+</head>
+<body>
+<div class="container-fluid">
+    <h1 class="navbar-brand" style="text-align: center">Subject menu</h1>
+    <a class="nav-link active" th:href="@{/all/subjects}">Show all subjects</a>
+    <br/>
+</div>
+<p>Find subject by id</p>
+<nav class="navbar navbar-light bg-light" aria-label>
+    <div class="container-fluid">
+        <form class="d-flex" th:method="POST" action="/show/subject">
+            <input class="form-control me-2" type="number" placeholder="Subject id" aria-label="Subject id"
+                   name="id"/>
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+<p>Find subject related to audience</p>
+<nav class="navbar navbar-light bg-light" aria-label>
+    <div class="container-fluid">
+        <form class="d-flex" th:method="POST" action="/subjects/related">
+            <input class="form-control me-2" type="number" placeholder="Audience id" aria-label="Audience id"
+                   name="id"/>
+            <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+</body>
+</html>

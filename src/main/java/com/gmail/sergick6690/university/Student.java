@@ -5,7 +5,7 @@ import lombok.Builder;
 import java.util.Objects;
 
 public class Student extends Human {
-    private int groupID;
+    private int groupId;
     private int course;
 
     public Student() {
@@ -14,16 +14,16 @@ public class Student extends Human {
     @Builder
     private Student(int id, String firstName, String lastNAme, String sex, int age, int course, int groupID) {
         super(id, firstName, lastNAme, sex, age);
-        this.groupID = groupID;
+        this.groupId = groupID;
         this.course = course;
     }
 
-    public int getGroupID() {
-        return groupID;
+    public int getGroupId() {
+        return groupId;
     }
 
-    public void setGroupID(int groupID) {
-        this.groupID = groupID;
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
     }
 
     public int getCourse() {
@@ -40,19 +40,19 @@ public class Student extends Human {
         if (!(o instanceof Student)) return false;
         if (!super.equals(o)) return false;
         Student student = (Student) o;
-        return getGroupID() == student.getGroupID() &&
+        return getGroupId() == student.getGroupId() &&
                 getCourse() == student.getCourse();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getGroupID(), getCourse());
+        return Objects.hash(super.hashCode(), getGroupId(), getCourse());
     }
 
     @Override
     public String toString() {
-        return super.toString()+ "Student{" +
-                "groupID=" + groupID +
+        return super.toString() + "Student{" +
+                "groupID=" + groupId +
                 ", course=" + course +
                 '}';
     }

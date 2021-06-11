@@ -6,14 +6,16 @@ import java.util.Objects;
 public class Cathedra {
     private int id;
     private String name;
+    private int facultyId;
     private List<Group> groups;
 
     public Cathedra() {
     }
 
-    public Cathedra(int id, String name, List<Group> groups) {
+    public Cathedra(int id, String name, int facultyId, List<Group> groups) {
         this.id = id;
         this.name = name;
+        this.facultyId = facultyId;
         this.groups = groups;
     }
 
@@ -31,6 +33,14 @@ public class Cathedra {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getFacultyId() {
+        return facultyId;
+    }
+
+    public void setFacultyId(int facultyId) {
+        this.facultyId = facultyId;
     }
 
     public List<Group> getGroups() {

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>all audiences</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+</head>
+<body>
+<h1 class="navbar-brand" style="text-align: center">All audiences</h1>
+<div class="container-fluid" th:each="audience : ${audiences}">
+    <p class="navbar-brand "> number - <a th:href="@{/audiences/{id}(id=${audience.getId()})}"
+                                          th:text="${audience.getNumber()}">audience</a>
+    </p>
+</div>
+</body>
+</html>

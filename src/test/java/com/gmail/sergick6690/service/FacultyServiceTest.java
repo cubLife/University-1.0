@@ -31,7 +31,7 @@ class FacultyServiceTest {
     }
 
     @Test
-    void shouldInvokeFindById() throws ServiceException, DaoException {
+    void shouldInvokeFindById() throws Exception {
         service.findById(ID);
         verify(dao).findById(ID);
     }
