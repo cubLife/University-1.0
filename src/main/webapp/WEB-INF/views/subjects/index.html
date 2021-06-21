@@ -9,13 +9,13 @@
 <body>
 <div class="container-fluid">
     <h1 class="navbar-brand" style="text-align: center">Subject menu</h1>
-    <a class="nav-link active" th:href="@{/all/subjects}">Show all subjects</a>
+    <a class="nav-link active" th:href="@{/subjects/all}">Show all subjects</a>
     <br/>
 </div>
 <p>Find subject by id</p>
 <nav class="navbar navbar-light bg-light" aria-label>
     <div class="container-fluid">
-        <form class="d-flex" th:method="POST" action="/show/subject">
+        <form class="d-flex" th:method="POST" action="/subjects/subject">
             <input class="form-control me-2" type="number" placeholder="Subject id" aria-label="Subject id"
                    name="id"/>
             <button class="btn btn-outline-success" type="submit">Search</button>

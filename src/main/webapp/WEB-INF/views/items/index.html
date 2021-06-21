@@ -9,13 +9,13 @@
 <body>
 <h1 class="navbar-brand" style="text-align: center">Item menu</h1>
 <div class="container-fluid">
-    <a class="nav-link active" th:href="@{/all/items}">Show all items</a>
+    <a class="nav-link active" th:href="@{/items/all}">Show all items</a>
     <br/>
 </div>
 <p>Find item by id</p>
 <nav class="navbar navbar-light bg-light" aria-label>
     <div class="container-fluid">
-        <form class="d-flex" th:method="POST" action="/show/item">
+        <form class="d-flex" th:method="POST" action="/items/item">
             <input class="form-control me-2" type="number" placeholder="Item id" aria-label="Item id"
                    name="id"/>
             <button class="btn btn-outline-success" type="submit">Search</button>

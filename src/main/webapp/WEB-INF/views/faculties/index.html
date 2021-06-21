@@ -9,11 +9,11 @@
 <body>
 <h1 class="navbar-brand" style="text-align: center">Faculties menu</h1>
 <div class="container-fluid">
-    <a class="nav-link active" th:href="@{/all/faculties}">Show all faculties</a>
+    <a class="nav-link active" th:href="@{/faculties/all}">Show all faculties</a>
 </div>
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <form class="d-flex" th:method="POST" action="/show/faculty">
+        <form class="d-flex" th:method="POST" action="/faculties/faculty">
             <input class="form-control me-2" type="number" placeholder="Faculty id" aria-label="Faculty id"
                    name="id"/>
             <button class="btn btn-outline-success" type="submit">Search</button>

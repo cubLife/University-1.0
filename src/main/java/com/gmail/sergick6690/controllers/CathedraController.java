@@ -2,18 +2,13 @@ package com.gmail.sergick6690.controllers;
 
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.service.CathedraService;
-import com.gmail.sergick6690.university.Cathedra;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequestMapping("/cathedras")
 public class CathedraController {
     private CathedraService service;
 
@@ -22,45 +17,26 @@ public class CathedraController {
         this.service = service;
     }
 
-    @GetMapping("cathedras/index")
+    @GetMapping("/index")
     public String startPage() {
         return "cathedra/index";
     }
 
-    @GetMapping("all/cathedras")
-    public String showAll(Model model) {
-        List<Cathedra> cathedras;
-        try {
-            cathedras = service.findAll();
-        } catch (ServiceException e) {
-            model.addAttribute("massage", e.toString());
-            return "errorPage";
-        }
-        model.addAttribute("cathedras", cathedras);
+    @GetMapping("/all")
+    public String showAll(Model model) throws ServiceException {
+        model.addAttribute("cathedras", service.findAll());
         return "cathedra/cathedras";
     }
 
-    @GetMapping("/cathedras/{id}")
-    public String showById(@PathVariable("id") int id, Model model) {
-        Cathedra cathedra = null;
-        try {
-            cathedra = service.findById(id);
-        } catch (ServiceException e) {
-            model.addAttribute("massage", e.toString());
-            return "errorPage";
-        }
-        model.addAttribute("cathedra", cathedra);
+    @GetMapping("/{id}")
+    public String showById(@PathVariable("id") int id, Model model) throws ServiceException {
+        model.addAttribute("cathedra", service.findById(id));
         return "cathedra/show";
     }
 
-    @PostMapping("show/cathedra")
-    public String show(@RequestParam("id") int id, Model model) {
-        try {
-            model.addAttribute("cathedra", service.findById(id));
-        } catch (ServiceException e) {
-            model.addAttribute("massage", e.toString());
-            return "errorPage";
-        }
+    @PostMapping("/cathedra")
+    public String show(@RequestParam("id") int id, Model model) throws ServiceException {
+        model.addAttribute("cathedra", service.findById(id));
         return "cathedra/show";
     }
 }

@@ -9,13 +9,13 @@
 <body>
 <h1 class="navbar-brand" style="text-align: center">Groups menu</h1>
 <div class="container-fluid">
-    <a class="nav-link active" th:href="@{/all/groups}">Show all groups</a>
+    <a class="nav-link active" th:href="@{/groups/all}">Show all groups</a>
     <br/>
 </div>
 <p>Find group by id</p>
 <nav class="navbar navbar-light bg-light" aria-label>
     <div class="container-fluid">
-        <form class="d-flex" th:method="POST" action="/show/group">
+        <form class="d-flex" th:method="POST" action="/groups/group">
             <input class="form-control me-2" type="number" placeholder="Group id" aria-label="Group id"
                    name="id"/>
             <button class="btn btn-outline-success" type="submit">Search</button>
@@ -32,6 +32,5 @@
         </form>
     </div>
 </nav>
-</form>
 </body>
 </html>

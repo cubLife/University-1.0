@@ -9,13 +9,13 @@
 <body>
 <h1 class="navbar-brand" style="text-align: center">Teacher menu</h1>
 <div class="container-fluid">
-    <a class="nav-link active" th:href="@{/all/teachers}">Show all teachers</a>
+    <a class="nav-link active" th:href="@{/teachers/all}">Show all teachers</a>
     <br/>
 </div>
 <p>Find teacher by id</p>
 <nav class="navbar navbar-light bg-light" aria-label>
     <div class="container-fluid">
-        <form class="d-flex" th:method="POST" action="/show/teacher">
+        <form class="d-flex" th:method="POST" action="/teachers/teacher">
             <input class="form-control me-2" type="number" placeholder="Teacher id" aria-label="Teacher id"
                    name="id"/>
             <button class="btn btn-outline-success" type="submit">Search</button>
@@ -25,7 +25,7 @@
 <p>Show teacher with equal degree </p>
 <nav class="navbar navbar-light bg-light" aria-label>
     <div class="container-fluid">
-        <form class="d-flex" th:method="POST" action="/equal/degree">
+        <form class="d-flex" th:method="POST" action="/teachers/equal/degree">
             <input class="form-control me-2" type="text" placeholder="Degree" aria-label="Degree"
                    name="degree"/>
             <button class="btn btn-outline-success" type="submit">Search</button>
