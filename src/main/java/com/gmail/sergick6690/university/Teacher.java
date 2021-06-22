@@ -21,6 +21,7 @@ public class Teacher extends Human {
         this.subjects = subjects;
     }
 
+
     public String getDegree() {
         return degree;
     }

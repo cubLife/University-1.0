@@ -1,7 +1,7 @@
 package com.gmail.sergick6690.implementation;
 
 import com.gmail.sergick6690.DAO.*;
-import com.gmail.sergick6690.SpringConfig;
+import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.TablesCreator;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.*;
@@ -17,7 +17,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.sql.SQLException;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

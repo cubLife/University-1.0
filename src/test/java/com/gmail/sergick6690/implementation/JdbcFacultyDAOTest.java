@@ -1,7 +1,7 @@
 package com.gmail.sergick6690.implementation;
 
 import com.gmail.sergick6690.DAO.FacultyDAO;
-import com.gmail.sergick6690.SpringConfig;
+import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.TablesCreator;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Faculty;

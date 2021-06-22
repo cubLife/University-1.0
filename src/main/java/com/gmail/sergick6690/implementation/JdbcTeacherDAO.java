@@ -30,64 +30,63 @@ public class JdbcTeacherDAO implements TeacherDAO {
     }
 
     @Override
-    public void add(Teacher teacher)throws DaoException {
+    public void add(Teacher teacher) throws DaoException {
         try {
-            jdbcTemplate.update(properties.getProperty(ADD), teacher.getFirstName(), teacher.getLastNAme(), teacher.getSex(),
+            jdbcTemplate.update(properties.getProperty(ADD), teacher.getFirstName(), teacher.getLastName(), teacher.getSex(),
                     teacher.getAge(), teacher.getDegree(), teacher.getScheduleId());
-        }catch (Exception e){
-            throw new DaoException("Can't add teacher - "+teacher,e);
+        } catch (Exception e) {
+            throw new DaoException("Can't add teacher - " + teacher, e);
         }
     }
 
     @Override
-    public void removeById(int id) throws DaoException{
+    public void removeById(int id) throws DaoException {
         try {
             jdbcTemplate.update(properties.getProperty(REMOVE), id);
-        }catch (Exception e){
-            throw new DaoException("Can't remove teacher with id - "+id,e);
+        } catch (Exception e) {
+            throw new DaoException("Can't remove teacher with id - " + id, e);
         }
     }
 
     @Override
-    public Teacher findById(int id) throws DaoException{
+    public Teacher findById(int id) throws DaoException {
         return jdbcTemplate.query(properties.getProperty(FIND_BY_ID), new BeanPropertyRowMapper<>(Teacher.class), id)
-                .stream().findAny().orElseThrow(() -> new  DaoException("Teacher not found - " + id));
+                .stream().findAny().orElseThrow(() -> new DaoException("Teacher not found - " + id));
     }
 
     @Override
-    public List<Teacher> findAll()throws DaoException {
+    public List<Teacher> findAll() throws DaoException {
         try {
             return jdbcTemplate.query(properties.getProperty(FIND_ALL), new BeanPropertyRowMapper<>(Teacher.class));
-        }catch (Exception e){
-            throw new DaoException("Can't find any teacher",e);
+        } catch (Exception e) {
+            throw new DaoException("Can't find any teacher", e);
         }
-
     }
 
     @Override
-    public Integer findTeachersCountWithEqualDegree(String degree) throws DaoException{
+    public Integer findTeachersCountWithEqualDegree(String degree) throws DaoException {
         try {
             return jdbcTemplate.queryForObject(properties.getProperty(FIND_WITH_EQUAL_DEGREE), Integer.class, degree);
-        }catch (Exception e){
-            throw new DaoException("Can't find any teacher with degree - "+degree,e);
+        } catch (Exception e) {
+            throw new DaoException("Can't find any teacher with degree - " + degree, e);
         }
     }
 
     @Override
-    public void removeSchedule(int teacherId) throws DaoException{
+    public void removeSchedule(int teacherId) throws DaoException {
         try {
             jdbcTemplate.update(properties.getProperty(REMOVE_SCHEDULE), teacherId);
-        }catch (Exception e){
-            throw new DaoException("Can't remove schedule for teacher with id - "+teacherId,e);
+        } catch (Exception e) {
+            throw new DaoException("Can't remove schedule for teacher with id - " + teacherId, e);
         }
     }
 
     @Override
-    public void assignSchedule(int teacherId, int scheduleId) throws DaoException{
+    public void assignSchedule(int teacherId, int scheduleId) throws DaoException {
         try {
             jdbcTemplate.update(properties.getProperty(ASSIGN_SCHEDULE), scheduleId, teacherId);
-        }catch (Exception e){
-            throw new DaoException("Cant assign schedule with id - "+scheduleId+"for teacher with id - "+teacherId,e);
+        } catch (Exception e) {
+            throw new DaoException("Cant assign schedule with id - " + scheduleId + "for teacher with id - " + teacherId, e);
         }
     }
 }

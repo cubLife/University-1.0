@@ -4,7 +4,7 @@ import com.gmail.sergick6690.DAO.CathedraDAO;
 import com.gmail.sergick6690.DAO.GroupDAO;
 import com.gmail.sergick6690.DAO.ScheduleDAO;
 import com.gmail.sergick6690.DAO.StudentDAO;
-import com.gmail.sergick6690.SpringConfig;
+import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.TablesCreator;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Cathedra;
@@ -20,7 +20,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -105,7 +104,7 @@ class JdbcStudentDAOTest {
         studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).groupID(1).course(0).build());
         studentDAO.assignGroup(1, 2);
         int expected = 2;
-        int actual = studentDAO.findById(1).getGroupID();
+        int actual = studentDAO.findById(1).getGroupId();
         assertEquals(expected, actual);
     }
 
@@ -115,7 +114,7 @@ class JdbcStudentDAOTest {
         studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).groupID(2).course(0).build());
         studentDAO.removeFromGroup(1);
         int expected = 1;
-        int actual = studentDAO.findById(1).getGroupID();
+        int actual = studentDAO.findById(1).getGroupId();
         assertEquals(expected, actual);
     }
 

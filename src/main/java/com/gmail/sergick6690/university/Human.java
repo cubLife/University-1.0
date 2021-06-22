@@ -10,7 +10,7 @@ import java.util.Objects;
 public class Human {
     private int id;
     private String firstName;
-    private String lastNAme;
+    private String lastName;
     private String sex;
     private int age;
 
@@ -36,12 +36,12 @@ public class Human {
         this.firstName = firstName;
     }
 
-    public String getLastNAme() {
-        return lastNAme;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLastNAme(String lastNAme) {
-        this.lastNAme = lastNAme;
+    public void setLastName(String lastNAme) {
+        this.lastName = lastNAme;
     }
 
     public String getSex() {
@@ -68,13 +68,13 @@ public class Human {
         return getId() == human.getId() &&
                 getAge() == human.getAge() &&
                 Objects.equals(getFirstName(), human.getFirstName()) &&
-                Objects.equals(getLastNAme(), human.getLastNAme()) &&
+                Objects.equals(getLastName(), human.getLastName()) &&
                 Objects.equals(getSex(), human.getSex());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getFirstName(), getLastNAme(), getSex(), getAge());
+        return Objects.hash(getId(), getFirstName(), getLastName(), getSex(), getAge());
     }
 
     @Override
@@ -82,7 +82,7 @@ public class Human {
         return "Human{" +
                 "id=" + id +
                 ", firstName='" + firstName + '\'' +
-                ", lastNAme='" + lastNAme + '\'' +
+                ", lastNAme='" + lastName + '\'' +
                 ", sex='" + sex + '\'' +
                 ", age=" + age +
                 '}';

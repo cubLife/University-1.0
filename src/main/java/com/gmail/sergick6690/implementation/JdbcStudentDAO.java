@@ -33,10 +33,10 @@ public class JdbcStudentDAO implements StudentDAO {
     @Override
     public void add(Student student) throws DaoException {
         try {
-            jdbcTemplate.update(properties.getProperty(ADD), student.getFirstName(), student.getLastNAme(),
-                    student.getSex(), student.getAge(), student.getGroupID(), student.getCourse());
-        }catch (Exception e){
-            throw new DaoException("Can't add student - "+student, e);
+            jdbcTemplate.update(properties.getProperty(ADD), student.getFirstName(), student.getLastName(),
+                    student.getSex(), student.getAge(), student.getGroupId(), student.getCourse());
+        } catch (Exception e) {
+            throw new DaoException("Can't add student - " + student, e);
         }
     }
 
@@ -47,57 +47,56 @@ public class JdbcStudentDAO implements StudentDAO {
     }
 
     @Override
-    public List<Student> findAll() throws DaoException{
+    public List<Student> findAll() throws DaoException {
         try {
             return jdbcTemplate.query(properties.getProperty(FIND_ALL), new BeanPropertyRowMapper<>(Student.class));
-        }catch (Exception e){
-            throw new DaoException("Can't find any student",e);
+        } catch (Exception e) {
+            throw new DaoException("Can't find any student", e);
         }
     }
 
     @Override
-    public void removeById(int id)throws DaoException {
+    public void removeById(int id) throws DaoException {
         try {
             jdbcTemplate.update(properties.getProperty(REMOVE), id);
-        }catch (Exception e){
-            throw new DaoException("Can't remove student with id - "+id, e);
+        } catch (Exception e) {
+            throw new DaoException("Can't remove student with id - " + id, e);
         }
     }
 
     @Override
-    public void assignGroup(int studentId, int groupId)throws DaoException {
+    public void assignGroup(int studentId, int groupId) throws DaoException {
         try {
             jdbcTemplate.update(properties.getProperty(ASSIGN_GROUP), groupId, studentId);
-        }catch (Exception e){
-            throw  new DaoException("Can't assign group", e);
+        } catch (Exception e) {
+            throw new DaoException("Can't assign group", e);
         }
     }
 
     @Override
-    public void removeFromGroup(int studentId) throws DaoException{
+    public void removeFromGroup(int studentId) throws DaoException {
         try {
             jdbcTemplate.update(properties.getProperty(REMOVE_FROM_GROUP), studentId);
-        }catch (Exception e){
-            throw new DaoException("Can't remove remove student with id - "+studentId+" from group",e);
+        } catch (Exception e) {
+            throw new DaoException("Can't remove remove student with id - " + studentId + " from group", e);
         }
-
     }
 
     @Override
-    public void assignCourse(int studentId, int courseId)throws DaoException {
+    public void assignCourse(int studentId, int courseId) throws DaoException {
         try {
             jdbcTemplate.update(properties.getProperty(ASSIGN_COURSE), courseId, studentId);
-        }catch (Exception e){
-            throw new DaoException("Can't assgn course - "+courseId+"for student - "+studentId,e);
+        } catch (Exception e) {
+            throw new DaoException("Can't assgn course - " + courseId + "for student - " + studentId, e);
         }
     }
 
     @Override
-    public void removeFromCourse(int studentId)throws DaoException {
+    public void removeFromCourse(int studentId) throws DaoException {
         try {
             jdbcTemplate.update(properties.getProperty(REMOVE_FROM_COURSE), studentId);
-        }catch (Exception e){
-            throw new DaoException("Can't remove student with id - "+studentId+" from course",e);
+        } catch (Exception e) {
+            throw new DaoException("Can't remove student with id - " + studentId + " from course", e);
         }
     }
 }
