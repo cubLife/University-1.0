@@ -13,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -33,13 +34,16 @@ class ScheduleControllerTest {
     private WebApplicationContext webApplicationContext;
     @MockBean
     ScheduleService service;
-    private static final String SCHEDULES_INDEX_URL = "/schedules/index";
+    private static final String SCHEDULES_INDEX_URL = "/schedules";
     private static final String SCHEDULES_ALL_URL = "/schedules/all";
     private static final String SCHEDULES_ID_URL = "/schedules/1";
+    private static final String SCHEDULES_ADD_URL = "/schedules/add";
+    private static final String SCHEDULES_DELETE_URL = "/schedules/delete";
     private static final String SCHEDULES_SCHEDULE_URL = "/schedules/schedule";
     private static final String SCHEDULES_INDEX_VIEW = "schedules/index";
     private static final String SCHEDULES_SCHEDULES_VIEW = "schedules/schedules";
     private static final String SCHEDULES_SHOW_VIEW = "schedules/show";
+    private static final String REDIRECT = "/schedules";
     private static final String SCHEDULE = "schedule";
     private static final String SCHEDULES = "schedules";
 
@@ -90,5 +94,20 @@ class ScheduleControllerTest {
                 .andDo(print())
                 .andExpect(model().attribute(SCHEDULE, new Schedule()))
                 .andExpect(view().name(SCHEDULES_SHOW_VIEW));
+    }
+
+    @Test
+    void add() throws Exception {
+        mockMvc.perform(post(SCHEDULES_ADD_URL))
+                .andDo(print())
+                .andExpect(model().attribute("schedule", new Schedule()))
+                .andExpect(redirectedUrl(REDIRECT));
+    }
+
+    @Test
+    void delete() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete(SCHEDULES_DELETE_URL).param("id", "1"))
+                .andDo(print())
+                .andExpect(redirectedUrl(REDIRECT));
     }
 }

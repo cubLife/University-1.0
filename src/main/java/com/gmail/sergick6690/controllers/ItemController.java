@@ -2,10 +2,13 @@ package com.gmail.sergick6690.controllers;
 
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.service.ItemService;
+import com.gmail.sergick6690.university.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.text.ParseException;
 
 @Controller
 @RequestMapping("/items")
@@ -17,8 +20,9 @@ public class ItemController {
         this.service = service;
     }
 
-    @GetMapping("/index")
-    public String startPage() {
+    @GetMapping()
+    public String startPage(Model model) {
+        model.addAttribute("item", new Item());
         return "items/index";
     }
 
@@ -38,5 +42,18 @@ public class ItemController {
     public String show(@RequestParam("id") int id, Model model) throws ServiceException {
         model.addAttribute("item", service.findById(id));
         return "items/show";
+    }
+
+    @PostMapping("/add")
+    public String add(@RequestParam("subjectId") int subjectId, @RequestParam("day") String day, @RequestParam("hour") int hour, @RequestParam("audienceId") int audienceId
+            , @RequestParam("duration") int duration, @RequestParam("scheduleId") int scheduleId) throws ServiceException {
+        service.add(new Item(subjectId, day, hour, audienceId, duration, scheduleId));
+        return "redirect:/items";
+    }
+
+    @DeleteMapping("/delete")
+    public String delete(@RequestParam("id") int id) throws ServiceException {
+        service.removeById(id);
+        return "redirect:/items";
     }
 }

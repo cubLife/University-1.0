@@ -29,7 +29,7 @@ public class JdbcCathedraDAO implements CathedraDAO {
     @Override
     public void add(Cathedra cathedra) throws DaoException {
         try {
-            jdbcTemplate.update(properties.getProperty(ADD), cathedra.getName());
+            jdbcTemplate.update(properties.getProperty(ADD), cathedra.getName(), cathedra.getFacultyId());
         } catch (Exception e) {
             throw new DaoException("Cant add cathedra - " + cathedra, e);
         }

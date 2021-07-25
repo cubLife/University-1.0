@@ -37,7 +37,7 @@ public class JdbcScheduleDAO implements ScheduleDAO {
 
     @Override
     public Schedule findById(int id) throws DaoException {
-        return jdbcTemplate.query(properties.getProperty(FIND_BY_ID), new BeanPropertyRowMapper<>(Schedule.class), id)
+        return jdbcTemplate.query(properties.getProperty(FIND_BY_ID), new BeanPropertyRowMapper<Schedule>(Schedule.class), id)
                 .stream().findAny().orElseThrow(() -> new DaoException("Schedule not found - " + id));
     }
 

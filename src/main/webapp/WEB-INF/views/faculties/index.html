@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en"
+xmlns:th=xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>faculties</title>
@@ -17,6 +18,23 @@
             <input class="form-control me-2" type="number" placeholder="Faculty id" aria-label="Faculty id"
                    name="id"/>
             <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <form class="d-flex" th:method="POST" th:action="@{/faculties/add}" th:object="${faculty}">
+            <input class="form-control me-2" type="text" th:field="*{name}" placeholder="Faculty name"
+                   aria-label="Faculty name" name="name"/>
+            <button class="btn btn-outline-success" type="submit">Add new faculty</button>
+        </form>
+    </div>
+</nav>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <form class="d-flex" th:method="delete" th:action="@{/faculties/delete}">
+            <input class="form-control me-2" type="number" placeholder="Faculty id" aria-label="Faculty id" name="id"/>
+            <button class="btn btn-outline-success" type="submit">Delete faculty</button>
         </form>
     </div>
 </nav>

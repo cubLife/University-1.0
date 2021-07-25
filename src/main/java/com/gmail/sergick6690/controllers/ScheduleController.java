@@ -2,6 +2,7 @@ package com.gmail.sergick6690.controllers;
 
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.service.ScheduleService;
+import com.gmail.sergick6690.university.Schedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,8 +18,9 @@ public class ScheduleController {
         this.service = service;
     }
 
-    @GetMapping("/index")
-    public String startPage() {
+    @GetMapping()
+    public String startPage(Model model) {
+        model.addAttribute("schedule", new Schedule());
         return "schedules/index";
     }
 
@@ -38,5 +40,17 @@ public class ScheduleController {
     public String show(@RequestParam("id") int id, Model model) throws ServiceException {
         model.addAttribute("schedule", service.findById(id));
         return "schedules/show";
+    }
+
+    @PostMapping("/add")
+    public String add(@ModelAttribute("schedule") Schedule schedule) throws ServiceException {
+        service.add(schedule);
+        return "redirect:/schedules";
+    }
+
+    @DeleteMapping("/delete")
+    public String delete(@RequestParam("id") int id) throws ServiceException {
+        service.removeById(id);
+        return "redirect:/schedules";
     }
 }

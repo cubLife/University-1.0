@@ -59,7 +59,8 @@ CREATE TABLE subjects
 CREATE TABLE Items
 (
     id         SERIAL,
-    date       DATE,
+    day VARCHAR(15),
+    hour INT,
     duration   INTEGER,
     subjectId  int,
     audienceId int,

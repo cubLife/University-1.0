@@ -1,10 +1,12 @@
 package com.gmail.sergick6690.implementation;
 
 import com.gmail.sergick6690.DAO.CathedraDAO;
+import com.gmail.sergick6690.DAO.FacultyDAO;
 import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.TablesCreator;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Cathedra;
+import com.gmail.sergick6690.university.Faculty;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -25,17 +28,20 @@ import static org.mockito.Mockito.doThrow;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @ContextConfiguration(classes = SpringConfig.class)
+@WebAppConfiguration
 class JdbcCathedraDAOTest {
     private TablesCreator creator;
     private CathedraDAO cathedraDAO;
+    private FacultyDAO facultyDAO;
     @Mock
     private JdbcCathedraDAO mockCathedraDAO;
     private final String TEST = "test";
 
     @Autowired
-    public JdbcCathedraDAOTest(TablesCreator creator, CathedraDAO cathedraDAO) {
+    public JdbcCathedraDAOTest(TablesCreator creator, CathedraDAO cathedraDAO, FacultyDAO facultyDAO) {
         this.creator = creator;
         this.cathedraDAO = cathedraDAO;
+        this.facultyDAO=facultyDAO;
     }
 
     @BeforeEach
@@ -45,7 +51,7 @@ class JdbcCathedraDAOTest {
 
     @Test
     void shouldAddCathedra() throws DaoException {
-        cathedraDAO.add(new Cathedra(1, TEST,1, null));
+      generateTestData();
         Cathedra expected = new Cathedra(1, TEST,1, null);
         Cathedra actual = cathedraDAO.findAll().get(0);
         assertEquals(expected, actual);
@@ -53,9 +59,7 @@ class JdbcCathedraDAOTest {
 
     @Test
     void shouldRremoveCathedraById() throws DaoException {
-        for (int i = 0; i < 5; i++) {
-            cathedraDAO.add(new Cathedra());
-        }
+     generateTestData();
         cathedraDAO.removeById(1);
         int expected = 4;
         int actual = cathedraDAO.findAll().size();
@@ -64,9 +68,7 @@ class JdbcCathedraDAOTest {
 
     @Test
     void shouldFindCathedraById() throws NotImplementedException, DaoException {
-        for (int i = 0; i < 5; i++) {
-            cathedraDAO.add(new Cathedra(1, TEST, 1,null));
-        }
+       generateTestData();
         Cathedra expected = new Cathedra(4, TEST,1, null);
         Cathedra actual = cathedraDAO.findById(4);
         assertEquals(expected, actual);
@@ -74,9 +76,7 @@ class JdbcCathedraDAOTest {
 
     @Test
     void shouldFindAllCathedras() throws DaoException {
-        for (int i = 0; i < 5; i++) {
-            cathedraDAO.add(new Cathedra());
-        }
+       generateTestData();
         int expected = 5;
         int actual = cathedraDAO.findAll().size();
         assertEquals(expected, actual);
@@ -112,5 +112,12 @@ class JdbcCathedraDAOTest {
         assertThrows(DaoException.class, () -> {
             mockCathedraDAO.removeById(0);
         });
+    }
+
+    public void generateTestData() throws DaoException {
+        facultyDAO.add(new Faculty(1,TEST, null));
+        for (int i = 0; i < 5; i++) {
+            cathedraDAO.add(new Cathedra(1, TEST, 1,null));
+        }
     }
 }

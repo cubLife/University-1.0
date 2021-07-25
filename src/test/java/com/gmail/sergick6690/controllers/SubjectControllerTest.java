@@ -12,7 +12,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
@@ -32,17 +35,25 @@ class SubjectControllerTest {
     private WebApplicationContext webApplicationContext;
     @MockBean
     private SubjectService service;
-    private static final String SUBJECTS_INDEX_URL = "/subjects/index";
+    private static final String SUBJECTS_INDEX_URL = "/subjects";
     private static final String SUBJECTS_ALL_URL = "/subjects/all";
     private static final String SUBJECTS_ID_URL = "/subjects/1";
     private static final String SUBJECTS_SUBJECT_URL = "/subjects/subject";
     private static final String SUBJECTS_RELATED_URL = "/subjects/related";
+    private static final String SUBJECTS_ADD_URL = "/subjects/add";
+    private static final String SUBJECTS_REMOVE_TEACHER_URL = "/subjects/remove/teacher";
+    private static final String SUBJECTS_CHANGE_TEACHER_URL = "/subjects/change/teacher";
+    private static final String SUBJECTS_ASSIGN_TEACHER_URL = "/subjects/assign/teacher";
+    private static final String SUBJECTS_DELETE_URL = "/subjects/delete";
     private static final String SUBJECTS_INDEX_VIEW = "subjects/index";
     private static final String SUBJECTS_SUBJECTS_VIEW = "subjects/subjects";
     private static final String SUBJECTS_SHOW_VIEW = "subjects/show";
     private static final String SUBJECTS_RELATED_VIEW = "subjects/related";
+    private static final String REDIRECT = "/subjects";
     private static final String SUBJECT = "subject";
     private static final String SUBJECTS = "subjects";
+    private static final String SUBJECT_ID = "subjectId";
+    private static final String TEACHER_ID = "teacherId";
 
     public SubjectControllerTest(WebApplicationContext webApplicationContext) {
         this.webApplicationContext = webApplicationContext;
@@ -101,5 +112,48 @@ class SubjectControllerTest {
                 .andExpect(model().attribute(SUBJECTS, List.of(new Subject())))
                 .andExpect(model().attribute("number", 0))
                 .andExpect(view().name(SUBJECTS_RELATED_VIEW));
+    }
+
+
+    @Test
+    void add() throws Exception {
+        mockMvc.perform(post(SUBJECTS_ADD_URL))
+                .andDo(print())
+                .andExpect(model().attribute("subject", new Subject()))
+                .andExpect(redirectedUrl(REDIRECT));
+    }
+
+    @Test
+    void removeTeacher() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete(SUBJECTS_REMOVE_TEACHER_URL).param(SUBJECT_ID, "1"))
+                .andDo(print())
+                .andExpect(redirectedUrl(REDIRECT));
+    }
+
+    @Test
+    void assignTeacher() throws Exception {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add(SUBJECT_ID, "1");
+        params.add(TEACHER_ID, "1");
+        mockMvc.perform(post(SUBJECTS_ASSIGN_TEACHER_URL).params(params))
+                .andDo(print())
+                .andExpect(redirectedUrl(REDIRECT));
+    }
+
+    @Test
+    void changeTeacher() throws Exception {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add(SUBJECT_ID, "1");
+        params.add(TEACHER_ID, "1");
+        mockMvc.perform(post(SUBJECTS_CHANGE_TEACHER_URL).params(params))
+                .andDo(print())
+                .andExpect(redirectedUrl(REDIRECT));
+    }
+
+    @Test
+    void delete() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete(SUBJECTS_DELETE_URL).param("id", "1"))
+                .andDo(print())
+                .andExpect(redirectedUrl(REDIRECT));
     }
 }

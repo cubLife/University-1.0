@@ -3,6 +3,7 @@ package com.gmail.sergick6690.controllers;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.service.AudienceService;
 import com.gmail.sergick6690.service.SubjectService;
+import com.gmail.sergick6690.university.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,16 +13,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/subjects")
 public class SubjectController {
     private SubjectService service;
-    private AudienceService audienceService;
 
     @Autowired
     public SubjectController(SubjectService service, AudienceService audienceService) {
         this.service = service;
-        this.audienceService = audienceService;
     }
 
-    @GetMapping("/index")
-    public String startPage() {
+    @GetMapping()
+    public String startPage(Model model) {
+        model.addAttribute("subject", new Subject());
         return "subjects/index";
     }
 
@@ -48,5 +48,35 @@ public class SubjectController {
         model.addAttribute("subjects", service.findAllSubjectRelatedToAudience(id));
         model.addAttribute("number", id - 1);
         return "subjects/related";
+    }
+
+    @PostMapping("/add")
+    public String add(@ModelAttribute("subject") Subject subject) throws ServiceException {
+        service.add(subject);
+        return "redirect:/subjects";
+    }
+
+    @DeleteMapping("/remove/teacher")
+    public String removeTeacher(@RequestParam("subjectId") int subjectId) throws ServiceException {
+        service.removeTeacher(subjectId);
+        return "redirect:/subjects";
+    }
+
+    @PostMapping("/assign/teacher")
+    public String assignTeacher(@RequestParam("subjectId") int subjectId, @RequestParam("teacherId") int teacherId) throws ServiceException {
+        service.assignTeacher(subjectId, teacherId);
+        return "redirect:/subjects";
+    }
+
+    @PostMapping("/change/teacher")
+    public String changeTeacher(@RequestParam("subjectId") int subjectId, @RequestParam("teacherId") int teacherId) throws ServiceException {
+        service.changeTeacher(subjectId, teacherId);
+        return "redirect:/subjects";
+    }
+
+    @DeleteMapping("/delete")
+    public String deleteSubject(@RequestParam("id") int id) throws ServiceException {
+        service.removeById(id);
+        return "redirect:/subjects";
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -33,15 +34,18 @@ class FacultyControllerTest {
     private WebApplicationContext webApplicationContext;
     @MockBean
     private FacultyService service;
-    private static final String FACULTIES_INDEX_URL = "/faculties/index";
+    private static final String FACULTIES_INDEX_URL = "/faculties";
     private static final String FACULTIES_ALL_URL = "/faculties/all";
     private static final String FACULTIES_ID_URL = "/faculties/1";
     private static final String FACULTIES_FACULTY_URL = "/faculties/faculty";
+    private static final String FACULTIES_ADD_URL = "/faculties/add";
+    private static final String FACULTIES_DELETE_URL = "/faculties/delete";
     private static final String FACULTIES_INDEX_VIEW = "faculties/index";
     private static final String FACULTIES_FACULTIES_VIEW = "faculties/faculties";
     private static final String FACULTIES_SHOW_VIEW = "faculties/show";
     private static final String FACULTY = "faculty";
     private static final String FACULTIES = "faculties";
+    private static final String REDIRECT = "/faculties";
 
     @Autowired
     public FacultyControllerTest(WebApplicationContext webApplicationContext) {
@@ -90,5 +94,20 @@ class FacultyControllerTest {
                 .andDo(print())
                 .andExpect(model().attribute(FACULTY, new Faculty()))
                 .andExpect(view().name(FACULTIES_SHOW_VIEW));
+    }
+
+    @Test
+    void add() throws Exception {
+        mockMvc.perform(post(FACULTIES_ADD_URL))
+                .andDo(print())
+                .andExpect(model().attribute("faculty", new Faculty()))
+                .andExpect(redirectedUrl(REDIRECT));
+    }
+
+    @Test
+    void delete() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete(FACULTIES_DELETE_URL).param("id", "1"))
+                .andDo(print())
+                .andExpect(redirectedUrl(REDIRECT));
     }
 }

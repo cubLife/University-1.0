@@ -13,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -33,15 +34,18 @@ class GroupControllerTest {
     private WebApplicationContext webApplicationContext;
     @MockBean
     private GroupService service;
-    private static final String GROUPS_INDEX_URL = "/groups/index";
+    private static final String GROUPS_INDEX_URL = "/groups";
     private static final String GROUPS_ALL_URL = "/groups/all";
     private static final String GROUPS_ID_URL = "/groups/1";
     private static final String GROUPS_FACULTY_URL = "/groups/group";
     private static final String GROUPS_RELATED_URL = "/groups/related";
+    private static final String GROUPS_ADD_URL = "/groups/add";
+    private static final String GROUPS_DELETE_URL = "/groups/delete";
     private static final String GROUPS_INDEX_VIEW = "groups/index";
     private static final String GROUPS_GROUPS_VIEW = "groups/groups";
     private static final String GROUPS_SHOW_VIEW = "groups/show";
     private static final String GROUPS_RELATED_VIEW = "groups/related";
+    private static final String REDIRECT = "/groups";
     private static final String GROUP = "group";
     private static final String GROUPS = "groups";
 
@@ -102,5 +106,20 @@ class GroupControllerTest {
                 .andDo(print())
                 .andExpect(model().attribute(GROUPS, List.of(new Group())))
                 .andExpect(view().name(GROUPS_RELATED_VIEW));
+    }
+
+    @Test
+    void add() throws Exception {
+        mockMvc.perform(post(GROUPS_ADD_URL))
+                .andDo(print())
+                .andExpect(model().attribute("group", new Group()))
+                .andExpect(redirectedUrl(REDIRECT));
+    }
+
+    @Test
+    void delete() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete(GROUPS_DELETE_URL).param("id", "1"))
+                .andDo(print())
+                .andExpect(redirectedUrl(REDIRECT));
     }
 }

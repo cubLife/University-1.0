@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.doThrow;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @ContextConfiguration(classes = SpringConfig.class)
+@WebAppConfiguration
 class JdbcScheduleDAOTest {
     private TablesCreator creator;
     private ScheduleDAO scheduleDAO;

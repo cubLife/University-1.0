@@ -22,5 +22,21 @@
         </form>
     </div>
 </nav>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <form class="d-flex" th:method="POST"  th:action="@{/schedules/add}" th:object="${schedule}">
+            <input class="form-control me-2" type="text" th:field="*{name}" placeholder="Schedule name" aria-label="Schedule name" name="name"/>
+            <button class="btn btn-outline-success" type="submit">Add new schedule</button>
+        </form>
+    </div>
+</nav>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <form class="d-flex" th:method="delete"  th:action="@{/schedules/delete}">
+            <input class="form-control me-2" type="number" placeholder="Schedule id" aria-label="Schedule id" name="id"/>
+            <button class="btn btn-outline-success" type="submit">Delete schedule</button>
+        </form>
+    </div>
+</nav>
 </body>
 </html>
