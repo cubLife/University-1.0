@@ -112,7 +112,7 @@ class GroupControllerTest {
     void add() throws Exception {
         mockMvc.perform(post(GROUPS_ADD_URL))
                 .andDo(print())
-                .andExpect(model().attribute("group", new Group()))
+                .andExpect(flash().attribute("message", "Was added new group - " + new Group()))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 
@@ -120,6 +120,7 @@ class GroupControllerTest {
     void delete() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete(GROUPS_DELETE_URL).param("id", "1"))
                 .andDo(print())
+                .andExpect(flash().attribute("message", "Was deleted group with id - " + 1))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 }

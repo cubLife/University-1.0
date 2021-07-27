@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/faculties")
@@ -43,14 +44,16 @@ public class FacultyController {
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute("faculty") Faculty faculty) throws ServiceException {
+    public String add(@ModelAttribute("faculty") Faculty faculty, RedirectAttributes attributes) throws ServiceException {
         service.add(faculty);
+        attributes.addFlashAttribute("message", "Was added new faculty - " + faculty);
         return "redirect:/faculties";
     }
 
     @DeleteMapping("/delete")
-    public String delete(@RequestParam("id") int id) throws ServiceException {
+    public String delete(@RequestParam("id") int id, RedirectAttributes attributes) throws ServiceException {
         service.removeById(id);
+        attributes.addFlashAttribute("message", "Was deleted faculty with id - " + id);
         return "redirect:/faculties";
     }
 }

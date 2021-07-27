@@ -54,6 +54,8 @@ class SubjectControllerTest {
     private static final String SUBJECTS = "subjects";
     private static final String SUBJECT_ID = "subjectId";
     private static final String TEACHER_ID = "teacherId";
+    private static final String MESSAGE = "message";
+    private static final String VALUE = "1";
 
     public SubjectControllerTest(WebApplicationContext webApplicationContext) {
         this.webApplicationContext = webApplicationContext;
@@ -119,40 +121,43 @@ class SubjectControllerTest {
     void add() throws Exception {
         mockMvc.perform(post(SUBJECTS_ADD_URL))
                 .andDo(print())
-                .andExpect(model().attribute("subject", new Subject()))
+                .andExpect(flash().attribute(MESSAGE, "Was added new subject - " + new Subject()))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 
     @Test
     void removeTeacher() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete(SUBJECTS_REMOVE_TEACHER_URL).param(SUBJECT_ID, "1"))
+        mockMvc.perform(MockMvcRequestBuilders.delete(SUBJECTS_REMOVE_TEACHER_URL).param(SUBJECT_ID, VALUE))
                 .andDo(print())
+                .andExpect(flash().attribute(MESSAGE, "Was removed new teacher from subject with id - " + VALUE))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 
     @Test
     void assignTeacher() throws Exception {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add(SUBJECT_ID, "1");
-        params.add(TEACHER_ID, "1");
+        params.add(SUBJECT_ID, VALUE);
+        params.add(TEACHER_ID, VALUE);
         mockMvc.perform(post(SUBJECTS_ASSIGN_TEACHER_URL).params(params))
                 .andDo(print())
+                .andExpect(flash().attribute(MESSAGE, "Was assigned teacher with id - " + VALUE + " for subject with id - " + VALUE))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 
     @Test
     void changeTeacher() throws Exception {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add(SUBJECT_ID, "1");
-        params.add(TEACHER_ID, "1");
+        params.add(SUBJECT_ID, VALUE);
+        params.add(TEACHER_ID, VALUE);
         mockMvc.perform(post(SUBJECTS_CHANGE_TEACHER_URL).params(params))
                 .andDo(print())
+                .andExpect(flash().attribute(MESSAGE, "Was changed teacher on teacher with id - " + VALUE + " for subject with id - " + VALUE))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 
     @Test
     void delete() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete(SUBJECTS_DELETE_URL).param("id", "1"))
+        mockMvc.perform(MockMvcRequestBuilders.delete(SUBJECTS_DELETE_URL).param("id", VALUE))
                 .andDo(print())
                 .andExpect(redirectedUrl(REDIRECT));
     }

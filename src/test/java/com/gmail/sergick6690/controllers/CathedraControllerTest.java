@@ -98,7 +98,7 @@ class CathedraControllerTest {
     void add() throws Exception {
         mockMvc.perform(post(CATHEDRAS_ADD_URL))
                 .andDo(print())
-                .andExpect(model().attribute("cathedra", new Cathedra()))
+                .andExpect(flash().attribute("message", "Was added new cathedra - " + new Cathedra()))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 
@@ -106,6 +106,7 @@ class CathedraControllerTest {
     void delete() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete(CATHEDRAS_DELETE_URL).param("id", "1"))
                 .andDo(print())
+                .andExpect(flash().attribute("message", "Was deleted cathedra with id - " + 1))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 }

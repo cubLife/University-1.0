@@ -59,6 +59,8 @@ class TeacherControllerTest {
     private static final String REDIRECT = "/teachers";
     private static final String TEACHER_ID = "teacherId";
     private static final String SCHEDULE_ID = "scheduleId";
+    private static final String MESSAGE = "message";
+    private static final String VALUE = "1";
 
     @Autowired
     public TeacherControllerTest(WebApplicationContext webApplicationContext) {
@@ -124,14 +126,15 @@ class TeacherControllerTest {
     void add() throws Exception {
         mockMvc.perform(post(TEACHERS_ADD_URL))
                 .andDo(print())
-                .andExpect(model().attribute(TEACHER, new Teacher()))
+                .andExpect(flash().attribute(MESSAGE, "Was added new teacher - " + new Teacher()))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 
     @Test
     void removeSchedule() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete(TEACHERS_REMOVE_SCHEDULE_URL).param(TEACHER_ID, "1"))
+        mockMvc.perform(MockMvcRequestBuilders.delete(TEACHERS_REMOVE_SCHEDULE_URL).param(TEACHER_ID, VALUE))
                 .andDo(print())
+                .andExpect(flash().attribute(MESSAGE, "Was removed schedule for teacher with id - " + VALUE))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 
@@ -142,14 +145,15 @@ class TeacherControllerTest {
         params.add(SCHEDULE_ID, "1");
         mockMvc.perform(post(TEACHERS_ASSIGN_SCHEDULE_URL).params(params))
                 .andDo(print())
+                .andExpect(flash().attribute(MESSAGE, "Was assigned schedule with id - " + VALUE + " for teacher with id - " + VALUE))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 
     @Test
     void changeSchedule() throws Exception {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-        params.add(TEACHER_ID, "1");
-        params.add(SCHEDULE_ID, "1");
+        params.add(TEACHER_ID, VALUE);
+        params.add(SCHEDULE_ID, VALUE);
         mockMvc.perform(post(TEACHERS_CHANGE_SCHEDULE_URL).params(params))
                 .andDo(print())
                 .andExpect(redirectedUrl(REDIRECT));
@@ -157,8 +161,9 @@ class TeacherControllerTest {
 
     @Test
     void delete() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete(TEACHERS_DELETE_TEACHER_URL).param("id", "1"))
+        mockMvc.perform(MockMvcRequestBuilders.delete(TEACHERS_DELETE_TEACHER_URL).param("id", VALUE))
                 .andDo(print())
+                .andExpect(flash().attribute(MESSAGE, "Was deleted student with id - " + VALUE))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 }

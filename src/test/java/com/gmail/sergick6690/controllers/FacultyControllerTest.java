@@ -100,7 +100,7 @@ class FacultyControllerTest {
     void add() throws Exception {
         mockMvc.perform(post(FACULTIES_ADD_URL))
                 .andDo(print())
-                .andExpect(model().attribute("faculty", new Faculty()))
+                .andExpect(flash().attribute("message", "Was added new faculty - " + new Faculty()))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 
@@ -108,6 +108,7 @@ class FacultyControllerTest {
     void delete() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete(FACULTIES_DELETE_URL).param("id", "1"))
                 .andDo(print())
+                .andExpect(flash().attribute("message", "Was deleted faculty with id - " + 1))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 }

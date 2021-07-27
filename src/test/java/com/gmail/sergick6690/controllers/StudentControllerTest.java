@@ -57,6 +57,7 @@ class StudentControllerTest {
     private static final String STUDENT_ID = "studentId";
     private static final String COURSE = "course";
     private static final String VALUE = "1";
+    private static final String MESSAGE = "message";
 
     @Autowired
     public StudentControllerTest(WebApplicationContext webApplicationContext) {
@@ -101,7 +102,7 @@ class StudentControllerTest {
     void show() throws Exception {
         when(service.findById(1))
                 .thenReturn(new Student());
-        mockMvc.perform(post(STUDENTS_STUDENT_URL).param("id", "1"))
+        mockMvc.perform(post(STUDENTS_STUDENT_URL).param("id", VALUE))
                 .andDo(print())
                 .andExpect(model().attribute(STUDENT, new Student()))
                 .andExpect(view().name(STUDENTS_SHOW_VIEW));
@@ -111,14 +112,15 @@ class StudentControllerTest {
     void add() throws Exception {
         mockMvc.perform(post(STUDENTS_ADD_URL))
                 .andDo(print())
-                .andExpect(model().attribute("student", new Student()))
+                .andExpect(flash().attribute(MESSAGE, "Was added new student - " + new Student()))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 
     @Test
     void delete() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete(STUDENTS_DELETE_URL).param("id", "1"))
+        mockMvc.perform(MockMvcRequestBuilders.delete(STUDENTS_DELETE_URL).param("id", VALUE))
                 .andDo(print())
+                .andExpect(flash().attribute(MESSAGE, "Was deleted student with id - " + VALUE))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 
@@ -129,6 +131,7 @@ class StudentControllerTest {
         params.add(GROUP_ID, VALUE);
         mockMvc.perform(post(STUDENTS_ASSIGN_GROUP_URL).params(params))
                 .andDo(print())
+                .andExpect(flash().attribute(MESSAGE, "Was assigned group with id - " + VALUE + " for student with id - " + VALUE))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 
@@ -136,6 +139,7 @@ class StudentControllerTest {
     void removeFromGroup() throws Exception {
         mockMvc.perform(post(STUDENTS_REMOVE_GROUP_URL).param(STUDENT_ID, VALUE))
                 .andDo(print())
+                .andExpect(flash().attribute(MESSAGE, "Was deleted student with id - 1 from group"))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 
@@ -146,6 +150,7 @@ class StudentControllerTest {
         params.add(GROUP_ID, VALUE);
         mockMvc.perform(post(STUDENTS_CHANGE_GROUP_URL).params(params))
                 .andDo(print())
+                .andExpect(flash().attribute(MESSAGE, "Was changed group on group with id - " + VALUE + " for student with id - " + VALUE))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 
@@ -156,6 +161,7 @@ class StudentControllerTest {
         params.add(COURSE, VALUE);
         mockMvc.perform(post(STUDENTS_ASSIGN_COURSE_URL).params(params))
                 .andDo(print())
+                .andExpect(flash().attribute(MESSAGE, "Was assigned course - " + VALUE + " for student with id - " + VALUE))
                 .andExpect(redirectedUrl(REDIRECT));
 
     }
@@ -164,6 +170,7 @@ class StudentControllerTest {
     void removeFromCourse() throws Exception {
         mockMvc.perform(post(STUDENTS_REMOVE_COURSE_URL).param(STUDENT_ID, VALUE))
                 .andDo(print())
+                .andExpect(flash().attribute(MESSAGE, "Was removed course for student with id - " + VALUE))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 
@@ -174,6 +181,7 @@ class StudentControllerTest {
         params.add(COURSE, VALUE);
         mockMvc.perform(post(STUDENTS_ASSIGN_COURSE_URL).params(params))
                 .andDo(print())
+                .andExpect(flash().attribute(MESSAGE, "Was assigned course - " + VALUE + " for student with id - " + VALUE))
                 .andExpect(redirectedUrl(REDIRECT));
 
     }

@@ -109,6 +109,7 @@ class ItemControllerTest {
         params.add("scheduleId", "1");
         mockMvc.perform(post(ITEMS_ADD_URL).params(params))
                 .andDo(print())
+                .andExpect(flash().attribute("message", "Was added new item - " + new Item(0, 1, "Test", 1, 1, 1, 1)))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 
@@ -116,6 +117,7 @@ class ItemControllerTest {
     void delete() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete(ITEMS_DELETE_URL).param("id", "1"))
                 .andDo(print())
+                .andExpect(flash().attribute("message", "Was deleted item with id - " + 1))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 }

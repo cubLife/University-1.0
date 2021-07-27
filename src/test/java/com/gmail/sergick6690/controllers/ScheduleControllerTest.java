@@ -100,7 +100,7 @@ class ScheduleControllerTest {
     void add() throws Exception {
         mockMvc.perform(post(SCHEDULES_ADD_URL))
                 .andDo(print())
-                .andExpect(model().attribute("schedule", new Schedule()))
+                .andExpect(flash().attribute("message", "Was added new schedule - " + new Schedule()))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 
@@ -108,6 +108,7 @@ class ScheduleControllerTest {
     void delete() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete(SCHEDULES_DELETE_URL).param("id", "1"))
                 .andDo(print())
+                .andExpect(flash().attribute("message", "Was deleted schedule with id - " + 1))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 }
