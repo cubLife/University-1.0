@@ -8,6 +8,7 @@
 </head>
 <body>
 <h1 class="navbar-brand" style="text-align: center">Schedules menu</h1>
+<h2 class="navbar-brand" style="text-align: center" th:text="${message}">MESSAGE</h2>
 <div class="container-fluid">
     <a class="nav-link active" th:href="@{/schedules/all}">Show all schedules</a>
     <br/>
@@ -19,6 +20,22 @@
             <input class="form-control me-2" type="number" placeholder="Schedule id" aria-label="Schedule id"
                    name="id"/>
             <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <form class="d-flex" th:method="POST"  th:action="@{/schedules/add}" th:object="${schedule}">
+            <input class="form-control me-2" type="text" th:field="*{name}" placeholder="Schedule name" aria-label="Schedule name" name="name"/>
+            <button class="btn btn-outline-success" type="submit">Add new schedule</button>
+        </form>
+    </div>
+</nav>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <form class="d-flex" th:method="delete"  th:action="@{/schedules/delete}">
+            <input class="form-control me-2" type="number" placeholder="Schedule id" aria-label="Schedule id" name="id"/>
+            <button class="btn btn-outline-success" type="submit">Delete schedule</button>
         </form>
     </div>
 </nav>

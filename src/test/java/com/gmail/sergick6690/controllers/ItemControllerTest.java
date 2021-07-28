@@ -13,7 +13,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
@@ -33,13 +36,16 @@ class ItemControllerTest {
     private WebApplicationContext webApplicationContext;
     @MockBean
     private ItemService service;
-    private static final String ITEMS_INDEX_URL = "/items/index";
+    private static final String ITEMS_INDEX_URL = "/items/";
     private static final String ITEMS_ALL_URL = "/items/all";
     private static final String ITEMS_ID_URL = "/items/1";
     private static final String ITEMS_ITEM_URL = "/items/item";
+    private static final String ITEMS_ADD_URL = "/items/add";
+    private static final String ITEMS_DELETE_URL = "/items/delete";
     private static final String ITEMS_INDEX_VIEW = "items/index";
     private static final String ITEMS_ITEMS_VIEW = "items/items";
     private static final String ITEMS_SHOW_VIEW = "items/show";
+    private static final String REDIRECT = "/items";
     private static final String ITEM = "item";
     private static final String ITEMS = "items";
 
@@ -90,5 +96,28 @@ class ItemControllerTest {
                 .andDo(print())
                 .andExpect(model().attribute(ITEM, new Item()))
                 .andExpect(view().name(ITEMS_SHOW_VIEW));
+    }
+
+    @Test
+    void add() throws Exception {
+        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+        params.add("subjectId", "1");
+        params.add("day", "Test");
+        params.add("hour", "1");
+        params.add("audienceId", "1");
+        params.add("duration", "1");
+        params.add("scheduleId", "1");
+        mockMvc.perform(post(ITEMS_ADD_URL).params(params))
+                .andDo(print())
+                .andExpect(flash().attribute("message", "Was added new item - " + new Item(0, 1, "Test", 1, 1, 1, 1)))
+                .andExpect(redirectedUrl(REDIRECT));
+    }
+
+    @Test
+    void delete() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete(ITEMS_DELETE_URL).param("id", "1"))
+                .andDo(print())
+                .andExpect(flash().attribute("message", "Was deleted item with id - " + 1))
+                .andExpect(redirectedUrl(REDIRECT));
     }
 }

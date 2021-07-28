@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -28,6 +29,7 @@ import static org.mockito.Mockito.doThrow;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @ContextConfiguration(classes = SpringConfig.class)
+@WebAppConfiguration
 class JdbcTeacherDAOTest {
     private TablesCreator creator;
     private TeacherDAO teacherDAO;
@@ -52,9 +54,9 @@ class JdbcTeacherDAOTest {
     void shouldAddTeacher() throws DaoException {
         Schedule schedule = new Schedule(1, TEST, null);
         scheduleDAO.add(schedule);
-        teacherDAO.add(Teacher.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).degree(TEST).
+        teacherDAO.add(Teacher.builder().firstName(TEST).lastName(TEST).sex(TEST).age(0).degree(TEST).
                 scheduleId(1).subjects(null).build());
-        Teacher expected = Teacher.builder().id(1).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).degree(TEST).
+        Teacher expected = Teacher.builder().id(1).firstName(TEST).lastName(TEST).sex(TEST).age(0).degree(TEST).
                 scheduleId(1).subjects(null).build();
         Teacher actual = teacherDAO.findAll().get(0);
         assertEquals(expected, actual);
@@ -71,7 +73,7 @@ class JdbcTeacherDAOTest {
     @Test
     void shouldFindTeacherById() throws NotImplementedException, DaoException {
         generateTestData();
-        Teacher expected = Teacher.builder().id(5).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).degree(TEST).
+        Teacher expected = Teacher.builder().id(5).firstName(TEST).lastName(TEST).sex(TEST).age(0).degree(TEST).
                 scheduleId(1).subjects(null).build();
         Teacher actual = teacherDAO.findById(5);
         assertEquals(expected, actual);
@@ -173,9 +175,9 @@ class JdbcTeacherDAOTest {
         scheduleDAO.add(schedule);
         scheduleDAO.add(schedule);
         for (int i = 0; i < 5; i++) {
-            teacherDAO.add(Teacher.builder().id(1).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).degree(TEST).
+            teacherDAO.add(Teacher.builder().id(1).firstName(TEST).lastName(TEST).sex(TEST).age(0).degree(TEST).
                     scheduleId(1).subjects(null).build());
-            teacherDAO.add(Teacher.builder().id(1).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).degree(TEST + 1).
+            teacherDAO.add(Teacher.builder().id(1).firstName(TEST).lastName(TEST).sex(TEST).age(0).degree(TEST + 1).
                     scheduleId(1).subjects(null).build());
         }
     }

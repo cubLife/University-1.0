@@ -1,16 +1,10 @@
 package com.gmail.sergick6690.implementation;
 
-import com.gmail.sergick6690.DAO.CathedraDAO;
-import com.gmail.sergick6690.DAO.GroupDAO;
-import com.gmail.sergick6690.DAO.ScheduleDAO;
-import com.gmail.sergick6690.DAO.StudentDAO;
+import com.gmail.sergick6690.DAO.*;
 import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.TablesCreator;
 import com.gmail.sergick6690.exceptions.DaoException;
-import com.gmail.sergick6690.university.Cathedra;
-import com.gmail.sergick6690.university.Group;
-import com.gmail.sergick6690.university.Schedule;
-import com.gmail.sergick6690.university.Student;
+import com.gmail.sergick6690.university.*;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -31,23 +26,26 @@ import static org.mockito.Mockito.doThrow;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @ContextConfiguration(classes = SpringConfig.class)
+@WebAppConfiguration
 class JdbcStudentDAOTest {
     private TablesCreator creator;
     private StudentDAO studentDAO;
     private GroupDAO groupDAO;
     private CathedraDAO cathedraDAO;
     private ScheduleDAO scheduleDAO;
+    private FacultyDAO facultyDAO;
     @Mock
     private JdbcStudentDAO mockStudentDAO;
     private static final String TEST = "test";
 
     @Autowired
-    public JdbcStudentDAOTest(TablesCreator creator, StudentDAO studentDAO, GroupDAO groupDAO, CathedraDAO cathedraDAO, ScheduleDAO scheduleDAO) {
+    public JdbcStudentDAOTest(TablesCreator creator, StudentDAO studentDAO, GroupDAO groupDAO, CathedraDAO cathedraDAO, ScheduleDAO scheduleDAO, FacultyDAO facultyDAO) {
         this.creator = creator;
         this.studentDAO = studentDAO;
         this.groupDAO = groupDAO;
         this.cathedraDAO = cathedraDAO;
         this.scheduleDAO = scheduleDAO;
+        this.facultyDAO = facultyDAO;
     }
 
     @BeforeEach
@@ -204,7 +202,8 @@ class JdbcStudentDAOTest {
 
     private void createTestData() throws DaoException {
         scheduleDAO.add(new Schedule());
-        cathedraDAO.add(new Cathedra());
+        facultyDAO.add(new Faculty(1,TEST, null));
+        cathedraDAO.add(new Cathedra(1, TEST, 1,null));
         groupDAO.add(new Group(TEST, 1, 1));
         groupDAO.add(new Group(TEST, 1, 1));
     }

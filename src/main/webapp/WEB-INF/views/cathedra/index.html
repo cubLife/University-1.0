@@ -8,6 +8,7 @@
 </head>
 <body>
 <h1 class="navbar-brand" style="text-align: center">Cathedras menu</h1>
+<h2 class="navbar-brand" style="text-align: center" th:text="${message}">MESSAGE</h2>
 <div class="container-fluid">
     <a class="nav-link active" th:href="@{/cathedras/all}">Show all cathedras</a>
     <br/>
@@ -21,5 +22,22 @@
         </div>
     </nav>
 </div>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <form class="d-flex" th:method="POST"  th:action="@{/cathedras/add}" th:object="${cathedra}">
+            <input class="form-control me-2" type="text" th:field="*{name}" placeholder="Cathedra name" aria-label="Cathedra name" name="name"/>
+            <input class="form-control me-2" type="text" th:field="*{facultyId}" placeholder="Faculty id" aria-label="Faculty id" name="id"/>
+            <button class="btn btn-outline-success btn-sm" type="submit">Add new cathedra</button>
+        </form>
+    </div>
+</nav>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <form class="d-flex" th:method="delete"  th:action="@{/cathedras/delete}">
+            <input class="form-control me-2" type="number" placeholder="Cathedra id" aria-label="Cathedra id" name="id"/>
+            <button class="btn btn-outline-success" type="submit">Delete cathedra</button>
+        </form>
+    </div>
+</nav>
 </body>
 </html>

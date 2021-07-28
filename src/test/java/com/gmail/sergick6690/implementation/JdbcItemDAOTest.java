@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.web.WebAppConfiguration;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -25,6 +26,7 @@ import static org.mockito.Mockito.doThrow;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @ContextConfiguration(classes = SpringConfig.class)
+@WebAppConfiguration
 class JdbcItemDAOTest {
     private TablesCreator creator;
     private ItemDAO itemDAO;
@@ -55,7 +57,7 @@ class JdbcItemDAOTest {
     @Test
     void shouldAddItem() throws DaoException {
         generateTestData();
-        Item expected = new Item(1, null, null, null, 1, null);
+        Item expected = new Item(1,1, TEST, 1, 1, 1, 1);
         Item actual = itemDAO.findAll().get(0);
         assertEquals(expected, actual);
     }
@@ -63,7 +65,7 @@ class JdbcItemDAOTest {
     @Test
     void shouldFindItemById() throws NotImplementedException, DaoException {
         generateTestData();
-        Item expected = new Item(3, null, null, null, 1, null);
+        Item expected = new Item(3,1, TEST, 1, 1, 1, 1);
         Item actual = itemDAO.findById(3);
         assertEquals(expected, actual);
     }
@@ -119,7 +121,7 @@ class JdbcItemDAOTest {
 
     private void generateTestData() throws DaoException {
         Schedule schedule = new Schedule(1, TEST, null);
-        Teacher teacher = Teacher.builder().id(1).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).degree(TEST).
+        Teacher teacher = Teacher.builder().id(1).firstName(TEST).lastName(TEST).sex(TEST).age(0).degree(TEST).
                 scheduleId(1).subjects(null).build();
         Subject subject = new Subject(1, TEST, 1, TEST);
         Audience audience = new Audience(1, 0);
@@ -128,7 +130,7 @@ class JdbcItemDAOTest {
         subjectDAO.add(subject);
         audienceDAO.add(audience);
         for (int i = 0; i < 5; i++) {
-            itemDAO.add(new Item(subject, null, audience, 1, schedule));
+            itemDAO.add(new Item(1, TEST,1, 1, 1, 1));
         }
     }
 }

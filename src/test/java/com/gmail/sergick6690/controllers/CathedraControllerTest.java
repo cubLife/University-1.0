@@ -12,6 +12,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -32,15 +33,18 @@ class CathedraControllerTest {
     private WebApplicationContext webApplicationContext;
     @MockBean
     CathedraService service;
-    private static final String CATHEDRAS_INDEX_URL = "/cathedras/index";
+    private static final String CATHEDRAS_INDEX_URL = "/cathedras";
     private static final String CATHEDRAS_ALL_URL = "/cathedras/all";
     private static final String CATHEDRAS_ID_URL = "/cathedras/1";
     private static final String CATHEDRAS_CATHEDRA_URL = "/cathedras/cathedra";
+    private static final String CATHEDRAS_ADD_URL = "/cathedras/add";
+    private static final String CATHEDRAS_DELETE_URL = "/cathedras/delete";
     private static final String CATHEDRAS_INDEX_VIEW = "cathedra/index";
     private static final String CATHEDRAS_CATHEDRAS_VIEW = "cathedra/cathedras";
     private static final String CATHEDRAS_SHOW_VIEW = "cathedra/show";
     private static final String CATHEDRA = "cathedra";
     private static final String CATHEDRAS = "cathedras";
+    private static final String REDIRECT = "/cathedras";
 
     public CathedraControllerTest(WebApplicationContext webApplicationContext) {
         this.webApplicationContext = webApplicationContext;
@@ -88,5 +92,21 @@ class CathedraControllerTest {
                 .andDo(print())
                 .andExpect(model().attribute(CATHEDRA, new Cathedra()))
                 .andExpect(view().name(CATHEDRAS_SHOW_VIEW));
+    }
+
+    @Test
+    void add() throws Exception {
+        mockMvc.perform(post(CATHEDRAS_ADD_URL))
+                .andDo(print())
+                .andExpect(flash().attribute("message", "Was added new cathedra - " + new Cathedra()))
+                .andExpect(redirectedUrl(REDIRECT));
+    }
+
+    @Test
+    void delete() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete(CATHEDRAS_DELETE_URL).param("id", "1"))
+                .andDo(print())
+                .andExpect(flash().attribute("message", "Was deleted cathedra with id - " + 1))
+                .andExpect(redirectedUrl(REDIRECT));
     }
 }

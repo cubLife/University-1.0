@@ -8,6 +8,7 @@
 </head>
 <body>
 <h1 class="navbar-brand" style="text-align: center">Item menu</h1>
+<h2 class="navbar-brand" style="text-align: center" th:text="${message}">MESSAGE</h2>
 <div class="container-fluid">
     <a class="nav-link active" th:href="@{/items/all}">Show all items</a>
     <br/>
@@ -19,6 +20,49 @@
             <input class="form-control me-2" type="number" placeholder="Item id" aria-label="Item id"
                    name="id"/>
             <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <form class="d-grid" th:method="POST" th:action="@{/items/add}">
+            <input class="form-control me-2" type="number" placeholder="Subject id" aria-label="Subject Id"
+                   name="subjectId"/>
+            <input class="form-control me-2" type="number" placeholder="Audience id" aria-label="Audience id"
+                   name="audienceId"/>
+            <input class="form-control me-2" type="number" placeholder="Duration" aria-label="Duration"
+                   name="duration"/>
+            <input class="form-control " type="number" placeholder="Schedule Id" aria-label="Schedule id"
+                   name="scheduleId"/>
+            <label>Day</label>
+            <select class="form-control " name="day">
+                <option>Monday</option>
+                <option>Tuesday</option>
+                <option>Wednesday</option>
+                <option>Thursday</option>
+                <option>Friday</option>
+            </select>
+            <label>Hour</label>
+            <select class="form-control " name="hour">
+                <option>9</option>
+                <option>10</option>
+                <option>11</option>
+                <option>12</option>
+                <option>13</option>
+                <option>14</option>
+                <option>15</option>
+                <option>16</option>
+                <option>17</option>
+            </select>
+            <button class="btn btn-outline-success" type="submit">Add new item</button>
+        </form>
+    </div>
+</nav>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <form class="d-flex" th:method="delete" th:action="@{/items/delete}">
+            <input class="form-control me-2" type="number" placeholder="Item id" aria-label="Item id" name="id"/>
+            <button class="btn btn-outline-success" type="submit">Delete item</button>
         </form>
     </div>
 </nav>

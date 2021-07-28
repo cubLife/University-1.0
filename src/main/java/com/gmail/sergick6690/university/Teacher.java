@@ -14,8 +14,8 @@ public class Teacher extends Human {
     }
 
     @Builder
-    private Teacher(int id, String firstName, String lastNAme, String sex, int age, String degree, int scheduleId, List<Subject> subjects) {
-        super(id, firstName, lastNAme, sex, age);
+    private Teacher(int id, String firstName, String lastName, String sex, int age, String degree, int scheduleId, List<Subject> subjects) {
+        super(id, firstName, lastName, sex, age);
         this.degree = degree;
         this.scheduleId = scheduleId;
         this.subjects = subjects;

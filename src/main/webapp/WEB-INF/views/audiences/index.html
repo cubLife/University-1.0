@@ -8,6 +8,7 @@
 </head>
 <body>
 <h1 class="navbar-brand" style="text-align: center">Audience menu</h1>
+<h2 class="navbar-brand" style="text-align: center" th:text="${message}">MESSAGE</h2>
 <div class="container-fluid">
     <a class="nav-link active" th:href="@{/audiences/all}">Show all audiences</a>
 </div>
@@ -17,6 +18,24 @@
             <input class="form-control me-2" type="number" placeholder="Audience id" aria-label="Audience id"
                    name="id"/>
             <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <form class="d-flex" th:method="POST" th:action="@{/audiences/add}" th:object="${audience}">
+            <input class="form-control me-2" type="number" th:field="*{number}" placeholder="Audience number"
+                   aria-label="Audience number" name="namber"/>
+            <button class="btn btn-outline-success" type="submit">Add new audience</button>
+        </form>
+    </div>
+</nav>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <form class="d-flex" th:method="delete" th:action="@{/audiences/delete}">
+            <input class="form-control me-2" type="number" placeholder="Audience id" aria-label="Audience id"
+                   name="id"/>
+            <button class="btn btn-outline-success" type="submit">Delete audience</button>
         </form>
     </div>
 </nav>

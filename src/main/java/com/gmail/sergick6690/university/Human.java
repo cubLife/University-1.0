@@ -17,7 +17,7 @@ public class Human {
     public Human() {
     }
 
-    public Human(String firstName, String lastNAme, String sex, int age) {
+    public Human(String firstName, String lastName, String sex, int age) {
     }
 
     public int getId() {

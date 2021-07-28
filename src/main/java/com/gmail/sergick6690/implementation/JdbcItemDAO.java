@@ -30,8 +30,8 @@ public class JdbcItemDAO implements ItemDAO {
     @Override
     public void add(Item item) throws DaoException {
         try {
-            jdbcTemplate.update(properties.getProperty(ADD), item.getDate(), item.getDuration(), item.getSubject().getId(),
-                    item.getAudience().getId(), item.getSchedule().getId());
+            jdbcTemplate.update(properties.getProperty(ADD), item.getDay(), item.getHour(), item.getDuration(), item.getSubjectId(),
+                    item.getAudienceId(), item.getScheduleId());
         } catch (Exception e) {
             throw new DaoException("Can't add item - " + item, e);
         }

@@ -5,35 +5,39 @@ import java.util.Objects;
 
 public class Item {
     private int id;
-    private Subject subject;
-    private Date date;
-    private Audience audience;
+    private int subjectId;
+    private String day;
+    private int hour;
+    private int audienceId;
     private int duration;
-    private Schedule schedule;
+    private int scheduleId;
 
     public Item() {
     }
 
-    public Item(int id, Subject subject, Date date, Audience audience, int duration, Schedule schedule) {
+
+    public Item(int id, int subjectId, String day, int hour, int audienceId, int duration, int scheduleId) {
         this.id = id;
-        this.subject = subject;
-        this.date = date;
-        this.audience = audience;
+        this.subjectId = subjectId;
+        this.day = day;
+        this.hour=hour;
+        this.audienceId = audienceId;
         this.duration = duration;
-        this.schedule = schedule;
+        this.scheduleId = scheduleId;
     }
 
-    public Item(Subject subject, Date date, Audience audience, int duration, Schedule schedule) {
-        this.subject = subject;
-        this.date = date;
-        this.audience = audience;
+    public Item(int subjectId, String day, int hour, int audienceId, int duration, int scheduleId) {
+        this.subjectId = subjectId;
+        this.day = day;
+        this.hour=hour;
+        this.audienceId = audienceId;
         this.duration = duration;
-        this.schedule = schedule;
+        this.scheduleId = scheduleId;
     }
 
-    public Item(Subject subject, Audience audience) {
-        this.subject = subject;
-        this.audience = audience;
+    public Item(int subjectId, int audienceId) {
+        this.subjectId = subjectId;
+        this.audienceId = audienceId;
     }
 
     public int getId() {
@@ -44,28 +48,36 @@ public class Item {
         this.id = id;
     }
 
-    public Subject getSubject() {
-        return subject;
+    public int getSubjectId() {
+        return subjectId;
     }
 
-    public void setSubject(Subject subject) {
-        this.subject = subject;
+    public void setSubjectId(int subject) {
+        this.subjectId = subject;
     }
 
-    public Date getDate() {
-        return date;
+    public String getDay() {
+        return day;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setDay(String day) {
+        this.day = day;
     }
 
-    public Audience getAudience() {
-        return audience;
+    public int getHour() {
+        return hour;
     }
 
-    public void setAudience(Audience audience) {
-        this.audience = audience;
+    public void setHour(int hour) {
+        this.hour = hour;
+    }
+
+    public int getAudienceId() {
+        return audienceId;
+    }
+
+    public void setAudienceId(int audience) {
+        this.audienceId = audience;
     }
 
     public int getDuration() {
@@ -76,12 +88,12 @@ public class Item {
         this.duration = duration;
     }
 
-    public Schedule getSchedule() {
-        return schedule;
+    public int getScheduleId() {
+        return scheduleId;
     }
 
-    public void setSchedule(Schedule schedule) {
-        this.schedule = schedule;
+    public void setScheduleId(int schedule) {
+        this.scheduleId = schedule;
     }
 
     @Override
@@ -91,26 +103,27 @@ public class Item {
         Item item = (Item) o;
         return getId() == item.getId() &&
                 getDuration() == item.getDuration() &&
-                Objects.equals(getSubject(), item.getSubject()) &&
-                Objects.equals(getDate(), item.getDate()) &&
-                Objects.equals(getAudience(), item.getAudience()) &&
-                Objects.equals(getSchedule(), item.getSchedule());
+                Objects.equals(getSubjectId(), item.getSubjectId()) &&
+                Objects.equals(getDay(), item.getDay()) &&
+                Objects.equals(getAudienceId(), item.getAudienceId()) &&
+                Objects.equals(getScheduleId(), item.getScheduleId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getSubject(), getDate(), getAudience(), getDuration(), getSchedule());
+        return Objects.hash(getId(), getSubjectId(), getDay(), getAudienceId(), getDuration(), getScheduleId());
     }
 
     @Override
     public String toString() {
         return "Item{" +
                 "id=" + id +
-                ", subject=" + subject +
-                ", date=" + date +
-                ", audience=" + audience +
+                ", subjectId=" + subjectId +
+                ", day='" + day + '\'' +
+                ", hour=" + hour +
+                ", audienceId=" + audienceId +
                 ", duration=" + duration +
-                ", schedule=" + schedule +
+                ", scheduleId=" + scheduleId +
                 '}';
     }
 }

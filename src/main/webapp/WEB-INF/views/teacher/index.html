@@ -8,6 +8,7 @@
 </head>
 <body>
 <h1 class="navbar-brand" style="text-align: center">Teacher menu</h1>
+<h2 class="navbar-brand" style="text-align: center" th:text="${message}">MESSAGE</h2>
 <div class="container-fluid">
     <a class="nav-link active" th:href="@{/teachers/all}">Show all teachers</a>
     <br/>
@@ -29,6 +30,63 @@
             <input class="form-control me-2" type="text" placeholder="Degree" aria-label="Degree"
                    name="degree"/>
             <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <form class="d-flex" th:method="POST" th:action="@{/teachers/add}" th:object="${teacher}">
+            <input class="form-control me-2" type="text" th:field="*{firstName}" placeholder="First name"
+                   aria-label="First name" name="firstName"/>
+            <input class="form-control me-2" type="text" th:field="*{lastName}" placeholder="Last name"
+                   aria-label="Last name" name="LastName"/>
+            <input class="form-control me-2" type="text" th:field="*{sex}" placeholder="Sex" aria-label="" name="sex"/>
+            <input class="form-control me-2" type="number" th:field="*{age}" placeholder="Age" aria-label="Age"
+                   name="age"/>
+            <input class="form-control me-2" type="text" th:field="*{degree}" placeholder="Degree" aria-label="Degree"
+                   name="degree"/>
+            <input class="form-control me-2" type="text" th:field="*{scheduleId}" placeholder="Schedule Id"
+                   aria-label="Sxhedule id" name="scheduleId"/>
+            <button class="btn btn-outline-success" type="submit">Add new teacher</button>
+        </form>
+    </div>
+</nav>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <form class="d-flex" th:method="delete" th:action="@{/teachers/delete}">
+            <input class="form-control me-2" type="number" placeholder="Teacher id" aria-label="Teacher id" name="id"/>
+            <button class="btn btn-outline-success" type="submit">Delete teacher</button>
+        </form>
+    </div>
+</nav>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <form class="d-flex" th:method="delete" th:action="@{/teachers/remove/schedule}">
+            <input class="form-control me-2" type="number" placeholder="Teacher id" aria-label="Teacher id"
+                   name="teacherId"/>
+            <button class="btn btn-outline-success" type="submit">Remove schedule</button>
+        </form>
+    </div>
+</nav>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <form class="d-flex" th:method="POST" th:action="@{/teachers/assign/schedule}">
+            <input class="form-control me-2" type="number" placeholder="Teacher id" aria-label="Teacher id"
+                   name="teacherId"/>
+            <input class="form-control me-2" type="number" placeholder="Schedule id" aria-label="Schedule id"
+                   name="scheduleId"/>
+            <button class="btn btn-outline-success" type="submit">Assign schedule</button>
+        </form>
+    </div>
+</nav>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <form class="d-flex" th:method="POST" th:action="@{/teachers/change/schedule}">
+            <input class="form-control me-2" type="number" placeholder="Teacher id" aria-label="Teacher id"
+                   name="teacherId"/>
+            <input class="form-control me-2" type="number" placeholder="Schedule id" aria-label="Schedule id"
+                   name="scheduleId"/>
+            <button class="btn btn-outline-success" type="submit">Change schedule</button>
         </form>
     </div>
 </nav>

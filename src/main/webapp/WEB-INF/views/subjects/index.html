@@ -9,6 +9,7 @@
 <body>
 <div class="container-fluid">
     <h1 class="navbar-brand" style="text-align: center">Subject menu</h1>
+    <h2 class="navbar-brand" style="text-align: center" th:text="${message}">MESSAGE</h2>
     <a class="nav-link active" th:href="@{/subjects/all}">Show all subjects</a>
     <br/>
 </div>
@@ -29,6 +30,50 @@
             <input class="form-control me-2" type="number" placeholder="Audience id" aria-label="Audience id"
                    name="id"/>
             <button class="btn btn-outline-success" type="submit">Search</button>
+        </form>
+    </div>
+</nav>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <form class="d-flex" th:method="POST"  th:action="@{/subjects/add}" th:object="${subject}">
+            <input class="form-control me-2" type="text" th:field="*{name}" placeholder="Name" aria-label="Name" name="name"/>
+            <input class="form-control me-2" type="number" th:field="*{teacherId}" placeholder="Teacher id" aria-label="Teacher id" name="teacherId"/>
+            <input class="form-control me-2" type="text" th:field="*{description}" placeholder="Subject description" aria-label="Subject description" name="description"/>
+            <button class="btn btn-outline-success" type="submit">Add new subject</button>
+        </form>
+    </div>
+</nav>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <form class="d-flex" th:method="delete"  th:action="@{/subjects/delete}">
+            <input class="form-control me-2" type="number" placeholder="Subject id" aria-label="Iubject id" name="id"/>
+            <button class="btn btn-outline-success" type="submit">Delete subject</button>
+        </form>
+    </div>
+</nav>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <form class="d-flex" th:method="delete"  th:action="@{/subjects/remove/teacher}">
+            <input class="form-control me-2" type="number" placeholder="Subject id" aria-label="Subject id" name="subjectId"/>
+            <button class="btn btn-outline-success" type="submit">Remove teacher</button>
+        </form>
+    </div>
+</nav>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <form class="d-flex" th:method="POST"  th:action="@{/subjects/assign/teacher}">
+            <input class="form-control me-2" type="number" placeholder="Subject id" aria-label="Subject id" name="subjectId"/>
+            <input class="form-control me-2" type="number" placeholder="Teacher id" aria-label="Teacher id" name="teacherId"/>
+            <button class="btn btn-outline-success" type="submit">Assign Teacher</button>
+        </form>
+    </div>
+</nav>
+<nav class="navbar navbar-light bg-light">
+    <div class="container-fluid">
+        <form class="d-flex" th:method="POST"  th:action="@{/subjects/change/teacher}">
+            <input class="form-control me-2" type="number" placeholder="Subject id" aria-label="Subject id" name="subjectId"/>
+            <input class="form-control me-2" type="number" placeholder="Teacher id" aria-label="Teacher id" name="teacherId"/>
+            <button class="btn btn-outline-success" type="submit">Change teacher</button>
         </form>
     </div>
 </nav>
