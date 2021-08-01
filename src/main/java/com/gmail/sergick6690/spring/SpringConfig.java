@@ -1,14 +1,14 @@
 package com.gmail.sergick6690.spring;
 
-
-import com.gmail.sergick6690.connectionFactory.ConnectionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jndi.JndiTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -16,35 +16,32 @@ import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
+import javax.naming.NamingException;
 import javax.sql.DataSource;
-import java.util.Properties;
 
 @Configuration
 @ComponentScan("com.gmail.sergick6690")
+@PropertySource("classpath:jndi.properties")
 @EnableWebMvc
 public class SpringConfig implements WebMvcConfigurer {
-    private final ConnectionFactory connectionFactory;
     private final ApplicationContext applicationContext;
+    private Environment environment;
+    private static final String POSTGRES = "jndi-postgreSQL";
+    private static final String H2 = "jndi-h2SQL";
 
     @Autowired
-    public SpringConfig(ConnectionFactory connectionFactory, ApplicationContext applicationContext) {
-        this.connectionFactory = connectionFactory;
+    public SpringConfig(ApplicationContext applicationContext, Environment environment) {
         this.applicationContext = applicationContext;
+        this.environment = environment;
     }
 
     @Bean
-    public DataSource dataSource() {
-        Properties properties = connectionFactory.getDBProperty();
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(properties.getProperty("driverClassName"));
-        dataSource.setUrl(properties.getProperty("url"));
-        dataSource.setUsername(properties.getProperty("username"));
-        dataSource.setPassword(properties.getProperty("password"));
-        return dataSource;
+    public DataSource dataSource() throws NamingException {
+        return (DataSource) new JndiTemplate().lookup(environment.getProperty(POSTGRES));
     }
 
     @Bean
-    public JdbcTemplate jdbcTemplate() {
+    public JdbcTemplate jdbcTemplate() throws NamingException {
         return new JdbcTemplate(dataSource());
     }
 
