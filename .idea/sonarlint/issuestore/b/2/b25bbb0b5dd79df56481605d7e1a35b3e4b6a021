@@ -1,0 +1,20 @@
+
+G
+java:S1068L"*Remove this unused "degree" private field.(úñ¼8Ã±¤¬‹/
+N
+java:S1068I",Remove this unused "lastNAme" private field.(Ú¿ƒùøÿÿÿÿ8á¹­¬‹/
+J
+java:S1068H"-Remove this unused "firstName" private field.(š„¦¿8á¹­¬‹/
+V	java:S107"AConstructor has 8 parameters, which is greater than 7 authorized.(¢³¥ƒ
+I
+java:S1068K"'Remove this unused "age" private field.(Æ†´¦şÿÿÿÿ8á¹­¬‹/
+N
+java:S1068N",Remove this unused "subjects" private field.(ÄˆÃÏùÿÿÿÿ8Ã±¤¬‹/
+H
+java:S1068G"&Remove this unused "id" private field.(ôç¼Óşÿÿÿÿ8á¹­¬‹/
+I
+java:S1068M",Remove this unused "schedule" private field.(é‹ˆ¶8Ã±¤¬‹/
+N
+java:S1144"1Remove this unused private "Teacher" constructor.(¢³¥ƒ8Õœ–¬‹/
+D
+java:S1068J"'Remove this unused "sex" private field.(ª†« 8á¹­¬‹/
