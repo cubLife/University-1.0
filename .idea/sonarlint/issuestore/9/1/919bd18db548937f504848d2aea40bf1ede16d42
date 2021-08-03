@@ -1,6 +1,0 @@
-
-n	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(ÖÄ§
-A
-java:S1168"+Return an empty collection instead of null.(•πÔç
-ß
-java:S1130"âRemove the declaration of thrown exception 'org.apache.maven.surefire.shared.lang3.NotImplementedException' which is a runtime exception.(°√¸ª8Ö«Øöã/
