@@ -31,7 +31,8 @@ public class JdbcAudienceDAO implements AudienceDAO {
         try {
             jdbcTemplate.update(properties.getProperty(ADD), audience.getNumber());
         } catch (Exception e) {
-            throw new DaoException("Cant't add audience", e);
+            throw new DaoException("Cant't add audience" + e, e);
+
         }
     }
 
