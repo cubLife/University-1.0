@@ -12,6 +12,7 @@ public class Student extends Human {
     @JoinColumn(name = "groupId")
     private Group group;
     private int course;
+
     public Student() {
     }
 
@@ -56,7 +57,7 @@ public class Student extends Human {
 
     @Override
     public String toString() {
-        return super.toString()+ "Student{" +
+        return super.toString() + "Student{" +
                 "group=" + group +
                 ", course=" + course +
                 '}';

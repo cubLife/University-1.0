@@ -71,7 +71,7 @@ public class Teacher extends Human {
 
     @Override
     public String toString() {
-        return super.toString() +"Teacher{" +
+        return super.toString() + "Teacher{" +
                 "degree='" + degree + '\'' +
                 ", schedule=" + schedule +
                 ", subjects=" + subjects +

@@ -26,8 +26,8 @@ public class Cathedra {
         this.groups = groups;
     }
 
-    public Cathedra(int id,String name) {
-       this.id= id;
+    public Cathedra(int id, String name) {
+        this.id = id;
         this.name = name;
     }
 

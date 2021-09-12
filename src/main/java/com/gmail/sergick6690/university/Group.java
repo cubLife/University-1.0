@@ -11,7 +11,7 @@ public class Group {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    @OneToMany(mappedBy = "group",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<Student> students;
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "scheduleId")

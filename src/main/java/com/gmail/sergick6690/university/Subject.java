@@ -16,8 +16,9 @@ public class Subject {
     @JoinColumn(name = "teacherId")
     private Teacher teacher;
     private String description;
-    @OneToMany(mappedBy = "subject",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
     private List<Item> items = new ArrayList<>();
+
     public Subject() {
     }
 

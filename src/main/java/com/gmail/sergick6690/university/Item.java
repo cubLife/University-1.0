@@ -30,7 +30,7 @@ public class Item {
         this.id = id;
         this.subject = subject;
         this.day = day;
-        this.hour=hour;
+        this.hour = hour;
         this.audience = audience;
         this.duration = duration;
         this.schedule = schedule;
@@ -39,7 +39,7 @@ public class Item {
     public Item(Subject subject, String day, int hour, Audience audience, int duration, Schedule schedule) {
         this.subject = subject;
         this.day = day;
-        this.hour=hour;
+        this.hour = hour;
         this.audience = audience;
         this.duration = duration;
         this.schedule = schedule;
