@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -27,6 +28,7 @@ import static org.mockito.Mockito.doThrow;
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @ContextConfiguration(classes = SpringConfig.class)
 @WebAppConfiguration
+@ActiveProfiles("test")
 class JdbcStudentDAOTest {
     private TablesCreator creator;
     private StudentDAO studentDAO;
@@ -56,8 +58,8 @@ class JdbcStudentDAOTest {
     @Test
     void shouldAddStudent() throws DaoException {
         createTestData();
-        studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).groupID(1).course(0).build());
-        Student expected = Student.builder().id(1).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).groupID(1).course(0).build();
+        studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).group(groupDAO.findById(1)).course(0).build());
+        Student expected = Student.builder().id(1).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).group(groupDAO.findById(1)).course(0).build();
         Student actual = studentDAO.findAll().get(0);
         assertEquals(expected, actual);
     }
@@ -66,9 +68,9 @@ class JdbcStudentDAOTest {
     void shouldFindStudentById() throws NotImplementedException, DaoException {
         createTestData();
         for (int i = 0; i < 5; i++) {
-            studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).groupID(1).course(0).build());
+            studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).group(groupDAO.findById(1)).course(0).build());
         }
-        Student expected = Student.builder().id(3).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).groupID(1).course(0).build();
+        Student expected = Student.builder().id(3).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).group(groupDAO.findById(1)).course(0).build();
         Student actual = studentDAO.findById(3);
         assertEquals(expected, actual);
     }
@@ -77,7 +79,7 @@ class JdbcStudentDAOTest {
     void shouldFindAllStudents() throws DaoException {
         createTestData();
         for (int i = 0; i < 5; i++) {
-            studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).groupID(1).course(0).build());
+            studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).group(groupDAO.findById(1)).course(0).build());
         }
         int expected = 5;
         int actual = studentDAO.findAll().size();
@@ -88,7 +90,7 @@ class JdbcStudentDAOTest {
     void shouldRemoveStudentById() throws DaoException {
         createTestData();
         for (int i = 0; i < 5; i++) {
-            studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).groupID(1).course(0).build());
+            studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).group(groupDAO.findById(1)).course(0).build());
         }
         studentDAO.removeById(1);
         int expected = 4;
@@ -97,39 +99,19 @@ class JdbcStudentDAOTest {
     }
 
     @Test
-    public void shouldAssignGroup() throws DaoException {
-        createTestData();
-        studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).groupID(1).course(0).build());
-        studentDAO.assignGroup(1, 2);
-        int expected = 2;
-        int actual = studentDAO.findById(1).getGroupId();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    void shouldRemoveFromGroup() throws DaoException {
-        createTestData();
-        studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).groupID(2).course(0).build());
-        studentDAO.removeFromGroup(1);
-        int expected = 1;
-        int actual = studentDAO.findById(1).getGroupId();
-        assertEquals(expected, actual);
-    }
-
-    @Test
     void shouldAssignCourse() throws DaoException {
         createTestData();
-        studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).groupID(1).course(0).build());
-        studentDAO.assignCourse(1, 3);
-        int expected = 3;
+        studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).group(groupDAO.findById(1)).course(0).build());
+        studentDAO.assignCourse(1, 4);
+        int expected = 4;
         int actual = studentDAO.findById(1).getCourse();
         assertEquals(expected, actual);
     }
 
     @Test
-    public void shouldRemoveFromCourse() throws DaoException {
+    void shouldRemoveFromCourse() throws DaoException {
         createTestData();
-        studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).groupID(1).course(3).build());
+        studentDAO.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).group(groupDAO.findById(1)).course(4).build());
         studentDAO.removeFromCourse(1);
         int expected = 0;
         int actual = studentDAO.findById(1).getCourse();
@@ -177,14 +159,6 @@ class JdbcStudentDAOTest {
     }
 
     @Test
-    void shouldThrowDaoExceptionWhenAssignGroupMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(mockStudentDAO).assignGroup(anyInt(), anyInt());
-        assertThrows(DaoException.class, () -> {
-            mockStudentDAO.assignGroup(anyInt(), anyInt());
-        });
-    }
-
-    @Test
     void shouldThrowDaoExceptionWhenRemoveFromCourseMethodCall() throws DaoException {
         doThrow(DaoException.class).when(mockStudentDAO).removeFromCourse(anyInt());
         assertThrows(DaoException.class, () -> {
@@ -192,19 +166,14 @@ class JdbcStudentDAOTest {
         });
     }
 
-    @Test
-    void shouldThrowDaoExceptionWhenRemoveFromGroupMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(mockStudentDAO).removeFromGroup(anyInt());
-        assertThrows(DaoException.class, () -> {
-            mockStudentDAO.removeFromGroup(anyInt());
-        });
-    }
-
     private void createTestData() throws DaoException {
         scheduleDAO.add(new Schedule());
-        facultyDAO.add(new Faculty(1,TEST, null));
-        cathedraDAO.add(new Cathedra(1, TEST, 1,null));
-        groupDAO.add(new Group(TEST, 1, 1));
-        groupDAO.add(new Group(TEST, 1, 1));
+        Faculty faculty = new Faculty();
+        faculty.setName(TEST);
+        facultyDAO.add(faculty);
+        cathedraDAO.add(new Cathedra(TEST, facultyDAO.findById(1)));
+        groupDAO.add(new Group(TEST, scheduleDAO.findById(1), cathedraDAO.findById(1)));
+        groupDAO.add(new Group(TEST, scheduleDAO.findById(1), cathedraDAO.findById(1)));
     }
+
 }

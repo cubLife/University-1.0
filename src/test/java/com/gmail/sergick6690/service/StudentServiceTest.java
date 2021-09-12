@@ -2,6 +2,7 @@ package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.exceptions.ServiceException;
+import com.gmail.sergick6690.implementation.JdbcGroupDAO;
 import com.gmail.sergick6690.implementation.JdbcStudentDAO;
 import com.gmail.sergick6690.university.Student;
 import org.junit.jupiter.api.Test;
@@ -15,13 +16,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class StudentServiceTest {
     @Mock
-    private JdbcStudentDAO dao;
+    private JdbcStudentDAO studentDAO;
+    @Mock
+    private StudentService studentService;
     @InjectMocks
     private StudentService service;
     private static final int ID = 1;
@@ -29,71 +31,52 @@ class StudentServiceTest {
     @Test
     void shouldInvokeAdd() throws ServiceException, DaoException {
         service.add(Student.builder().build());
-        verify(dao).add(Student.builder().build());
+        verify(studentDAO).add(Student.builder().build());
     }
 
     @Test
     void shouldFindById() throws ServiceException, DaoException {
         service.findById(ID);
-        verify(dao).findById(ID);
+        verify(studentDAO).findById(ID);
     }
 
     @Test
     void shouldFindAll() throws ServiceException, DaoException {
         service.findAll();
-        verify(dao).findAll();
+        verify(studentDAO).findAll();
     }
 
     @Test
     void shouldRemoveById() throws ServiceException, DaoException {
         service.removeById(ID);
-        verify(dao).removeById(ID);
+        verify(studentDAO).removeById(ID);
     }
 
-    @Test
-    void shouldAssignGroup() throws ServiceException, DaoException {
-        service.assignGroup(ID, ID);
-        verify(dao).assignGroup(ID, ID);
-    }
-
-    @Test
-    void shouldRemoveFromGroup() throws ServiceException, DaoException {
-        service.removeFromGroup(ID);
-        verify(dao).removeFromGroup(ID);
-    }
 
     @Test
     void shouldAssignCourse() throws ServiceException, DaoException {
         service.assignCourse(ID, ID);
-        verify(dao).assignCourse(ID, ID);
+        verify(studentDAO).assignCourse(ID, ID);
     }
 
     @Test
     void shouldRemoveFromCourse() throws ServiceException, DaoException {
         service.removeFromCourse(ID);
-        verify(dao).removeFromCourse(ID);
+        verify(studentDAO).removeFromCourse(ID);
     }
 
-    @Test
-    void shouldInvokeChangeGroup() throws ServiceException, DaoException {
-        InOrder inOrder = Mockito.inOrder(dao);
-        service.changeGroup(ID, ID);
-        inOrder.verify(dao).removeFromGroup(ID);
-        inOrder.verify(dao).assignGroup(ID, ID);
-        inOrder.verifyNoMoreInteractions();
-    }
 
     @Test
     void shouldInvokeChangeCourse() throws ServiceException, DaoException {
-        InOrder inOrder = Mockito.inOrder(dao);
+        InOrder inOrder = Mockito.inOrder(studentDAO);
         service.changeCourse(ID, ID);
-        inOrder.verify(dao).removeFromCourse(ID);
-        inOrder.verify(dao).assignCourse(ID, ID);
+        inOrder.verify(studentDAO).removeFromCourse(ID);
+        inOrder.verify(studentDAO).assignCourse(ID, ID);
         inOrder.verifyNoMoreInteractions();
     }
 
     @Test
-    void shouldThrowIllegalArgumentExceptionWhenAddMethodCall(){
+    void shouldThrowIllegalArgumentExceptionWhenAddMethodCall() {
         String expected = "Input parameter can't be null";
         String actual = assertThrows(IllegalArgumentException.class, () -> {
             service.add(null);
@@ -103,7 +86,7 @@ class StudentServiceTest {
 
     @Test
     void shouldThrowServiceExceptionWhenAddMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).add(new Student());
+        doThrow(DaoException.class).when(studentDAO).add(new Student());
         assertThrows(ServiceException.class, () -> {
             service.add(new Student());
         });
@@ -111,7 +94,7 @@ class StudentServiceTest {
 
     @Test
     void shouldThrowServiceExceptionWhenFindByIdMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).findById(anyInt());
+        doThrow(DaoException.class).when(studentDAO).findById(anyInt());
         assertThrows(ServiceException.class, () -> {
             service.findById(anyInt());
         });
@@ -119,7 +102,7 @@ class StudentServiceTest {
 
     @Test
     void shouldThrowServiceExceptionWhenFindAllMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).findAll();
+        doThrow(DaoException.class).when(studentDAO).findAll();
         assertThrows(ServiceException.class, () -> {
             service.findAll();
         });
@@ -127,7 +110,7 @@ class StudentServiceTest {
 
     @Test
     void shouldThrowServiceExceptionWhenRemoveByIdMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).removeById(anyInt());
+        doThrow(DaoException.class).when(studentDAO).removeById(anyInt());
         assertThrows(ServiceException.class, () -> {
             service.removeById(anyInt());
         });
@@ -135,33 +118,25 @@ class StudentServiceTest {
 
     @Test
     void shouldThrowServiceExceptionWhenAssignCourseMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).assignCourse(anyInt(),anyInt());
+        doThrow(DaoException.class).when(studentDAO).assignCourse(anyInt(), anyInt());
         assertThrows(ServiceException.class, () -> {
-            service.assignCourse(anyInt(),anyInt());
+            service.assignCourse(anyInt(), anyInt());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenAssignGroupMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).assignGroup(anyInt(),anyInt());
+    void shouldThrowServiceExceptionWhenAssignGroupMethodCall() throws ServiceException {
+        doThrow(ServiceException.class).when(studentService).assignGroup(anyInt(), anyInt());
         assertThrows(ServiceException.class, () -> {
-            service.assignGroup(anyInt(),anyInt());
+            studentService.assignGroup(anyInt(), anyInt());
         });
     }
 
     @Test
     void shouldThrowDaoExceptionWhenRemoveFromCourseMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).removeFromCourse(anyInt());
+        doThrow(DaoException.class).when(studentDAO).removeFromCourse(anyInt());
         assertThrows(ServiceException.class, () -> {
             service.removeFromCourse(anyInt());
-        });
-    }
-
-    @Test
-    void shouldThrowServiceExceptionWhenRemoveFromGroupMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).removeFromGroup(anyInt());
-        assertThrows(ServiceException.class, () -> {
-            service.removeFromGroup(anyInt());
         });
     }
 }

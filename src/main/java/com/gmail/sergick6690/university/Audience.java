@@ -1,10 +1,18 @@
 package com.gmail.sergick6690.university;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+@Entity
 public class Audience {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int number;
+    @OneToMany(mappedBy = "audience", cascade = CascadeType.ALL)
+    private List<Item> items = new ArrayList<>();
 
     public Audience() {
     }

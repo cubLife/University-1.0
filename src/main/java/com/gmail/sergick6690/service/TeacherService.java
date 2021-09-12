@@ -1,32 +1,37 @@
 package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.DAO.GenericDao;
+import com.gmail.sergick6690.DAO.ScheduleDAO;
 import com.gmail.sergick6690.DAO.TeacherDAO;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.implementation.JdbcTeacherDAO;
+import com.gmail.sergick6690.university.Schedule;
 import com.gmail.sergick6690.university.Teacher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static java.lang.String.format;
 
 @Service
-public class TeacherService implements GenericDao<Teacher> {
+@Transactional(rollbackFor = ServiceException.class)
+public class TeacherService {
     private TeacherDAO teacherDAO;
+    private ScheduleDAO scheduleDAO;
     private static final Logger ERROR = LoggerFactory.getLogger("com.gmail.sergick6690.error");
     private static final Logger DEBUG = LoggerFactory.getLogger("com.gmail.sergick6690.debug");
 
     @Autowired
-    public TeacherService(JdbcTeacherDAO teacherDAO) {
+    public TeacherService(TeacherDAO teacherDAO, ScheduleDAO scheduleDAO) {
         this.teacherDAO = teacherDAO;
+        this.scheduleDAO = scheduleDAO;
     }
 
-    @Override
     public void add(Teacher teacher) throws ServiceException {
         if (teacher == null) {
             ERROR.error("Input parameter was null", new IllegalArgumentException("Input parameter can't be null"));
@@ -41,7 +46,6 @@ public class TeacherService implements GenericDao<Teacher> {
         }
     }
 
-    @Override
     public Teacher findById(int id) throws ServiceException {
         try {
             Teacher teacher = teacherDAO.findById(id);
@@ -53,7 +57,6 @@ public class TeacherService implements GenericDao<Teacher> {
         }
     }
 
-    @Override
     public List<Teacher> findAll() throws ServiceException {
         try {
             List<Teacher> teacherList = teacherDAO.findAll();
@@ -65,7 +68,6 @@ public class TeacherService implements GenericDao<Teacher> {
         }
     }
 
-    @Override
     public void removeById(int id) throws ServiceException {
         try {
             teacherDAO.removeById(id);
@@ -76,9 +78,9 @@ public class TeacherService implements GenericDao<Teacher> {
         }
     }
 
-    public Integer findTeachersCountWithEqualDegree(String degree) throws ServiceException {
+    public Long findTeachersCountWithEqualDegree(String degree) throws ServiceException {
         try {
-            int count = teacherDAO.findTeachersCountWithEqualDegree(degree);
+            Long count = teacherDAO.findTeachersCountWithEqualDegree(degree);
             DEBUG.debug("Was returned teachers count - " + count + " for teachers with degree - " + degree);
             return count;
         } catch (DaoException e) {
@@ -89,9 +91,11 @@ public class TeacherService implements GenericDao<Teacher> {
 
     public void removeSchedule(int teacherId) throws ServiceException {
         try {
-            teacherDAO.removeSchedule(teacherId);
+            Schedule schedule = scheduleDAO.findById(1);
+            Teacher teacher = teacherDAO.findById(teacherId);
+            teacher.setSchedule(schedule);
             DEBUG.debug("Was removed schedule for teacher with id - " + teacherId);
-        } catch (DaoException e) {
+        } catch (Exception e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -99,9 +103,11 @@ public class TeacherService implements GenericDao<Teacher> {
 
     public void assignSchedule(int teacherId, int scheduleId) throws ServiceException {
         try {
-            teacherDAO.assignSchedule(teacherId, scheduleId);
+            Schedule schedule = scheduleDAO.findById(scheduleId);
+            Teacher teacher = teacherDAO.findById(teacherId);
+            teacher.setSchedule(schedule);
             DEBUG.debug("Was assigned schedule with id - " + scheduleId + "for teacher with id - " + teacherId);
-        } catch (DaoException e) {
+        } catch (Exception e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -109,10 +115,10 @@ public class TeacherService implements GenericDao<Teacher> {
 
     public void changeSchedule(int teacherId, int scheduleId) throws ServiceException {
         try {
-            teacherDAO.removeSchedule(teacherId);
-            teacherDAO.assignSchedule(teacherId, scheduleId);
+            this.removeSchedule(teacherId);
+            this.assignSchedule(teacherId, scheduleId);
             DEBUG.debug("Was changed schedule for teacher with id - " + teacherId + " on schedule with id - " + scheduleId);
-        } catch (DaoException e) {
+        } catch (Exception e) {
             ERROR.error("Can't change schedule for teacher with id - " + teacherId, e);
             throw new ServiceException("Can't change schedule for teacher with id - " + teacherId, e);
         }

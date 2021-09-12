@@ -1,9 +1,8 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.DAO.GenericDao;
+import com.gmail.sergick6690.DAO.AudienceDAO;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.implementation.JdbcAudienceDAO;
 import com.gmail.sergick6690.university.Audience;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,17 +14,16 @@ import java.util.List;
 import static java.lang.String.format;
 
 @Service
-public class AudienceService implements GenericDao<Audience> {
-    private JdbcAudienceDAO audienceDAO;
+public class AudienceService {
+    private AudienceDAO audienceDAO;
     private static final Logger ERROR = LoggerFactory.getLogger("com.gmail.sergick6690.error");
     private static final Logger DEBUG = LoggerFactory.getLogger("com.gmail.sergick6690.debug");
 
     @Autowired
-    public AudienceService(JdbcAudienceDAO audienceDAO) {
+    public AudienceService(AudienceDAO audienceDAO) {
         this.audienceDAO = audienceDAO;
     }
 
-    @Override
     public void add(Audience audience) throws ServiceException {
         if (audience == null) {
             ERROR.error("Input parameter was null", new IllegalArgumentException("Input parameter can't be null"));
@@ -40,7 +38,6 @@ public class AudienceService implements GenericDao<Audience> {
         }
     }
 
-    @Override
     public Audience findById(int id) throws ServiceException {
         try {
             Audience audience = audienceDAO.findById(id);
@@ -52,7 +49,6 @@ public class AudienceService implements GenericDao<Audience> {
         }
     }
 
-    @Override
     public List<Audience> findAll() throws ServiceException {
         try {
             List<Audience> audienceList = audienceDAO.findAll();
@@ -64,7 +60,6 @@ public class AudienceService implements GenericDao<Audience> {
         }
     }
 
-    @Override
     public void removeById(int id) throws ServiceException {
         try {
             audienceDAO.removeById(id);

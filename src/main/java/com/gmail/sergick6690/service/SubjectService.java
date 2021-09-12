@@ -1,32 +1,35 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.DAO.GenericDao;
 import com.gmail.sergick6690.DAO.SubjectDAO;
+import com.gmail.sergick6690.DAO.TeacherDAO;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.implementation.JdbcSubjectDAO;
 import com.gmail.sergick6690.university.Subject;
+import com.gmail.sergick6690.university.Teacher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static java.lang.String.format;
 
 @Service
-public class SubjectService implements GenericDao<Subject> {
+@Transactional(rollbackFor = ServiceException.class)
+public class SubjectService {
     private SubjectDAO subjectDAO;
+    private TeacherDAO teacherDAO;
     private static final Logger ERROR = LoggerFactory.getLogger("com.gmail.sergick6690.error");
     private static final Logger DEBUG = LoggerFactory.getLogger("com.gmail.sergick6690.debug");
 
     @Autowired
-    public SubjectService(JdbcSubjectDAO subjectDAO) {
+    public SubjectService(SubjectDAO subjectDAO, TeacherDAO teacherDAO) {
         this.subjectDAO = subjectDAO;
+        this.teacherDAO = teacherDAO;
     }
 
-    @Override
     public void add(Subject subject) throws ServiceException {
         if (subject == null) {
             ERROR.error("Input parameter was null", new IllegalArgumentException("Input parameter can't be null"));
@@ -41,7 +44,6 @@ public class SubjectService implements GenericDao<Subject> {
         }
     }
 
-    @Override
     public Subject findById(int id) throws ServiceException {
         try {
             Subject subject = subjectDAO.findById(id);
@@ -53,7 +55,6 @@ public class SubjectService implements GenericDao<Subject> {
         }
     }
 
-    @Override
     public List<Subject> findAll() throws ServiceException {
         try {
             List<Subject> subjectList = subjectDAO.findAll();
@@ -65,7 +66,6 @@ public class SubjectService implements GenericDao<Subject> {
         }
     }
 
-    @Override
     public void removeById(int id) throws ServiceException {
         try {
             subjectDAO.removeById(id);
@@ -89,9 +89,11 @@ public class SubjectService implements GenericDao<Subject> {
 
     public void assignTeacher(int subjectId, int teacherId) throws ServiceException {
         try {
-            subjectDAO.assignTeacher(subjectId, teacherId);
+            Teacher teacher = teacherDAO.findById(teacherId);
+            Subject subject = subjectDAO.findById(subjectId);
+            subject.setTeacher(teacher);
             DEBUG.debug("For subject with id" + subjectId + " was assigned teacher with id - " + teacherId);
-        } catch (DaoException e) {
+        } catch (Exception e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -99,9 +101,11 @@ public class SubjectService implements GenericDao<Subject> {
 
     public void removeTeacher(int subjectId) throws ServiceException {
         try {
-            subjectDAO.removeTeacher(subjectId);
+            Teacher teacher = teacherDAO.findById(1);
+            Subject subject = subjectDAO.findById(subjectId);
+            subject.setTeacher(teacher);
             DEBUG.debug("For subject with id - " + subjectId + " was removed teacher");
-        } catch (DaoException e) {
+        } catch (Exception e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -109,10 +113,10 @@ public class SubjectService implements GenericDao<Subject> {
 
     public void changeTeacher(int subjectId, int teacherId) throws ServiceException {
         try {
-            subjectDAO.removeTeacher(subjectId);
-            subjectDAO.assignTeacher(subjectId, teacherId);
+            this.removeTeacher(subjectId);
+            this.assignTeacher(subjectId, teacherId);
             DEBUG.debug("For subject with id -" + subjectId + " was changed teacher on teacher with id - " + teacherId);
-        } catch (DaoException e) {
+        } catch (Exception e) {
             ERROR.error("Can't change teacher for subject with id - " + subjectId, e);
             throw new ServiceException("Can't change teacher for subject with id - " + subjectId, e);
         }

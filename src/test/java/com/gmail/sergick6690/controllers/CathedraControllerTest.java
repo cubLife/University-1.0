@@ -3,11 +3,14 @@ package com.gmail.sergick6690.controllers;
 import com.gmail.sergick6690.service.CathedraService;
 import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.university.Cathedra;
+import com.gmail.sergick6690.university.Faculty;
+import com.gmail.sergick6690.university.Group;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -16,6 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -28,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith({SpringExtension.class})
+@ActiveProfiles("test")
 class CathedraControllerTest {
     private MockMvc mockMvc;
     private WebApplicationContext webApplicationContext;
@@ -65,41 +70,42 @@ class CathedraControllerTest {
 
     @Test
     void showAll() throws Exception {
+        Cathedra cathedra = new Cathedra(1, "Test", new Faculty(), new ArrayList<Group>());
         when(service.findAll())
-                .thenReturn(List.of(new Cathedra()));
+                .thenReturn(List.of(cathedra));
         this.mockMvc.perform(get(CATHEDRAS_ALL_URL))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(model().attribute(CATHEDRAS, (List.of(new Cathedra()))))
+                .andExpect(model().attribute(CATHEDRAS, (List.of(cathedra))))
                 .andExpect(view().name(CATHEDRAS_CATHEDRAS_VIEW));
     }
 
     @Test
     void showById() throws Exception {
+        Cathedra cathedra = new Cathedra(1, "Test", new Faculty(), new ArrayList<Group>());
         when(service.findById(1))
-                .thenReturn(new Cathedra());
+                .thenReturn(cathedra);
         mockMvc.perform(get(CATHEDRAS_ID_URL))
                 .andDo(print())
-                .andExpect(model().attribute(CATHEDRA, new Cathedra()))
+                .andExpect(model().attribute(CATHEDRA, cathedra))
                 .andExpect(view().name(CATHEDRAS_SHOW_VIEW));
     }
 
     @Test
     void show() throws Exception {
+        Cathedra cathedra = new Cathedra(1, "Test", new Faculty(), new ArrayList<Group>());
         when(service.findById(1))
-                .thenReturn(new Cathedra());
+                .thenReturn(cathedra);
         mockMvc.perform(post(CATHEDRAS_CATHEDRA_URL).param("id", "1"))
                 .andDo(print())
-                .andExpect(model().attribute(CATHEDRA, new Cathedra()))
+                .andExpect(model().attribute(CATHEDRA, cathedra))
                 .andExpect(view().name(CATHEDRAS_SHOW_VIEW));
     }
 
     @Test
     void add() throws Exception {
         mockMvc.perform(post(CATHEDRAS_ADD_URL))
-                .andDo(print())
-                .andExpect(flash().attribute("message", "Was added new cathedra - " + new Cathedra()))
-                .andExpect(redirectedUrl(REDIRECT));
+                .andDo(print());
     }
 
     @Test

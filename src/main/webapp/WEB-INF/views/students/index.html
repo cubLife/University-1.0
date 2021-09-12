@@ -25,20 +25,24 @@
 </nav>
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <form class="d-flex" th:method="POST"  th:action="@{/students/add}" th:object="${student}">
-            <input class="form-control me-2" type="text" th:field="*{firstName}" placeholder="First name" aria-label="First name" name="firstName"/>
-            <input class="form-control me-2" type="text" th:field="*{lastName}" placeholder="Last name" aria-label="Last name" name="LastName"/>
+        <form class="d-flex" th:method="POST" th:action="@{/students/add}" th:object="${student}">
+            <input class="form-control me-2" type="text" th:field="*{firstName}" placeholder="First name"
+                   aria-label="First name" name="firstName"/>
+            <input class="form-control me-2" type="text" th:field="*{lastName}" placeholder="Last name"
+                   aria-label="Last name" name="LastName"/>
             <input class="form-control me-2" type="text" th:field="*{sex}" placeholder="Sex" aria-label="" name="sex"/>
-            <input class="form-control me-2" type="number" th:field="*{age}" placeholder="Age" aria-label="Age" name="age"/>
-            <input class="form-control me-2" type="number" th:field="*{course}" placeholder="Course" aria-label="Course" name="course"/>
-            <input class="form-control me-2" type="number" th:field="*{groupId}" placeholder="Group Id" aria-label="Group id" name="groupId"/>
+            <input class="form-control me-2" type="number" th:field="*{age}" placeholder="Age" aria-label="Age"
+                   name="age"/>
+            <input class="form-control me-2" type="number" th:field="*{course}" placeholder="Course" aria-label="Course"
+                   name="course"/>
+            <input class="form-control me-2" type="number" placeholder="Group Id" aria-label="Group id" name="groupId"/>
             <button class="btn btn-outline-success" type="submit">Add new student</button>
         </form>
     </div>
 </nav>
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <form class="d-flex" th:method="delete"  th:action="@{/students/delete}">
+        <form class="d-flex" th:method="delete" th:action="@{/students/delete}">
             <input class="form-control me-2" type="number" placeholder="Student id" aria-label="Student id" name="id"/>
             <button class="btn btn-outline-success" type="submit">Delete student</button>
         </form>
@@ -46,8 +50,9 @@
 </nav>
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <form class="d-flex" th:method="post"  th:action="@{/students/assign/group}">
-            <input class="form-control me-2" type="number" placeholder="Student id" aria-label="Student id" name="studentId"/>
+        <form class="d-flex" th:method="post" th:action="@{/students/assign/group}">
+            <input class="form-control me-2" type="number" placeholder="Student id" aria-label="Student id"
+                   name="studentId"/>
             <input class="form-control me-2" type="number" placeholder="Group id" aria-label="Group id" name="groupId"/>
             <button class="btn btn-outline-success" type="submit">Assign group</button>
         </form>
@@ -55,16 +60,18 @@
 </nav>
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <form class="d-flex" th:method="post"  th:action="@{/students/remove/group}">
-            <input class="form-control me-2" type="number" placeholder="Student id" aria-label="Student id" name="studentId"/>
+        <form class="d-flex" th:method="post" th:action="@{/students/remove/group}">
+            <input class="form-control me-2" type="number" placeholder="Student id" aria-label="Student id"
+                   name="studentId"/>
             <button class="btn btn-outline-success" type="submit">Remove student from group</button>
         </form>
     </div>
 </nav>
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <form class="d-flex" th:method="post"  th:action="@{/students/change/group}">
-            <input class="form-control me-2" type="number" placeholder="Student id" aria-label="Student id" name="studentId"/>
+        <form class="d-flex" th:method="post" th:action="@{/students/change/group}">
+            <input class="form-control me-2" type="number" placeholder="Student id" aria-label="Student id"
+                   name="studentId"/>
             <input class="form-control me-2" type="number" placeholder="Group id" aria-label="Group id" name="groupId"/>
             <button class="btn btn-outline-success" type="submit">Change group</button>
         </form>
@@ -72,8 +79,9 @@
 </nav>
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <form class="d-flex" th:method="post"  th:action="@{/students/assign/course}">
-            <input class="form-control me-2" type="number" placeholder="Student id" aria-label="Student id" name="studentId"/>
+        <form class="d-flex" th:method="post" th:action="@{/students/assign/course}">
+            <input class="form-control me-2" type="number" placeholder="Student id" aria-label="Student id"
+                   name="studentId"/>
             <input class="form-control me-2" type="number" placeholder="Course" aria-label="Course" name="course"/>
             <button class="btn btn-outline-success" type="submit">Assign course</button>
         </form>
@@ -81,16 +89,18 @@
 </nav>
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <form class="d-flex" th:method="post"  th:action="@{/students/remove/course}">
-            <input class="form-control me-2" type="number" placeholder="Student id" aria-label="Student id" name="studentId"/>
+        <form class="d-flex" th:method="post" th:action="@{/students/remove/course}">
+            <input class="form-control me-2" type="number" placeholder="Student id" aria-label="Student id"
+                   name="studentId"/>
             <button class="btn btn-outline-success" type="submit">Remove course</button>
         </form>
     </div>
 </nav>
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <form class="d-flex" th:method="post"  th:action="@{/students/change/course}">
-            <input class="form-control me-2" type="number" placeholder="Student id" aria-label="Student id" name="studentId"/>
+        <form class="d-flex" th:method="post" th:action="@{/students/change/course}">
+            <input class="form-control me-2" type="number" placeholder="Student id" aria-label="Student id"
+                   name="studentId"/>
             <input class="form-control me-2" type="number" placeholder="Course" aria-label="Course" name="course"/>
             <button class="btn btn-outline-success" type="submit">Change course</button>
         </form>

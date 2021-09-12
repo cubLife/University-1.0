@@ -38,9 +38,9 @@
         <form class="d-flex" th:method="POST" th:action="@{/groups/add}" th:object="${group}">
             <input class="form-control me-2" type="text" th:field="*{name}" placeholder="Name" aria-label="Name"
                    name="name"/>
-            <input class="form-control me-2" type="number" th:field="*{scheduleId}" placeholder="Schedule id"
+            <input class="form-control me-2" type="number" placeholder="Schedule id "
                    aria-label="Schedule id" name="scheduleId"/>
-            <input class="form-control me-2" type="number" th:field="*{cathedraId}" placeholder="Cathedrs id"
+            <input class="form-control me-2" type="number" placeholder="Cathedrs id"
                    aria-label="Cathedra id" name="cathedraId"/>
             <button class="btn btn-outline-success" type="submit">Add new group</button>
         </form>

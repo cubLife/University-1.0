@@ -12,6 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -27,28 +29,25 @@ import static org.mockito.Mockito.doThrow;
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @ContextConfiguration(classes = SpringConfig.class)
 @WebAppConfiguration
+@ActiveProfiles("test")
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class JdbcFacultyDAOTest {
-    private TablesCreator creator;
     private FacultyDAO facultyDAO;
     @Mock
     private JdbcFacultyDAO mockJdbcFacultyDAO;
     private static final String TEST = "test";
 
     @Autowired
-    public JdbcFacultyDAOTest(TablesCreator creator, FacultyDAO facultyDAO) {
-        this.creator = creator;
+    public JdbcFacultyDAOTest(FacultyDAO facultyDAO) {
         this.facultyDAO = facultyDAO;
-    }
-
-    @BeforeEach
-    void createTables() throws IOException, URISyntaxException {
-        creator.createTables("Script.sql");
     }
 
     @Test
     void shouldAddFaculty() throws DaoException {
-        facultyDAO.add(new Faculty(1, TEST, null));
-        Faculty expected = new Faculty(1, TEST, null);
+        Faculty faculty = new Faculty();
+        faculty.setName(TEST);
+        facultyDAO.add(faculty);
+        Faculty expected = new Faculty(1, "test");
         Faculty actual = facultyDAO.findAll().get(0);
         assertEquals(expected, actual);
     }
@@ -56,9 +55,11 @@ class JdbcFacultyDAOTest {
     @Test
     void shouldFindFacultyById() throws NotImplementedException, DaoException {
         for (int i = 0; i < 5; i++) {
-            facultyDAO.add(new Faculty(1, TEST, null));
+            Faculty faculty = new Faculty();
+            faculty.setName(TEST);
+            facultyDAO.add(faculty);
         }
-        Faculty expected = (new Faculty(4, TEST, null));
+        Faculty expected = (new Faculty(4, TEST));
         Faculty actual = facultyDAO.findById(4);
         assertEquals(expected, actual);
     }

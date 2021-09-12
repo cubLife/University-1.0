@@ -12,6 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -27,8 +29,9 @@ import static org.mockito.Mockito.doThrow;
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @ContextConfiguration(classes = SpringConfig.class)
 @WebAppConfiguration
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@ActiveProfiles("test")
 class JdbcScheduleDAOTest {
-    private TablesCreator creator;
     private ScheduleDAO scheduleDAO;
     @Mock
     private JdbcScheduleDAO mockJdbcScheduleDAO;
@@ -36,19 +39,14 @@ class JdbcScheduleDAOTest {
 
     @Autowired
     public JdbcScheduleDAOTest(TablesCreator creator, ScheduleDAO scheduleDAO) {
-        this.creator = creator;
         this.scheduleDAO = scheduleDAO;
-    }
-
-    @BeforeEach
-    void createTables() throws IOException, URISyntaxException {
-        creator.createTables("Script.sql");
     }
 
     @Test
     void shouldAddSchedule() throws DaoException {
-        scheduleDAO.add(new Schedule(1, TEST, null));
-        Schedule expected = new Schedule(1, TEST, null);
+        scheduleDAO.add(new Schedule(TEST));
+        Schedule expected = new Schedule(TEST);
+        expected.setId(1);
         Schedule actual = scheduleDAO.findAll().get(0);
         assertEquals(expected, actual);
     }
@@ -56,7 +54,7 @@ class JdbcScheduleDAOTest {
     @Test
     void shouldFindScheduleByID() throws NotImplementedException, DaoException {
         for (int i = 0; i < 5; i++) {
-            scheduleDAO.add(new Schedule(1, TEST, null));
+            scheduleDAO.add(new Schedule(TEST));
         }
         Schedule expected = new Schedule(3, TEST, null);
         Schedule actual = scheduleDAO.findById(3);

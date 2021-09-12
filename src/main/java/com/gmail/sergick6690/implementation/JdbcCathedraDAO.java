@@ -4,41 +4,37 @@ import com.gmail.sergick6690.DAO.CathedraDAO;
 import com.gmail.sergick6690.PropertyLoader;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Cathedra;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Properties;
 
 @Repository
+@Transactional(rollbackFor = DaoException.class)
 public class JdbcCathedraDAO implements CathedraDAO {
-    private JdbcTemplate jdbcTemplate;
+    @PersistenceContext
+    private EntityManager entityManager;
     private Properties properties = new PropertyLoader("Queries/cathedraQueries.properties").loadProperty();
-    private static final String ADD = "addCathedra";
-    private static final String FIND_BY_ID = "findCathedraByID";
     private static final String FIND_ALL = "findAll";
-    private static final String REMOVE = "removeCathedra";
-
-    @Autowired
-    public JdbcCathedraDAO(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     @Override
     public void add(Cathedra cathedra) throws DaoException {
         try {
-            jdbcTemplate.update(properties.getProperty(ADD), cathedra.getName(), cathedra.getFacultyId());
+           entityManager.persist(cathedra);
         } catch (Exception e) {
-            throw new DaoException("Cant add cathedra - " + cathedra, e);
+            e.printStackTrace();
+            throw new DaoException("Cant't add cathedra" + e, e);
         }
     }
 
     @Override
     public void removeById(int id) throws DaoException {
         try {
-            jdbcTemplate.update(properties.getProperty(REMOVE), id);
+            Cathedra cathedra = findById(id);
+            entityManager.remove(cathedra);
         } catch (Exception e) {
             throw new DaoException("Cant remove cathedra with id - " + id, e);
         }
@@ -46,14 +42,20 @@ public class JdbcCathedraDAO implements CathedraDAO {
 
     @Override
     public Cathedra findById(int id) throws DaoException {
-        return jdbcTemplate.query(properties.getProperty(FIND_BY_ID), new BeanPropertyRowMapper<>(Cathedra.class), id)
-                .stream().findAny().orElseThrow(() -> new DaoException("Cathedra not found - " + id));
+        try {
+            Cathedra cathedra = entityManager.find(Cathedra.class, id);
+            if (cathedra != null) {
+                return cathedra;
+            } else throw new DaoException("Cathedra not found - " + id);
+        } catch (Exception e) {
+            throw new DaoException("Cathedra not found - " + id, e);
+        }
     }
 
     @Override
     public List<Cathedra> findAll() throws DaoException {
         try {
-            return jdbcTemplate.query(properties.getProperty(FIND_ALL), new BeanPropertyRowMapper<>(Cathedra.class));
+            return entityManager.createQuery(properties.getProperty(FIND_ALL), Cathedra.class).getResultList();
         } catch (Exception e) {
             throw new DaoException("Can't find any cathedras", e);
         }

@@ -53,35 +53,13 @@ class SubjectServiceTest {
 
     @SneakyThrows
     @Test
-    void shouldInvokeFindAllSubjectRelatedToAudience() throws ServiceException {
+    void shouldInvokeFindAllSubjectRelatedToAudience() {
         service.findAllSubjectRelatedToAudience(ID);
         verify(dao).findAllSubjectRelatedToAudience(ID);
     }
 
-    @SneakyThrows
     @Test
-    void assignTeacher() {
-        service.assignTeacher(ID, ID);
-        verify(dao).assignTeacher(ID, ID);
-    }
-
-    @Test
-    void removeTeacher() throws ServiceException, DaoException {
-        service.removeTeacher(ID);
-        verify(dao).removeTeacher(ID);
-    }
-
-    @Test
-    void shouldInvokeChangeTeacher() throws ServiceException, DaoException {
-        InOrder inOrder = Mockito.inOrder(dao);
-        service.changeTeacher(ID, ID);
-        inOrder.verify(dao).removeTeacher(ID);
-        inOrder.verify(dao).assignTeacher(ID, ID);
-        inOrder.verifyNoMoreInteractions();
-    }
-
-    @Test
-    void shouldThrowIllegalArgumentExceptionWhenAddMethodCall(){
+    void shouldThrowIllegalArgumentExceptionWhenAddMethodCall() {
         String expected = "Input parameter can't be null";
         String actual = assertThrows(IllegalArgumentException.class, () -> {
             service.add(null);
@@ -129,19 +107,4 @@ class SubjectServiceTest {
         });
     }
 
-    @Test
-    void shouldThrowDaoExceptionWhenAssignTeacherMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).assignTeacher(anyInt(),anyInt());
-        assertThrows(ServiceException.class, () -> {
-            service.assignTeacher(anyInt(),anyInt());
-        });
-    }
-
-    @Test
-    void shouldThrowDaoExceptionWhenRemoveTeacherMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).removeTeacher(anyInt());
-        assertThrows(ServiceException.class, () -> {
-            service.removeTeacher(anyInt());
-        });
-    }
 }

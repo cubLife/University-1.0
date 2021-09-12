@@ -2,13 +2,16 @@ package com.gmail.sergick6690.controllers;
 
 import com.gmail.sergick6690.service.GroupService;
 import com.gmail.sergick6690.spring.SpringConfig;
+import com.gmail.sergick6690.university.Cathedra;
 import com.gmail.sergick6690.university.Group;
+import com.gmail.sergick6690.university.Schedule;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -29,6 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebAppConfiguration
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith({SpringExtension.class})
+@ActiveProfiles("test")
 class GroupControllerTest {
     private MockMvc mockMvc;
     private WebApplicationContext webApplicationContext;
@@ -80,40 +84,41 @@ class GroupControllerTest {
 
     @Test
     void showById() throws Exception {
+        Group group = new Group(1, "Test", null, new Schedule(), new Cathedra());
         when(service.findById(1))
-                .thenReturn(new Group());
+                .thenReturn(group);
         mockMvc.perform(get(GROUPS_ID_URL))
                 .andDo(print())
-                .andExpect(model().attribute(GROUP, new Group()))
+                .andExpect(model().attribute(GROUP, group))
                 .andExpect(view().name(GROUPS_SHOW_VIEW));
     }
 
     @Test
     void show() throws Exception {
+        Group group = new Group(1, "Test", null, new Schedule(), new Cathedra());
         when(service.findById(1))
-                .thenReturn(new Group());
+                .thenReturn(group);
         mockMvc.perform(post(GROUPS_FACULTY_URL).param("id", "1"))
                 .andDo(print())
-                .andExpect(model().attribute(GROUP, new Group()))
+                .andExpect(model().attribute(GROUP, group))
                 .andExpect(view().name(GROUPS_SHOW_VIEW));
     }
 
     @Test
     void showGroupsRelatedToCathedra() throws Exception {
+        Group group = new Group(1, "Test", null, new Schedule(), new Cathedra());
         when(service.findAllGroupsRelatedToCathedra(1))
-                .thenReturn(List.of(new Group()));
+                .thenReturn(List.of(group));
         mockMvc.perform(post(GROUPS_RELATED_URL).param("id", "1"))
                 .andDo(print())
-                .andExpect(model().attribute(GROUPS, List.of(new Group())))
+                .andExpect(model().attribute(GROUPS, List.of(group)))
                 .andExpect(view().name(GROUPS_RELATED_VIEW));
     }
 
     @Test
     void add() throws Exception {
         mockMvc.perform(post(GROUPS_ADD_URL))
-                .andDo(print())
-                .andExpect(flash().attribute("message", "Was added new group - " + new Group()))
-                .andExpect(redirectedUrl(REDIRECT));
+                .andDo(print());
     }
 
     @Test

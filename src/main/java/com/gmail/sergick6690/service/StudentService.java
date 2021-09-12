@@ -1,10 +1,10 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.DAO.GenericDao;
+import com.gmail.sergick6690.DAO.GroupDAO;
 import com.gmail.sergick6690.DAO.StudentDAO;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.implementation.JdbcStudentDAO;
+import com.gmail.sergick6690.university.Group;
 import com.gmail.sergick6690.university.Student;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,18 +17,18 @@ import java.util.List;
 import static java.lang.String.format;
 
 @Service
-@Transactional
-public class StudentService implements GenericDao<Student> {
+public class StudentService {
     private StudentDAO studentDAO;
+    private GroupDAO groupDAO;
     private static final Logger ERROR = LoggerFactory.getLogger("com.gmail.sergick6690.error");
     private static final Logger DEBUG = LoggerFactory.getLogger("com.gmail.sergick6690.debug");
 
     @Autowired
-    public StudentService(JdbcStudentDAO studentDAO) {
+    public StudentService(StudentDAO studentDAO, GroupDAO groupDAO) {
         this.studentDAO = studentDAO;
+        this.groupDAO = groupDAO;
     }
 
-    @Override
     public void add(Student student) throws ServiceException {
         if (student == null) {
             ERROR.error("Input parameter was null", new IllegalArgumentException("Input parameter can't be null"));
@@ -43,7 +43,6 @@ public class StudentService implements GenericDao<Student> {
         }
     }
 
-    @Override
     public Student findById(int id) throws ServiceException {
         try {
             Student student = studentDAO.findById(id);
@@ -55,7 +54,6 @@ public class StudentService implements GenericDao<Student> {
         }
     }
 
-    @Override
     public List<Student> findAll() throws ServiceException {
         try {
             List<Student> studentList = studentDAO.findAll();
@@ -67,7 +65,6 @@ public class StudentService implements GenericDao<Student> {
         }
     }
 
-    @Override
     public void removeById(int id) throws ServiceException {
         try {
             studentDAO.removeById(id);
@@ -78,9 +75,12 @@ public class StudentService implements GenericDao<Student> {
         }
     }
 
+    @Transactional(rollbackFor = DaoException.class)
     public void assignGroup(int studentId, int groupId) throws ServiceException {
         try {
-            studentDAO.assignGroup(groupId, studentId);
+            Group group = groupDAO.findById(groupId);
+            Student student = studentDAO.findById(studentId);
+            student.setGroup(group);
             DEBUG.debug("Group with id - " + groupId + " was assigned to student with id - " + studentId);
         } catch (DaoException e) {
             ERROR.error(e.getMessage(), e);
@@ -88,9 +88,12 @@ public class StudentService implements GenericDao<Student> {
         }
     }
 
+    @Transactional(rollbackFor = DaoException.class)
     public void removeFromGroup(int studentId) throws ServiceException {
         try {
-            studentDAO.removeFromGroup(studentId);
+            Group group = groupDAO.findById(1);
+            Student student = studentDAO.findById(studentId);
+            student.setGroup(group);
             DEBUG.debug("Student with id - " + studentId + " was removed from group");
         } catch (DaoException e) {
             ERROR.error(e.getMessage(), e);
@@ -119,12 +122,13 @@ public class StudentService implements GenericDao<Student> {
         }
     }
 
+    @Transactional(rollbackFor = ServiceException.class)
     public void changeGroup(int studentId, int groupId) throws ServiceException {
         try {
-            studentDAO.removeFromGroup(studentId);
-            studentDAO.assignGroup(studentId, groupId);
+            this.removeFromGroup(studentId);
+            this.assignGroup(studentId, groupId);
             DEBUG.debug("For student with id - " + studentId + " was changed group on group with id - " + groupId);
-        } catch (DaoException e) {
+        } catch (Exception e) {
             ERROR.error("Can't change group for student with id - " + studentId, e);
             throw new ServiceException("Can't change group for student with id - " + studentId, e);
         }

@@ -12,6 +12,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
@@ -26,9 +28,10 @@ import static org.mockito.Mockito.doThrow;
 
 @ExtendWith({SpringExtension.class, MockitoExtension.class})
 @ContextConfiguration(classes = SpringConfig.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @WebAppConfiguration
+@ActiveProfiles("test")
 class JdbcItemDAOTest {
-    private TablesCreator creator;
     private ItemDAO itemDAO;
     private ScheduleDAO scheduleDAO;
     private SubjectDAO subjectDAO;
@@ -39,9 +42,8 @@ class JdbcItemDAOTest {
     private static final String TEST = "Test";
 
     @Autowired
-    public JdbcItemDAOTest(TablesCreator creator, ItemDAO itemDAO, ScheduleDAO scheduleDAO,
+    public JdbcItemDAOTest(ItemDAO itemDAO, ScheduleDAO scheduleDAO,
                            SubjectDAO subjectDAO, AudienceDAO audienceDAO, TeacherDAO teacherDAO) {
-        this.creator = creator;
         this.itemDAO = itemDAO;
         this.scheduleDAO = scheduleDAO;
         this.subjectDAO = subjectDAO;
@@ -49,15 +51,10 @@ class JdbcItemDAOTest {
         this.teacherDAO = teacherDAO;
     }
 
-    @BeforeEach
-    void createTables() throws IOException, URISyntaxException {
-        creator.createTables("Script.sql");
-    }
-
     @Test
     void shouldAddItem() throws DaoException {
         generateTestData();
-        Item expected = new Item(1,1, TEST, 1, 1, 1, 1);
+        Item expected = new Item(1, new Subject(1, null, null, null), TEST, 1, new Audience(1, 0), 1, new Schedule(1, null, null));
         Item actual = itemDAO.findAll().get(0);
         assertEquals(expected, actual);
     }
@@ -65,8 +62,8 @@ class JdbcItemDAOTest {
     @Test
     void shouldFindItemById() throws NotImplementedException, DaoException {
         generateTestData();
-        Item expected = new Item(3,1, TEST, 1, 1, 1, 1);
-        Item actual = itemDAO.findById(3);
+        Item expected = new Item(5, new Subject(1, null, null, null), TEST, 1, new Audience(1, 0), 1, new Schedule(1, null, null));
+        Item actual = itemDAO.findById(5);
         assertEquals(expected, actual);
     }
 
@@ -81,7 +78,7 @@ class JdbcItemDAOTest {
     @Test
     void shouldRemoveItemsById() throws DaoException {
         generateTestData();
-        itemDAO.removeById(1);
+        itemDAO.removeById(5);
         int expected = 4;
         int actual = itemDAO.findAll().size();
         assertEquals(expected, actual);
@@ -120,17 +117,16 @@ class JdbcItemDAOTest {
     }
 
     private void generateTestData() throws DaoException {
-        Schedule schedule = new Schedule(1, TEST, null);
-        Teacher teacher = Teacher.builder().id(1).firstName(TEST).lastName(TEST).sex(TEST).age(0).degree(TEST).
-                scheduleId(1).subjects(null).build();
-        Subject subject = new Subject(1, TEST, 1, TEST);
-        Audience audience = new Audience(1, 0);
+        Schedule schedule = new Schedule(TEST);
         scheduleDAO.add(schedule);
+        Teacher teacher = Teacher.builder().firstName(TEST).lastName(TEST).sex(TEST).age(0).degree(TEST).build();
+        Audience audience = new Audience();
         teacherDAO.add(teacher);
+        Subject subject = new Subject(TEST, teacherDAO.findById(1), TEST);
         subjectDAO.add(subject);
         audienceDAO.add(audience);
         for (int i = 0; i < 5; i++) {
-            itemDAO.add(new Item(1, TEST,1, 1, 1, 1));
+            itemDAO.add(new Item(subjectDAO.findById(1), TEST, 1, audienceDAO.findById(1), 1, scheduleDAO.findById(1)));
         }
     }
 }

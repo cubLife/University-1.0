@@ -25,11 +25,15 @@
             </tr>
             <tr>
                 <th>Audience id</th>
-                <th><p th:text="${item.getAudienceId()}">VALUE</p></th>
+                <th><p th:text="${item.getAudience().getId()}">VALUE</p></th>
             </tr>
             <tr>
                 <th>Schedule id</th>
-                <th><p th:text="${item.getScheduleId()}">VALUE</p></th>
+                <th><p th:text="${item.getSchedule().getId()}">VALUE</p></th>
+            </tr>
+            <tr>
+                <th>Subject id</th>
+                <th><p th:text="${item.getSubject().getId()}">VALUE</p></th>
             </tr>
             <tr>
                 <th>duration</th>

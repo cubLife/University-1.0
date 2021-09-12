@@ -4,11 +4,15 @@ import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.implementation.JdbcCathedraDAO;
 import com.gmail.sergick6690.university.Cathedra;
+import com.gmail.sergick6690.university.Faculty;
+import com.gmail.sergick6690.university.Group;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -26,8 +30,9 @@ class CathedraServiceTest {
 
     @Test
     void shouldInvokeAdd() throws ServiceException, DaoException {
-        service.add(new Cathedra());
-        verify(dao).add(new Cathedra());
+        Cathedra cathedra = new Cathedra(1, "Test", new Faculty(), new ArrayList<Group>());
+        service.add(cathedra);
+        verify(dao).add(cathedra);
     }
 
     @Test
@@ -59,9 +64,10 @@ class CathedraServiceTest {
 
     @Test
     void shouldThrowServiceExceptionWhenAddMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).add(new Cathedra());
+        Cathedra cathedra = new Cathedra(1, "Test", new Faculty(), new ArrayList<Group>());
+        doThrow(DaoException.class).when(dao).add(cathedra);
         assertThrows(ServiceException.class, () -> {
-            service.add(new Cathedra());
+            service.add(cathedra);
         });
     }
 

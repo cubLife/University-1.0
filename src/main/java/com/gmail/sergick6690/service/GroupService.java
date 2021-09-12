@@ -1,9 +1,8 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.DAO.GenericDao;
+import com.gmail.sergick6690.DAO.GroupDAO;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.implementation.JdbcGroupDAO;
 import com.gmail.sergick6690.university.Group;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,17 +14,16 @@ import java.util.List;
 import static java.lang.String.format;
 
 @Service
-public class GroupService implements GenericDao<Group> {
-    private JdbcGroupDAO groupDAO;
+public class GroupService {
+    private GroupDAO groupDAO;
     private static final Logger ERROR = LoggerFactory.getLogger("com.gmail.sergick6690.error");
     private static final Logger DEBUG = LoggerFactory.getLogger("com.gmail.sergick6690.debug");
 
     @Autowired
-    public GroupService(JdbcGroupDAO groupDAO) {
+    public GroupService(GroupDAO groupDAO) {
         this.groupDAO = groupDAO;
     }
 
-    @Override
     public void add(Group group) throws ServiceException {
         if (group == null) {
             ERROR.error("Input parameter was null", new IllegalArgumentException("Input parameter can't be null"));
@@ -40,7 +38,6 @@ public class GroupService implements GenericDao<Group> {
         }
     }
 
-    @Override
     public Group findById(int id) throws ServiceException {
         try {
             Group group = groupDAO.findById(id);
@@ -52,7 +49,6 @@ public class GroupService implements GenericDao<Group> {
         }
     }
 
-    @Override
     public List<Group> findAll() throws ServiceException {
         try {
             List<Group> groupList = groupDAO.findAll();
@@ -64,7 +60,6 @@ public class GroupService implements GenericDao<Group> {
         }
     }
 
-    @Override
     public void removeById(int id) throws ServiceException {
         try {
             groupDAO.removeById(id);

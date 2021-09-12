@@ -4,48 +4,48 @@ import com.gmail.sergick6690.DAO.AudienceDAO;
 import com.gmail.sergick6690.PropertyLoader;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Audience;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Properties;
 
 @Repository
+@Transactional(rollbackFor = DaoException.class)
 public class JdbcAudienceDAO implements AudienceDAO {
-    private JdbcTemplate jdbcTemplate;
+    @PersistenceContext
+    private EntityManager entityManager;
     private Properties properties = new PropertyLoader("Queries/audienceQueries.properties").loadProperty();
-    private static final String ADD = "addAudience";
-    private static final String FIND_BY_ID = "findAudienceById";
     private static final String FIND_ALL = "findAllAudience";
-    private static final String REMOVE = "removeAudience";
-
-    @Autowired
-    public JdbcAudienceDAO(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     @Override
     public void add(Audience audience) throws DaoException {
         try {
-            jdbcTemplate.update(properties.getProperty(ADD), audience.getNumber());
+            entityManager.persist(audience);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new DaoException("Cant't add audience" + e, e);
-
         }
     }
 
     @Override
     public Audience findById(int id) throws DaoException {
-        return jdbcTemplate.query(properties.getProperty(FIND_BY_ID), new BeanPropertyRowMapper<>(Audience.class), id)
-                .stream().findAny().orElseThrow(() -> new DaoException("Audience not found - " + id));
+        try {
+            Audience audience = entityManager.find(Audience.class, id);
+            if (audience != null) {
+                return audience;
+            } else throw new DaoException("Can't find any audience with id - " + id);
+        } catch (Exception e) {
+            throw new DaoException("Can't find any audience with id - " + id, e);
+        }
     }
 
     @Override
     public List<Audience> findAll() throws DaoException {
         try {
-            return jdbcTemplate.query(properties.getProperty(FIND_ALL), new BeanPropertyRowMapper<>(Audience.class));
+            return entityManager.createQuery(properties.getProperty(FIND_ALL), Audience.class).getResultList();
         } catch (Exception e) {
             throw new DaoException("Can't find any audiences", e);
         }
@@ -54,7 +54,8 @@ public class JdbcAudienceDAO implements AudienceDAO {
     @Override
     public void removeById(int id) throws DaoException {
         try {
-            jdbcTemplate.update(properties.getProperty(REMOVE), id);
+            Audience audience = findById(id);
+            entityManager.remove(audience);
         } catch (Exception e) {
             throw new DaoException("Can't remove audience with id - " + id, e);
         }

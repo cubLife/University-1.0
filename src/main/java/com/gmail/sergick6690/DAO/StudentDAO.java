@@ -24,10 +24,6 @@ public interface StudentDAO extends GenericDao<Student> {
     default void removeById(int id) throws DaoException {
     }
 
-    public void assignGroup(int studentId, int groupId) throws DaoException;
-
-    public void removeFromGroup(int studentId) throws DaoException;
-
     public void assignCourse(int studentId, int course) throws DaoException;
 
     public void removeFromCourse(int studentId) throws DaoException;

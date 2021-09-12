@@ -4,34 +4,26 @@ import com.gmail.sergick6690.DAO.ItemDAO;
 import com.gmail.sergick6690.PropertyLoader;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Item;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Properties;
 
 @Repository
+@Transactional(rollbackFor = DaoException.class)
 public class JdbcItemDAO implements ItemDAO {
-
-    private JdbcTemplate jdbcTemplate;
+    @PersistenceContext
+    private EntityManager entityManager;
     private Properties properties = new PropertyLoader("Queries/itemQueries.properties").loadProperty();
-    private static final String ADD = "addItem";
-    private static final String FIND_BY_ID = "findItemById";
     private static final String FIND_ALL = "findAllItems";
-    private static final String REMOVE = "removeItemsById";
-
-    @Autowired
-    public JdbcItemDAO(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     @Override
     public void add(Item item) throws DaoException {
         try {
-            jdbcTemplate.update(properties.getProperty(ADD), item.getDay(), item.getHour(), item.getDuration(), item.getSubjectId(),
-                    item.getAudienceId(), item.getScheduleId());
+            entityManager.persist(item);
         } catch (Exception e) {
             throw new DaoException("Can't add item - " + item, e);
         }
@@ -39,14 +31,20 @@ public class JdbcItemDAO implements ItemDAO {
 
     @Override
     public Item findById(int id) throws DaoException {
-        return jdbcTemplate.query(properties.getProperty(FIND_BY_ID), new BeanPropertyRowMapper<>(Item.class), id)
-                .stream().findAny().orElseThrow(() -> new DaoException("Item not found - " + id));
+        try {
+            Item item = entityManager.find(Item.class, id);
+            if (item != null) {
+                return item;
+            } else throw new DaoException("Item not found - " + id);
+        } catch (Exception e) {
+            throw new DaoException("Item not found - " + id, e);
+        }
     }
 
     @Override
     public List<Item> findAll() throws DaoException {
         try {
-            return jdbcTemplate.query(properties.getProperty(FIND_ALL), new BeanPropertyRowMapper<>(Item.class));
+            return entityManager.createQuery(properties.getProperty(FIND_ALL), Item.class).getResultList();
         } catch (Exception e) {
             throw new DaoException("Can't find any items", e);
         }
@@ -55,7 +53,8 @@ public class JdbcItemDAO implements ItemDAO {
     @Override
     public void removeById(int id) throws DaoException {
         try {
-            jdbcTemplate.update(properties.getProperty(REMOVE), id);
+            Item item = findById(id);
+            entityManager.remove(item);
         } catch (Exception e) {
             throw new DaoException("Can't remove item with id - " + id, e);
         }

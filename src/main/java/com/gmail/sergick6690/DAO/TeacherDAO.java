@@ -25,9 +25,6 @@ public interface TeacherDAO extends GenericDao<Teacher> {
     default void removeById(int id) throws DaoException {
     }
 
-    public Integer findTeachersCountWithEqualDegree(String degree) throws DaoException;
+    public Long findTeachersCountWithEqualDegree(String degree) throws DaoException;
 
-    public void removeSchedule(int teacherId) throws DaoException;
-
-    public void assignSchedule(int teacherId, int scheduleId) throws DaoException;
 }

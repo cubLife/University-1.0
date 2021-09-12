@@ -25,8 +25,4 @@ public interface SubjectDAO extends GenericDao<Subject> {
     }
 
     public List<Subject> findAllSubjectRelatedToAudience(int id) throws DaoException;
-
-    public void assignTeacher(int subjectId, int teacherId) throws DaoException;
-
-    public void removeTeacher(int subjectId) throws DaoException;
 }

@@ -1,11 +1,17 @@
 package com.gmail.sergick6690.university;
 
+import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "schedules")
 public class Schedule {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+    @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
     private List<Item> items;
 
     public Schedule() {
@@ -51,21 +57,19 @@ public class Schedule {
         if (!(o instanceof Schedule)) return false;
         Schedule schedule = (Schedule) o;
         return getId() == schedule.getId() &&
-                Objects.equals(getName(), schedule.getName()) &&
-                Objects.equals(getItems(), schedule.getItems());
+                Objects.equals(getName(), schedule.getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getItems());
+        return Objects.hash(getId(), getName());
     }
 
     @Override
     public String toString() {
         return "Schedule{" +
                 "id=" + id +
-                ", name=" + name +
-                ", items=" + items +
+                ", name='" + name + '\'' +
                 '}';
     }
 }
