@@ -14,7 +14,7 @@ import java.util.Properties;
 
 @Repository
 @Transactional(rollbackFor = DaoException.class)
-public class JdbcGroupDAO implements GroupDAO {
+public class GroupRepository implements GroupDAO {
     @PersistenceContext
     private EntityManager entityManager;
     private Properties properties = new PropertyLoader("Queries/groupQueries.properties").loadProperty();
@@ -36,7 +36,7 @@ public class JdbcGroupDAO implements GroupDAO {
             Group group = entityManager.find(Group.class, id);
             if (group != null) {
                 return group;
-            } else throw new DaoException("Group not found - " + id);
+            } else throw new IllegalArgumentException("Group not found - " + id);
         } catch (Exception e) {
             throw new DaoException("Group not found - " + id, e);
         }

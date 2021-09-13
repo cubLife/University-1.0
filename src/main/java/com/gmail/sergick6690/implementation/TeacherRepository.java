@@ -14,7 +14,7 @@ import java.util.Properties;
 
 @Repository
 @Transactional(rollbackFor = DaoException.class)
-public class JdbcTeacherDAO implements TeacherDAO {
+public class TeacherRepository implements TeacherDAO {
     @PersistenceContext
     private EntityManager entityManager;
     private Properties properties = new PropertyLoader("Queries/teacherQueries.properties").loadProperty();
@@ -47,7 +47,7 @@ public class JdbcTeacherDAO implements TeacherDAO {
             if (teacher != null) {
                 return teacher;
             } else {
-                throw new DaoException("Teacher not found - " + id);
+                throw new IllegalArgumentException("Teacher not found - " + id);
             }
         } catch (Exception e) {
             throw new DaoException("Teacher not found - " + id);

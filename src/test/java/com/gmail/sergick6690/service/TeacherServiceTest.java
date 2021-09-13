@@ -1,16 +1,13 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.DAO.ScheduleDAO;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.implementation.JdbcTeacherDAO;
-import com.gmail.sergick6690.university.Schedule;
+import com.gmail.sergick6690.implementation.TeacherRepository;
 import com.gmail.sergick6690.university.Teacher;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.verification.VerificationMode;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -21,7 +18,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class TeacherServiceTest {
     @Mock
-    private JdbcTeacherDAO teacherDAO;
+    private TeacherRepository teacherDAO;
     @InjectMocks
     private TeacherService service;
     private static final String TEST = "Test";

@@ -2,7 +2,7 @@ package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.implementation.JdbcGroupDAO;
+import com.gmail.sergick6690.implementation.GroupRepository;
 import com.gmail.sergick6690.university.Group;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class GroupServiceTest {
     @Mock
-    private JdbcGroupDAO dao;
+    private GroupRepository dao;
     @InjectMocks
     private GroupService service;
     private static final int ID = 1;

@@ -42,14 +42,14 @@ import static org.mockito.Mockito.doThrow;
 @WebAppConfiguration
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class JdbcAudienceDAOTest {
+class AudienceRepositoryTest {
 
     private AudienceDAO audienceDAO;
     @Mock
     private AudienceDAO mockAudienceDAO;
 
     @Autowired
-    public JdbcAudienceDAOTest(AudienceDAO audienceDAO) {
+    public AudienceRepositoryTest(AudienceDAO audienceDAO) {
         this.audienceDAO = audienceDAO;
     }
 
@@ -123,6 +123,13 @@ class JdbcAudienceDAOTest {
         doThrow(DaoException.class).when(mockAudienceDAO).removeById(anyInt());
         assertThrows(DaoException.class, () -> {
             mockAudienceDAO.removeById(0);
+        });
+    }
+    @Test
+    void shouldThrowIllegalArgumentExceptionWhenFindAudienceByIdCall() throws DaoException {
+        doThrow(IllegalArgumentException.class).when(mockAudienceDAO).findById(anyInt());
+        assertThrows(IllegalArgumentException.class, () -> {
+            mockAudienceDAO.findById(0);
         });
     }
 }

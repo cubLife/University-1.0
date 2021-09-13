@@ -2,11 +2,9 @@ package com.gmail.sergick6690.implementation;
 
 import com.gmail.sergick6690.DAO.FacultyDAO;
 import com.gmail.sergick6690.spring.SpringConfig;
-import com.gmail.sergick6690.TablesCreator;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Faculty;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -18,9 +16,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -31,14 +26,14 @@ import static org.mockito.Mockito.doThrow;
 @WebAppConfiguration
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class JdbcFacultyDAOTest {
+class FacultyRepositoryTest {
     private FacultyDAO facultyDAO;
     @Mock
-    private JdbcFacultyDAO mockJdbcFacultyDAO;
+    private FacultyRepository mockFacultyRepository;
     private static final String TEST = "test";
 
     @Autowired
-    public JdbcFacultyDAOTest(FacultyDAO facultyDAO) {
+    public FacultyRepositoryTest(FacultyDAO facultyDAO) {
         this.facultyDAO = facultyDAO;
     }
 
@@ -87,33 +82,41 @@ class JdbcFacultyDAOTest {
 
     @Test
     void shouldThrowDaoExceptionWhenAddFacultyMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(mockJdbcFacultyDAO).add(new Faculty());
+        doThrow(DaoException.class).when(mockFacultyRepository).add(new Faculty());
         assertThrows(DaoException.class, () -> {
-            mockJdbcFacultyDAO.add(new Faculty());
+            mockFacultyRepository.add(new Faculty());
         });
     }
 
     @Test
     void shouldThrowDaoExceptionWhenFindByIdMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(mockJdbcFacultyDAO).findById(anyInt());
+        doThrow(DaoException.class).when(mockFacultyRepository).findById(anyInt());
         assertThrows(DaoException.class, () -> {
-            mockJdbcFacultyDAO.findById(0);
+            mockFacultyRepository.findById(0);
+        });
+    }
+
+    @Test
+    void shouldThrowIllegalArgumentExceptionWhenFindByIdMethodCall() throws DaoException {
+        doThrow(IllegalArgumentException.class).when(mockFacultyRepository).findById(anyInt());
+        assertThrows(IllegalArgumentException.class, () -> {
+            mockFacultyRepository.findById(0);
         });
     }
 
     @Test
     void shouldThrowDaoExceptionWhenFindAllMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(mockJdbcFacultyDAO).findAll();
+        doThrow(DaoException.class).when(mockFacultyRepository).findAll();
         assertThrows(DaoException.class, () -> {
-            mockJdbcFacultyDAO.findAll();
+            mockFacultyRepository.findAll();
         });
     }
 
     @Test
     void shouldThrowDaoExceptionWhenRemoveByIdFacultyMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(mockJdbcFacultyDAO).removeById(anyInt());
+        doThrow(DaoException.class).when(mockFacultyRepository).removeById(anyInt());
         assertThrows(DaoException.class, () -> {
-            mockJdbcFacultyDAO.removeById(0);
+            mockFacultyRepository.removeById(0);
         });
     }
 }

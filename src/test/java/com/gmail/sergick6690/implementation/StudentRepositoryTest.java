@@ -29,7 +29,7 @@ import static org.mockito.Mockito.doThrow;
 @ContextConfiguration(classes = SpringConfig.class)
 @WebAppConfiguration
 @ActiveProfiles("test")
-class JdbcStudentDAOTest {
+class StudentRepositoryTest {
     private TablesCreator creator;
     private StudentDAO studentDAO;
     private GroupDAO groupDAO;
@@ -37,11 +37,11 @@ class JdbcStudentDAOTest {
     private ScheduleDAO scheduleDAO;
     private FacultyDAO facultyDAO;
     @Mock
-    private JdbcStudentDAO mockStudentDAO;
+    private StudentRepository mockStudentDAO;
     private static final String TEST = "test";
 
     @Autowired
-    public JdbcStudentDAOTest(TablesCreator creator, StudentDAO studentDAO, GroupDAO groupDAO, CathedraDAO cathedraDAO, ScheduleDAO scheduleDAO, FacultyDAO facultyDAO) {
+    public StudentRepositoryTest(TablesCreator creator, StudentDAO studentDAO, GroupDAO groupDAO, CathedraDAO cathedraDAO, ScheduleDAO scheduleDAO, FacultyDAO facultyDAO) {
         this.creator = creator;
         this.studentDAO = studentDAO;
         this.groupDAO = groupDAO;
@@ -130,6 +130,14 @@ class JdbcStudentDAOTest {
     void shouldThrowDaoExceptionWhenFindStudentByIdMethodCall() throws DaoException {
         doThrow(DaoException.class).when(mockStudentDAO).findById(anyInt());
         assertThrows(DaoException.class, () -> {
+            mockStudentDAO.findById(anyInt());
+        });
+    }
+
+    @Test
+    void shouldThrowIllegalArgumentExceptionWhenFindStudentByIdMethodCall() throws DaoException {
+        doThrow(IllegalArgumentException.class).when(mockStudentDAO).findById(anyInt());
+        assertThrows(IllegalArgumentException.class, () -> {
             mockStudentDAO.findById(anyInt());
         });
     }

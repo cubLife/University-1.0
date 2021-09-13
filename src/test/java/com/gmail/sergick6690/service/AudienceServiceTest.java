@@ -2,7 +2,7 @@ package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.implementation.JdbcAudienceDAO;
+import com.gmail.sergick6690.implementation.AudienceRepository;
 import com.gmail.sergick6690.university.Audience;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class AudienceServiceTest {
     @Mock
-    private JdbcAudienceDAO audienceDAO;
+    private AudienceRepository audienceDAO;
     @InjectMocks
     private AudienceService audienceService;
     private static final int ID = 1;

@@ -2,15 +2,13 @@ package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.implementation.JdbcSubjectDAO;
+import com.gmail.sergick6690.implementation.SubjectRepository;
 import com.gmail.sergick6690.university.Subject;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -22,7 +20,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class SubjectServiceTest {
     @Mock
-    private JdbcSubjectDAO dao;
+    private SubjectRepository dao;
     @InjectMocks
     private SubjectService service;
     private static final int ID = 1;

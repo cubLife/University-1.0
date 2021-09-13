@@ -2,11 +2,9 @@ package com.gmail.sergick6690.implementation;
 
 import com.gmail.sergick6690.DAO.*;
 import com.gmail.sergick6690.spring.SpringConfig;
-import com.gmail.sergick6690.TablesCreator;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.*;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -18,9 +16,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -31,19 +26,19 @@ import static org.mockito.Mockito.doThrow;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @WebAppConfiguration
 @ActiveProfiles("test")
-class JdbcItemDAOTest {
+class ItemRepositoryTest {
     private ItemDAO itemDAO;
     private ScheduleDAO scheduleDAO;
     private SubjectDAO subjectDAO;
     private AudienceDAO audienceDAO;
     private TeacherDAO teacherDAO;
     @Mock
-    private JdbcItemDAO mockJdbcItemDAO;
+    private ItemRepository mockItemRepository;
     private static final String TEST = "Test";
 
     @Autowired
-    public JdbcItemDAOTest(ItemDAO itemDAO, ScheduleDAO scheduleDAO,
-                           SubjectDAO subjectDAO, AudienceDAO audienceDAO, TeacherDAO teacherDAO) {
+    public ItemRepositoryTest(ItemDAO itemDAO, ScheduleDAO scheduleDAO,
+                              SubjectDAO subjectDAO, AudienceDAO audienceDAO, TeacherDAO teacherDAO) {
         this.itemDAO = itemDAO;
         this.scheduleDAO = scheduleDAO;
         this.subjectDAO = subjectDAO;
@@ -86,33 +81,41 @@ class JdbcItemDAOTest {
 
     @Test
     void shouldThrowDaoExceptionWhenAddItemMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(mockJdbcItemDAO).add(new Item());
+        doThrow(DaoException.class).when(mockItemRepository).add(new Item());
         assertThrows(DaoException.class, () -> {
-            mockJdbcItemDAO.add(new Item());
+            mockItemRepository.add(new Item());
         });
     }
 
     @Test
     void shouldThrowDaoExceptionWhenFindByIdItemMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(mockJdbcItemDAO).findById(anyInt());
+        doThrow(DaoException.class).when(mockItemRepository).findById(anyInt());
         assertThrows(DaoException.class, () -> {
-            mockJdbcItemDAO.findById(0);
+            mockItemRepository.findById(0);
         });
     }
 
     @Test
     void shouldThrowDaoExceptionWhenFindAllItemMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(mockJdbcItemDAO).findAll();
+        doThrow(DaoException.class).when(mockItemRepository).findAll();
         assertThrows(DaoException.class, () -> {
-            mockJdbcItemDAO.findAll();
+            mockItemRepository.findAll();
         });
     }
 
     @Test
     void shouldThrowDaoExceptionWhenRemoveByIdMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(mockJdbcItemDAO).removeById(anyInt());
+        doThrow(DaoException.class).when(mockItemRepository).removeById(anyInt());
         assertThrows(DaoException.class, () -> {
-            mockJdbcItemDAO.removeById(anyInt());
+            mockItemRepository.removeById(anyInt());
+        });
+    }
+
+    @Test
+    void shouldThrowIllegalArgumentExceptionWhenFindByIdMethodCall() throws DaoException {
+        doThrow(IllegalArgumentException.class).when(mockItemRepository).removeById(anyInt());
+        assertThrows(IllegalArgumentException.class, () -> {
+            mockItemRepository.removeById(anyInt());
         });
     }
 

@@ -14,7 +14,7 @@ import java.util.Properties;
 
 @Repository
 @Transactional(rollbackFor = DaoException.class)
-public class JdbcCathedraDAO implements CathedraDAO {
+public class CathedraRepository implements CathedraDAO {
     @PersistenceContext
     private EntityManager entityManager;
     private Properties properties = new PropertyLoader("Queries/cathedraQueries.properties").loadProperty();
@@ -46,7 +46,7 @@ public class JdbcCathedraDAO implements CathedraDAO {
             Cathedra cathedra = entityManager.find(Cathedra.class, id);
             if (cathedra != null) {
                 return cathedra;
-            } else throw new DaoException("Cathedra not found - " + id);
+            } else throw new IllegalArgumentException("Cathedra not found - " + id);
         } catch (Exception e) {
             throw new DaoException("Cathedra not found - " + id, e);
         }

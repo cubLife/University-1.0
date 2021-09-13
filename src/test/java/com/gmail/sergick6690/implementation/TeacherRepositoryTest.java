@@ -3,12 +3,10 @@ package com.gmail.sergick6690.implementation;
 import com.gmail.sergick6690.DAO.ScheduleDAO;
 import com.gmail.sergick6690.DAO.TeacherDAO;
 import com.gmail.sergick6690.spring.SpringConfig;
-import com.gmail.sergick6690.TablesCreator;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Schedule;
 import com.gmail.sergick6690.university.Teacher;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -20,8 +18,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -35,15 +31,15 @@ import static org.mockito.Mockito.doThrow;
 @WebAppConfiguration
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @ActiveProfiles("test")
-class JdbcTeacherDAOTest {
+class TeacherRepositoryTest {
     private TeacherDAO teacherDAO;
     private ScheduleDAO scheduleDAO;
     @Mock
-    private JdbcTeacherDAO mockTeacherDAO;
+    private TeacherRepository mockTeacherDAO;
     private static final String TEST = "Test";
 
     @Autowired
-    public JdbcTeacherDAOTest(TeacherDAO teacherDAO, ScheduleDAO scheduleDAO) {
+    public TeacherRepositoryTest(TeacherDAO teacherDAO, ScheduleDAO scheduleDAO) {
         this.teacherDAO = teacherDAO;
         this.scheduleDAO = scheduleDAO;
     }
@@ -116,6 +112,15 @@ class JdbcTeacherDAOTest {
     void shouldThrowDaoExceptionWhenRemoveTeacherByIdMethodCall() throws DaoException {
         doThrow(DaoException.class).when(mockTeacherDAO).removeById(anyInt());
         assertThrows(DaoException.class, () -> {
+            mockTeacherDAO.removeById(anyInt());
+        });
+    }
+
+
+    @Test
+    void shouldThrowIllegalArgumentExceptionWhenFindTeacherByIdMethodCall() throws DaoException {
+        doThrow(IllegalArgumentException.class).when(mockTeacherDAO).removeById(anyInt());
+        assertThrows(IllegalArgumentException.class, () -> {
             mockTeacherDAO.removeById(anyInt());
         });
     }

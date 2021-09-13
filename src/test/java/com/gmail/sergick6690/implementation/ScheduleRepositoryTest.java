@@ -6,7 +6,6 @@ import com.gmail.sergick6690.TablesCreator;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Schedule;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -18,9 +17,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -31,14 +27,14 @@ import static org.mockito.Mockito.doThrow;
 @WebAppConfiguration
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @ActiveProfiles("test")
-class JdbcScheduleDAOTest {
+class ScheduleRepositoryTest {
     private ScheduleDAO scheduleDAO;
     @Mock
-    private JdbcScheduleDAO mockJdbcScheduleDAO;
+    private ScheduleRepository mockScheduleRepository;
     private static final String TEST = "test";
 
     @Autowired
-    public JdbcScheduleDAOTest(TablesCreator creator, ScheduleDAO scheduleDAO) {
+    public ScheduleRepositoryTest(TablesCreator creator, ScheduleDAO scheduleDAO) {
         this.scheduleDAO = scheduleDAO;
     }
 
@@ -84,33 +80,41 @@ class JdbcScheduleDAOTest {
 
     @Test
     void shouldThrowDaoExceptionWhenAddScheduleMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(mockJdbcScheduleDAO).add(new Schedule());
+        doThrow(DaoException.class).when(mockScheduleRepository).add(new Schedule());
         assertThrows(DaoException.class, () -> {
-            mockJdbcScheduleDAO.add(new Schedule());
+            mockScheduleRepository.add(new Schedule());
         });
     }
 
     @Test
     void shouldThrowDaoExceptionWhenFindScheduleByIdMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(mockJdbcScheduleDAO).findById(anyInt());
+        doThrow(DaoException.class).when(mockScheduleRepository).findById(anyInt());
         assertThrows(DaoException.class, () -> {
-            mockJdbcScheduleDAO.findById(anyInt());
+            mockScheduleRepository.findById(anyInt());
+        });
+    }
+
+    @Test
+    void shouldThrowIllegalArgumentExceptionWhenFindScheduleByIdMethodCall() throws DaoException {
+        doThrow(IllegalArgumentException.class).when(mockScheduleRepository).findById(anyInt());
+        assertThrows(IllegalArgumentException.class, () -> {
+            mockScheduleRepository.findById(anyInt());
         });
     }
 
     @Test
     void shouldThrowDaoExceptionWhenFindAllScheduleMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(mockJdbcScheduleDAO).findAll();
+        doThrow(DaoException.class).when(mockScheduleRepository).findAll();
         assertThrows(DaoException.class, () -> {
-            mockJdbcScheduleDAO.findAll();
+            mockScheduleRepository.findAll();
         });
     }
 
     @Test
     void shouldThrowDaoExceptionWhenRemoveScheduleByIdMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(mockJdbcScheduleDAO).removeById(anyInt());
+        doThrow(DaoException.class).when(mockScheduleRepository).removeById(anyInt());
         assertThrows(DaoException.class, () -> {
-            mockJdbcScheduleDAO.removeById(anyInt());
+            mockScheduleRepository.removeById(anyInt());
         });
     }
 }

@@ -14,7 +14,7 @@ import java.util.Properties;
 
 @Repository
 @Transactional(rollbackFor = DaoException.class)
-public class JdbcScheduleDAO implements ScheduleDAO {
+public class ScheduleRepository implements ScheduleDAO {
     @PersistenceContext
     private EntityManager entityManager;
     private Properties properties = new PropertyLoader("Queries/scheduleQueries.properties").loadProperty();
@@ -35,7 +35,7 @@ public class JdbcScheduleDAO implements ScheduleDAO {
             Schedule schedule = entityManager.find(Schedule.class, id);
             if (schedule != null) {
                 return schedule;
-            } else throw new DaoException("Schedule not found - " + id);
+            } else throw new IllegalArgumentException("Schedule not found - " + id);
         } catch (Exception e) {
             throw new DaoException("Schedule not found - " + id, e);
         }

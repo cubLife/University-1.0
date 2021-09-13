@@ -14,7 +14,7 @@ import java.util.Properties;
 
 @Repository
 @Transactional(rollbackFor = DaoException.class)
-public class JdbcSubjectDAO implements SubjectDAO {
+public class SubjectRepository implements SubjectDAO {
     @PersistenceContext
     private EntityManager entityManager;
     private Properties properties = new PropertyLoader("Queries/subjectQueries.properties").loadProperty();
@@ -37,7 +37,7 @@ public class JdbcSubjectDAO implements SubjectDAO {
             if (subject != null) {
                 return subject;
             } else {
-                throw new DaoException("Subject not found - " + id);
+                throw new IllegalArgumentException("Subject not found - " + id);
             }
         } catch (Exception e) {
             throw new DaoException("Subject not found - " + id);

@@ -1,11 +1,9 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.DAO.GenericDao;
 import com.gmail.sergick6690.DAO.ScheduleDAO;
 import com.gmail.sergick6690.DAO.TeacherDAO;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.implementation.JdbcTeacherDAO;
 import com.gmail.sergick6690.university.Schedule;
 import com.gmail.sergick6690.university.Teacher;
 import org.slf4j.Logger;

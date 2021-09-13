@@ -14,7 +14,7 @@ import java.util.Properties;
 
 @Repository
 @Transactional(rollbackFor = DaoException.class)
-public class JdbcAudienceDAO implements AudienceDAO {
+public class AudienceRepository implements AudienceDAO {
     @PersistenceContext
     private EntityManager entityManager;
     private Properties properties = new PropertyLoader("Queries/audienceQueries.properties").loadProperty();
@@ -36,7 +36,7 @@ public class JdbcAudienceDAO implements AudienceDAO {
             Audience audience = entityManager.find(Audience.class, id);
             if (audience != null) {
                 return audience;
-            } else throw new DaoException("Can't find any audience with id - " + id);
+            } else throw new IllegalArgumentException("Can't find any audience with id - " + id);
         } catch (Exception e) {
             throw new DaoException("Can't find any audience with id - " + id, e);
         }

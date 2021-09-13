@@ -2,7 +2,7 @@ package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.implementation.JdbcCathedraDAO;
+import com.gmail.sergick6690.implementation.CathedraRepository;
 import com.gmail.sergick6690.university.Cathedra;
 import com.gmail.sergick6690.university.Faculty;
 import com.gmail.sergick6690.university.Group;
@@ -23,7 +23,7 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class CathedraServiceTest {
     @Mock
-    private JdbcCathedraDAO dao;
+    private CathedraRepository dao;
     @InjectMocks
     private CathedraService service;
     private static final int ID = 1;

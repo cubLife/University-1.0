@@ -3,13 +3,10 @@ package com.gmail.sergick6690.implementation;
 import com.gmail.sergick6690.DAO.CathedraDAO;
 import com.gmail.sergick6690.DAO.FacultyDAO;
 import com.gmail.sergick6690.spring.SpringConfig;
-import com.gmail.sergick6690.TablesCreator;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Cathedra;
 import com.gmail.sergick6690.university.Faculty;
-import com.gmail.sergick6690.university.Group;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -21,10 +18,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doThrow;
@@ -34,15 +27,15 @@ import static org.mockito.Mockito.doThrow;
 @WebAppConfiguration
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class JdbcCathedraDAOTest {
+class CathedraRepositoryTest {
     private CathedraDAO cathedraDAO;
     private FacultyDAO facultyDAO;
     @Mock
-    private JdbcCathedraDAO mockCathedraDAO;
+    private CathedraRepository mockCathedraDAO;
     private final String TEST = "test";
 
     @Autowired
-    public JdbcCathedraDAOTest(CathedraDAO cathedraDAO, FacultyDAO facultyDAO) {
+    public CathedraRepositoryTest(CathedraDAO cathedraDAO, FacultyDAO facultyDAO) {
         this.cathedraDAO = cathedraDAO;
         this.facultyDAO = facultyDAO;
     }
@@ -93,6 +86,14 @@ class JdbcCathedraDAOTest {
     void shouldThrowDaoExceptionWhenFindByIdMethodCall() throws DaoException {
         doThrow(DaoException.class).when(mockCathedraDAO).findById(anyInt());
         assertThrows(DaoException.class, () -> {
+            mockCathedraDAO.findById(0);
+        });
+    }
+
+    @Test
+    void shouldThrowIllegalArgumentExceptionWhenFindByIdMethodCall() throws DaoException {
+        doThrow(IllegalArgumentException.class).when(mockCathedraDAO).findById(anyInt());
+        assertThrows(IllegalArgumentException.class, () -> {
             mockCathedraDAO.findById(0);
         });
     }

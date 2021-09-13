@@ -14,7 +14,7 @@ import java.util.Properties;
 
 @Repository
 @Transactional(rollbackFor = DaoException.class)
-public class JdbcItemDAO implements ItemDAO {
+public class ItemRepository implements ItemDAO {
     @PersistenceContext
     private EntityManager entityManager;
     private Properties properties = new PropertyLoader("Queries/itemQueries.properties").loadProperty();
@@ -35,7 +35,7 @@ public class JdbcItemDAO implements ItemDAO {
             Item item = entityManager.find(Item.class, id);
             if (item != null) {
                 return item;
-            } else throw new DaoException("Item not found - " + id);
+            } else throw new IllegalArgumentException("Item not found - " + id);
         } catch (Exception e) {
             throw new DaoException("Item not found - " + id, e);
         }

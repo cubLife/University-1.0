@@ -5,14 +5,12 @@ import com.gmail.sergick6690.DAO.FacultyDAO;
 import com.gmail.sergick6690.DAO.GroupDAO;
 import com.gmail.sergick6690.DAO.ScheduleDAO;
 import com.gmail.sergick6690.spring.SpringConfig;
-import com.gmail.sergick6690.TablesCreator;
 import com.gmail.sergick6690.exceptions.DaoException;
 import com.gmail.sergick6690.university.Cathedra;
 import com.gmail.sergick6690.university.Faculty;
 import com.gmail.sergick6690.university.Group;
 import com.gmail.sergick6690.university.Schedule;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -24,9 +22,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
@@ -37,17 +32,17 @@ import static org.mockito.Mockito.doThrow;
 @WebAppConfiguration
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-class JdbcGroupDAOTest {
+class GroupRepositoryTest {
     private GroupDAO groupDAO;
     private ScheduleDAO scheduleDAO;
     private CathedraDAO cathedraDAO;
     private FacultyDAO facultyDAO;
     @Mock
-    private JdbcGroupDAO mockJdbcGroupDAO;
+    private GroupRepository mockGroupRepository;
     private static final String TEST = "test";
 
     @Autowired
-    public JdbcGroupDAOTest(GroupDAO groupDAO, ScheduleDAO scheduleDAO, CathedraDAO cathedraDAO, FacultyDAO facultyDAO) {
+    public GroupRepositoryTest(GroupDAO groupDAO, ScheduleDAO scheduleDAO, CathedraDAO cathedraDAO, FacultyDAO facultyDAO) {
         this.groupDAO = groupDAO;
         this.scheduleDAO = scheduleDAO;
         this.cathedraDAO = cathedraDAO;
@@ -89,41 +84,49 @@ class JdbcGroupDAOTest {
 
     @Test
     void shouldThrowDaoExceptionWhenAddFGroupMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(mockJdbcGroupDAO).add(new Group());
+        doThrow(DaoException.class).when(mockGroupRepository).add(new Group());
         assertThrows(DaoException.class, () -> {
-            mockJdbcGroupDAO.add(new Group());
+            mockGroupRepository.add(new Group());
         });
     }
 
     @Test
     void shouldThrowDaoExceptionWhenFindGroupByIdMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(mockJdbcGroupDAO).findById(anyInt());
+        doThrow(DaoException.class).when(mockGroupRepository).findById(anyInt());
         assertThrows(DaoException.class, () -> {
-            mockJdbcGroupDAO.findById(0);
+            mockGroupRepository.findById(0);
+        });
+    }
+
+    @Test
+    void shouldThrowIllegalArgumentExceptionWhenFindGroupByIdMethodCall() throws DaoException {
+        doThrow(IllegalArgumentException.class).when(mockGroupRepository).findById(anyInt());
+        assertThrows(IllegalArgumentException.class, () -> {
+            mockGroupRepository.findById(0);
         });
     }
 
     @Test
     void shouldThrowDaoExceptionWhenFidAllFGroupMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(mockJdbcGroupDAO).findAll();
+        doThrow(DaoException.class).when(mockGroupRepository).findAll();
         assertThrows(DaoException.class, () -> {
-            mockJdbcGroupDAO.findAll();
+            mockGroupRepository.findAll();
         });
     }
 
     @Test
     void shouldThrowDaoExceptionWhenRemoveFGroupByIdMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(mockJdbcGroupDAO).removeById(anyInt());
+        doThrow(DaoException.class).when(mockGroupRepository).removeById(anyInt());
         assertThrows(DaoException.class, () -> {
-            mockJdbcGroupDAO.removeById(0);
+            mockGroupRepository.removeById(0);
         });
     }
 
     @Test
     void shouldThrowDaoExceptionWhenFindAllGroupsRelatedToCathedraMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(mockJdbcGroupDAO).findAllGroupsRelatedToCathedra(anyInt());
+        doThrow(DaoException.class).when(mockGroupRepository).findAllGroupsRelatedToCathedra(anyInt());
         assertThrows(DaoException.class, () -> {
-            mockJdbcGroupDAO.findAllGroupsRelatedToCathedra(anyInt());
+            mockGroupRepository.findAllGroupsRelatedToCathedra(anyInt());
         });
     }
 
