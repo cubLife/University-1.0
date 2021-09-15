@@ -5,7 +5,6 @@ import com.gmail.sergick6690.service.GroupService;
 import com.gmail.sergick6690.service.StudentService;
 import com.gmail.sergick6690.university.Group;
 import com.gmail.sergick6690.university.Student;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;

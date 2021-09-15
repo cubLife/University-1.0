@@ -1,8 +1,8 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.DAO.GroupDAO;
-import com.gmail.sergick6690.DAO.StudentDAO;
-import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.Repository.GroupRepository;
+import com.gmail.sergick6690.Repository.StudentRepository;
+import com.gmail.sergick6690.exceptions.RepositoryException;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.university.Group;
 import com.gmail.sergick6690.university.Student;
@@ -18,13 +18,13 @@ import static java.lang.String.format;
 
 @Service
 public class StudentService {
-    private StudentDAO studentDAO;
-    private GroupDAO groupDAO;
+    private StudentRepository studentDAO;
+    private GroupRepository groupDAO;
     private static final Logger ERROR = LoggerFactory.getLogger("com.gmail.sergick6690.error");
     private static final Logger DEBUG = LoggerFactory.getLogger("com.gmail.sergick6690.debug");
 
     @Autowired
-    public StudentService(StudentDAO studentDAO, GroupDAO groupDAO) {
+    public StudentService(StudentRepository studentDAO, GroupRepository groupDAO) {
         this.studentDAO = studentDAO;
         this.groupDAO = groupDAO;
     }
@@ -37,7 +37,7 @@ public class StudentService {
         try {
             studentDAO.add(student);
             DEBUG.debug((format("New student - %s was added", student.toString())));
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -48,7 +48,7 @@ public class StudentService {
             Student student = studentDAO.findById(id);
             DEBUG.debug(format("Student with id - %d was returned", id));
             return student;
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -59,7 +59,7 @@ public class StudentService {
             List<Student> studentList = studentDAO.findAll();
             DEBUG.debug("All students was returned");
             return studentList;
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -69,33 +69,33 @@ public class StudentService {
         try {
             studentDAO.removeById(id);
             DEBUG.debug(format("Student with id - %d is removed", id));
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
     }
 
-    @Transactional(rollbackFor = DaoException.class)
+    @Transactional(rollbackFor = RepositoryException.class)
     public void assignGroup(int studentId, int groupId) throws ServiceException {
         try {
             Group group = groupDAO.findById(groupId);
             Student student = studentDAO.findById(studentId);
             student.setGroup(group);
             DEBUG.debug("Group with id - " + groupId + " was assigned to student with id - " + studentId);
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
     }
 
-    @Transactional(rollbackFor = DaoException.class)
+    @Transactional(rollbackFor = RepositoryException.class)
     public void removeFromGroup(int studentId) throws ServiceException {
         try {
             Group group = groupDAO.findById(1);
             Student student = studentDAO.findById(studentId);
             student.setGroup(group);
             DEBUG.debug("Student with id - " + studentId + " was removed from group");
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -106,7 +106,7 @@ public class StudentService {
         try {
             studentDAO.assignCourse(studentId, course);
             DEBUG.debug("Course number - " + course + " was assigned to student with id - " + studentId);
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -116,7 +116,7 @@ public class StudentService {
         try {
             studentDAO.removeFromCourse(studentId);
             DEBUG.debug("For student with id - " + studentId + " was removed course");
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -139,7 +139,7 @@ public class StudentService {
             studentDAO.removeFromCourse(studentId);
             studentDAO.assignCourse(studentId, course);
             DEBUG.debug("For student with id - " + studentId + " was changed course on course with id - " + course);
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error("Can't change course for student with id - " + studentId, e);
             throw new ServiceException("Can't change course for student with id - " + studentId, e);
         }

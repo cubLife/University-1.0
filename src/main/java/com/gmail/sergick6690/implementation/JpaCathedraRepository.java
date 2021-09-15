@@ -1,8 +1,7 @@
 package com.gmail.sergick6690.implementation;
 
-import com.gmail.sergick6690.DAO.CathedraDAO;
 import com.gmail.sergick6690.PropertyLoader;
-import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.exceptions.RepositoryException;
 import com.gmail.sergick6690.university.Cathedra;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,51 +12,51 @@ import java.util.List;
 import java.util.Properties;
 
 @Repository
-@Transactional(rollbackFor = DaoException.class)
-public class CathedraRepository implements CathedraDAO {
+@Transactional(rollbackFor = RepositoryException.class)
+public class JpaCathedraRepository implements com.gmail.sergick6690.Repository.CathedraRepository {
     @PersistenceContext
     private EntityManager entityManager;
     private Properties properties = new PropertyLoader("Queries/cathedraQueries.properties").loadProperty();
     private static final String FIND_ALL = "findAll";
 
     @Override
-    public void add(Cathedra cathedra) throws DaoException {
+    public void add(Cathedra cathedra) throws RepositoryException {
         try {
-           entityManager.persist(cathedra);
+            entityManager.persist(cathedra);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new DaoException("Cant't add cathedra" + e, e);
+            throw new RepositoryException("Cant't add cathedra" + e, e);
         }
     }
 
     @Override
-    public void removeById(int id) throws DaoException {
+    public void removeById(int id) throws RepositoryException {
         try {
             Cathedra cathedra = findById(id);
             entityManager.remove(cathedra);
         } catch (Exception e) {
-            throw new DaoException("Cant remove cathedra with id - " + id, e);
+            throw new RepositoryException("Cant remove cathedra with id - " + id, e);
         }
     }
 
     @Override
-    public Cathedra findById(int id) throws DaoException {
+    public Cathedra findById(int id) throws RepositoryException {
         try {
             Cathedra cathedra = entityManager.find(Cathedra.class, id);
             if (cathedra != null) {
                 return cathedra;
             } else throw new IllegalArgumentException("Cathedra not found - " + id);
         } catch (Exception e) {
-            throw new DaoException("Cathedra not found - " + id, e);
+            throw new RepositoryException("Cathedra not found - " + id, e);
         }
     }
 
     @Override
-    public List<Cathedra> findAll() throws DaoException {
+    public List<Cathedra> findAll() throws RepositoryException {
         try {
             return entityManager.createQuery(properties.getProperty(FIND_ALL), Cathedra.class).getResultList();
         } catch (Exception e) {
-            throw new DaoException("Can't find any cathedras", e);
+            throw new RepositoryException("Can't find any cathedras", e);
         }
     }
 }

@@ -99,8 +99,8 @@ public class SpringConfig implements WebMvcConfigurer {
 
     private Properties additionalProperties() {
         Properties properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "validate");
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+        properties.setProperty("hibernate.hbm2ddl.auto", "create");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
         properties.setProperty("show_sql", "true");
         properties.setProperty("hibernate.enable_lazy_load_no_trans", "true");
         return properties;

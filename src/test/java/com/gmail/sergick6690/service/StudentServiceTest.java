@@ -1,8 +1,8 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.exceptions.RepositoryException;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.implementation.StudentRepository;
+import com.gmail.sergick6690.implementation.JpaStudentRepository;
 import com.gmail.sergick6690.university.Student;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class StudentServiceTest {
     @Mock
-    private StudentRepository studentDAO;
+    private JpaStudentRepository studentRepository;
     @Mock
     private StudentService studentService;
     @InjectMocks
@@ -28,49 +28,49 @@ class StudentServiceTest {
     private static final int ID = 1;
 
     @Test
-    void shouldInvokeAdd() throws ServiceException, DaoException {
+    void shouldInvokeAdd() throws ServiceException, RepositoryException {
         service.add(Student.builder().build());
-        verify(studentDAO).add(Student.builder().build());
+        verify(studentRepository).add(Student.builder().build());
     }
 
     @Test
-    void shouldFindById() throws ServiceException, DaoException {
+    void shouldFindById() throws ServiceException, RepositoryException {
         service.findById(ID);
-        verify(studentDAO).findById(ID);
+        verify(studentRepository).findById(ID);
     }
 
     @Test
-    void shouldFindAll() throws ServiceException, DaoException {
+    void shouldFindAll() throws ServiceException, RepositoryException {
         service.findAll();
-        verify(studentDAO).findAll();
+        verify(studentRepository).findAll();
     }
 
     @Test
-    void shouldRemoveById() throws ServiceException, DaoException {
+    void shouldRemoveById() throws ServiceException, RepositoryException {
         service.removeById(ID);
-        verify(studentDAO).removeById(ID);
+        verify(studentRepository).removeById(ID);
     }
 
 
     @Test
-    void shouldAssignCourse() throws ServiceException, DaoException {
+    void shouldAssignCourse() throws ServiceException, RepositoryException {
         service.assignCourse(ID, ID);
-        verify(studentDAO).assignCourse(ID, ID);
+        verify(studentRepository).assignCourse(ID, ID);
     }
 
     @Test
-    void shouldRemoveFromCourse() throws ServiceException, DaoException {
+    void shouldRemoveFromCourse() throws ServiceException, RepositoryException {
         service.removeFromCourse(ID);
-        verify(studentDAO).removeFromCourse(ID);
+        verify(studentRepository).removeFromCourse(ID);
     }
 
 
     @Test
-    void shouldInvokeChangeCourse() throws ServiceException, DaoException {
-        InOrder inOrder = Mockito.inOrder(studentDAO);
+    void shouldInvokeChangeCourse() throws ServiceException, RepositoryException {
+        InOrder inOrder = Mockito.inOrder(studentRepository);
         service.changeCourse(ID, ID);
-        inOrder.verify(studentDAO).removeFromCourse(ID);
-        inOrder.verify(studentDAO).assignCourse(ID, ID);
+        inOrder.verify(studentRepository).removeFromCourse(ID);
+        inOrder.verify(studentRepository).assignCourse(ID, ID);
         inOrder.verifyNoMoreInteractions();
     }
 
@@ -84,40 +84,40 @@ class StudentServiceTest {
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenAddMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(studentDAO).add(new Student());
+    void shouldThrowServiceExceptionWhenAddMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(studentRepository).add(new Student());
         assertThrows(ServiceException.class, () -> {
             service.add(new Student());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenFindByIdMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(studentDAO).findById(anyInt());
+    void shouldThrowServiceExceptionWhenFindByIdMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(studentRepository).findById(anyInt());
         assertThrows(ServiceException.class, () -> {
             service.findById(anyInt());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenFindAllMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(studentDAO).findAll();
+    void shouldThrowServiceExceptionWhenFindAllMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(studentRepository).findAll();
         assertThrows(ServiceException.class, () -> {
             service.findAll();
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenRemoveByIdMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(studentDAO).removeById(anyInt());
+    void shouldThrowServiceExceptionWhenRemoveByIdMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(studentRepository).removeById(anyInt());
         assertThrows(ServiceException.class, () -> {
             service.removeById(anyInt());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenAssignCourseMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(studentDAO).assignCourse(anyInt(), anyInt());
+    void shouldThrowServiceExceptionWhenAssignCourseMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(studentRepository).assignCourse(anyInt(), anyInt());
         assertThrows(ServiceException.class, () -> {
             service.assignCourse(anyInt(), anyInt());
         });
@@ -132,8 +132,8 @@ class StudentServiceTest {
     }
 
     @Test
-    void shouldThrowDaoExceptionWhenRemoveFromCourseMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(studentDAO).removeFromCourse(anyInt());
+    void shouldThrowDaoExceptionWhenRemoveFromCourseMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(studentRepository).removeFromCourse(anyInt());
         assertThrows(ServiceException.class, () -> {
             service.removeFromCourse(anyInt());
         });

@@ -1,8 +1,8 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.DAO.ScheduleDAO;
-import com.gmail.sergick6690.DAO.TeacherDAO;
-import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.Repository.ScheduleRepository;
+import com.gmail.sergick6690.Repository.TeacherRepository;
+import com.gmail.sergick6690.exceptions.RepositoryException;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.university.Schedule;
 import com.gmail.sergick6690.university.Teacher;
@@ -19,13 +19,13 @@ import static java.lang.String.format;
 @Service
 @Transactional(rollbackFor = ServiceException.class)
 public class TeacherService {
-    private TeacherDAO teacherDAO;
-    private ScheduleDAO scheduleDAO;
+    private TeacherRepository teacherDAO;
+    private ScheduleRepository scheduleDAO;
     private static final Logger ERROR = LoggerFactory.getLogger("com.gmail.sergick6690.error");
     private static final Logger DEBUG = LoggerFactory.getLogger("com.gmail.sergick6690.debug");
 
     @Autowired
-    public TeacherService(TeacherDAO teacherDAO, ScheduleDAO scheduleDAO) {
+    public TeacherService(TeacherRepository teacherDAO, ScheduleRepository scheduleDAO) {
         this.teacherDAO = teacherDAO;
         this.scheduleDAO = scheduleDAO;
     }
@@ -38,7 +38,7 @@ public class TeacherService {
         try {
             teacherDAO.add(teacher);
             DEBUG.debug((format("New teacher - %s was added", teacher.toString())));
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -49,7 +49,7 @@ public class TeacherService {
             Teacher teacher = teacherDAO.findById(id);
             DEBUG.debug(format("Subject with id - %d was returned", id));
             return teacher;
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -60,7 +60,7 @@ public class TeacherService {
             List<Teacher> teacherList = teacherDAO.findAll();
             DEBUG.debug("All teachers was returned");
             return teacherList;
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -70,7 +70,7 @@ public class TeacherService {
         try {
             teacherDAO.removeById(id);
             DEBUG.debug(format("Subject with id - %d is removed", id));
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -81,7 +81,7 @@ public class TeacherService {
             Long count = teacherDAO.findTeachersCountWithEqualDegree(degree);
             DEBUG.debug("Was returned teachers count - " + count + " for teachers with degree - " + degree);
             return count;
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }

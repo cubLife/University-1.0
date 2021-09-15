@@ -1,9 +1,8 @@
 package com.gmail.sergick6690.implementation;
 
-import com.gmail.sergick6690.DAO.ScheduleDAO;
+import com.gmail.sergick6690.Repository.ScheduleRepository;
 import com.gmail.sergick6690.spring.SpringConfig;
-import com.gmail.sergick6690.TablesCreator;
-import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.exceptions.RepositoryException;
 import com.gmail.sergick6690.university.Schedule;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.Test;
@@ -27,75 +26,75 @@ import static org.mockito.Mockito.doThrow;
 @WebAppConfiguration
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @ActiveProfiles("test")
-class ScheduleRepositoryTest {
-    private ScheduleDAO scheduleDAO;
+class JpaScheduleRepositoryTest {
+    private ScheduleRepository scheduleRepository;
     @Mock
-    private ScheduleRepository mockScheduleRepository;
+    private JpaScheduleRepository mockScheduleRepository;
     private static final String TEST = "test";
 
     @Autowired
-    public ScheduleRepositoryTest(TablesCreator creator, ScheduleDAO scheduleDAO) {
-        this.scheduleDAO = scheduleDAO;
+    public JpaScheduleRepositoryTest(ScheduleRepository scheduleRepository) {
+        this.scheduleRepository = scheduleRepository;
     }
 
     @Test
-    void shouldAddSchedule() throws DaoException {
-        scheduleDAO.add(new Schedule(TEST));
+    void shouldAddSchedule() throws RepositoryException {
+        scheduleRepository.add(new Schedule(TEST));
         Schedule expected = new Schedule(TEST);
         expected.setId(1);
-        Schedule actual = scheduleDAO.findAll().get(0);
+        Schedule actual = scheduleRepository.findAll().get(0);
         assertEquals(expected, actual);
     }
 
     @Test
-    void shouldFindScheduleByID() throws NotImplementedException, DaoException {
+    void shouldFindScheduleByID() throws NotImplementedException, RepositoryException {
         for (int i = 0; i < 5; i++) {
-            scheduleDAO.add(new Schedule(TEST));
+            scheduleRepository.add(new Schedule(TEST));
         }
         Schedule expected = new Schedule(3, TEST, null);
-        Schedule actual = scheduleDAO.findById(3);
+        Schedule actual = scheduleRepository.findById(3);
         assertEquals(expected, actual);
     }
 
     @Test
-    void findAllSchedules() throws DaoException {
+    void findAllSchedules() throws RepositoryException {
         for (int i = 0; i < 5; i++) {
-            scheduleDAO.add(new Schedule());
+            scheduleRepository.add(new Schedule());
         }
         int expected = 5;
-        int actual = scheduleDAO.findAll().size();
+        int actual = scheduleRepository.findAll().size();
         assertEquals(expected, actual);
     }
 
     @Test
-    void removeScheduleById() throws DaoException {
+    void removeScheduleById() throws RepositoryException {
         for (int i = 0; i < 5; i++) {
-            scheduleDAO.add(new Schedule());
+            scheduleRepository.add(new Schedule());
         }
-        scheduleDAO.removeById(1);
+        scheduleRepository.removeById(1);
         int expected = 4;
-        int actual = scheduleDAO.findAll().size();
+        int actual = scheduleRepository.findAll().size();
         assertEquals(expected, actual);
     }
 
     @Test
-    void shouldThrowDaoExceptionWhenAddScheduleMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(mockScheduleRepository).add(new Schedule());
-        assertThrows(DaoException.class, () -> {
+    void shouldThrowRepositoryExceptionWhenAddScheduleMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(mockScheduleRepository).add(new Schedule());
+        assertThrows(RepositoryException.class, () -> {
             mockScheduleRepository.add(new Schedule());
         });
     }
 
     @Test
-    void shouldThrowDaoExceptionWhenFindScheduleByIdMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(mockScheduleRepository).findById(anyInt());
-        assertThrows(DaoException.class, () -> {
+    void shouldThrowWhenFindScheduleByIdMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(mockScheduleRepository).findById(anyInt());
+        assertThrows(RepositoryException.class, () -> {
             mockScheduleRepository.findById(anyInt());
         });
     }
 
     @Test
-    void shouldThrowIllegalArgumentExceptionWhenFindScheduleByIdMethodCall() throws DaoException {
+    void shouldThrowIllegalArgumentExceptionWhenFindScheduleByIdMethodCall() throws RepositoryException {
         doThrow(IllegalArgumentException.class).when(mockScheduleRepository).findById(anyInt());
         assertThrows(IllegalArgumentException.class, () -> {
             mockScheduleRepository.findById(anyInt());
@@ -103,17 +102,17 @@ class ScheduleRepositoryTest {
     }
 
     @Test
-    void shouldThrowDaoExceptionWhenFindAllScheduleMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(mockScheduleRepository).findAll();
-        assertThrows(DaoException.class, () -> {
+    void shouldThrowRepositoryExceptionWhenFindAllScheduleMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(mockScheduleRepository).findAll();
+        assertThrows(RepositoryException.class, () -> {
             mockScheduleRepository.findAll();
         });
     }
 
     @Test
-    void shouldThrowDaoExceptionWhenRemoveScheduleByIdMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(mockScheduleRepository).removeById(anyInt());
-        assertThrows(DaoException.class, () -> {
+    void shouldThrowRepositoryExceptionWhenRemoveScheduleByIdMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(mockScheduleRepository).removeById(anyInt());
+        assertThrows(RepositoryException.class, () -> {
             mockScheduleRepository.removeById(anyInt());
         });
     }

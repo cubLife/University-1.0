@@ -1,8 +1,8 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.DAO.SubjectDAO;
-import com.gmail.sergick6690.DAO.TeacherDAO;
-import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.Repository.SubjectRepository;
+import com.gmail.sergick6690.Repository.TeacherRepository;
+import com.gmail.sergick6690.exceptions.RepositoryException;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.university.Subject;
 import com.gmail.sergick6690.university.Teacher;
@@ -19,13 +19,13 @@ import static java.lang.String.format;
 @Service
 @Transactional(rollbackFor = ServiceException.class)
 public class SubjectService {
-    private SubjectDAO subjectDAO;
-    private TeacherDAO teacherDAO;
+    private SubjectRepository subjectDAO;
+    private TeacherRepository teacherDAO;
     private static final Logger ERROR = LoggerFactory.getLogger("com.gmail.sergick6690.error");
     private static final Logger DEBUG = LoggerFactory.getLogger("com.gmail.sergick6690.debug");
 
     @Autowired
-    public SubjectService(SubjectDAO subjectDAO, TeacherDAO teacherDAO) {
+    public SubjectService(SubjectRepository subjectDAO, TeacherRepository teacherDAO) {
         this.subjectDAO = subjectDAO;
         this.teacherDAO = teacherDAO;
     }
@@ -38,7 +38,7 @@ public class SubjectService {
         try {
             subjectDAO.add(subject);
             DEBUG.debug((format("New subject - %s was added", subject.toString())));
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -49,7 +49,7 @@ public class SubjectService {
             Subject subject = subjectDAO.findById(id);
             DEBUG.debug(format("Subject with id - %d was returned", id));
             return subject;
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -60,7 +60,7 @@ public class SubjectService {
             List<Subject> subjectList = subjectDAO.findAll();
             DEBUG.debug("All subjects was returned");
             return subjectList;
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -70,7 +70,7 @@ public class SubjectService {
         try {
             subjectDAO.removeById(id);
             DEBUG.debug(format("Subject with id - %d is removed", id));
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -81,7 +81,7 @@ public class SubjectService {
             List<Subject> subjectList = subjectDAO.findAllSubjectRelatedToAudience(id);
             DEBUG.debug("All subjects related to audience with id - " + id + " was returned");
             return subjectList;
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -93,7 +93,7 @@ public class SubjectService {
             Subject subject = subjectDAO.findById(subjectId);
             subject.setTeacher(teacher);
             DEBUG.debug("For subject with id" + subjectId + " was assigned teacher with id - " + teacherId);
-        } catch (Exception e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -105,7 +105,7 @@ public class SubjectService {
             Subject subject = subjectDAO.findById(subjectId);
             subject.setTeacher(teacher);
             DEBUG.debug("For subject with id - " + subjectId + " was removed teacher");
-        } catch (Exception e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }

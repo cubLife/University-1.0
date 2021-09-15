@@ -1,8 +1,8 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.DAO.FacultyDAO;
-import com.gmail.sergick6690.DAO.GenericDao;
-import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.Repository.FacultyRepository;
+import com.gmail.sergick6690.Repository.GenericRepository;
+import com.gmail.sergick6690.exceptions.RepositoryException;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.university.Faculty;
 import org.slf4j.Logger;
@@ -15,14 +15,14 @@ import java.util.List;
 import static java.lang.String.format;
 
 @Service
-public class FacultyService implements GenericDao<Faculty> {
-    private FacultyDAO facultyDAO;
+public class FacultyService implements GenericRepository<Faculty> {
+    private FacultyRepository facultyRepository;
     private static final Logger ERROR = LoggerFactory.getLogger("com.gmail.sergick6690.error");
     private static final Logger DEBUG = LoggerFactory.getLogger("com.gmail.sergick6690.debug");
 
     @Autowired
-    public FacultyService(FacultyDAO facultyDAO) {
-        this.facultyDAO = facultyDAO;
+    public FacultyService(FacultyRepository facultyRepository) {
+        this.facultyRepository = facultyRepository;
     }
 
     @Override
@@ -32,9 +32,9 @@ public class FacultyService implements GenericDao<Faculty> {
             throw new IllegalArgumentException("Input parameter can't be null");
         }
         try {
-            facultyDAO.add(faculty);
+            facultyRepository.add(faculty);
             DEBUG.debug((format("New faculty - %s was added", faculty.toString())));
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -43,10 +43,10 @@ public class FacultyService implements GenericDao<Faculty> {
     @Override
     public Faculty findById(int id) throws ServiceException {
         try {
-            Faculty faculty = facultyDAO.findById(id);
+            Faculty faculty = facultyRepository.findById(id);
             DEBUG.debug(format("Faculty with id - %d was returned", id));
             return faculty;
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -55,10 +55,10 @@ public class FacultyService implements GenericDao<Faculty> {
     @Override
     public List<Faculty> findAll() throws ServiceException {
         try {
-            List<Faculty> facultyList = facultyDAO.findAll();
+            List<Faculty> facultyList = facultyRepository.findAll();
             DEBUG.debug("All faculties was returned");
             return facultyList;
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -67,9 +67,9 @@ public class FacultyService implements GenericDao<Faculty> {
     @Override
     public void removeById(int id) throws ServiceException {
         try {
-            facultyDAO.removeById(id);
+            facultyRepository.removeById(id);
             DEBUG.debug(format("Cathedra with id - %d is removed", id));
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }

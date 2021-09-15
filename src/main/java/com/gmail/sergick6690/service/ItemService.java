@@ -1,7 +1,7 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.DAO.ItemDAO;
-import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.Repository.ItemRepository;
+import com.gmail.sergick6690.exceptions.RepositoryException;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.university.Item;
 import org.slf4j.Logger;
@@ -15,12 +15,12 @@ import static java.lang.String.format;
 
 @Service
 public class ItemService {
-    private ItemDAO itemDAO;
+    private ItemRepository itemDAO;
     private static final Logger ERROR = LoggerFactory.getLogger("com.gmail.sergick6690.error");
     private static final Logger DEBUG = LoggerFactory.getLogger("com.gmail.sergick6690.debug");
 
     @Autowired
-    public ItemService(ItemDAO itemDAO) {
+    public ItemService(ItemRepository itemDAO) {
         this.itemDAO = itemDAO;
     }
 
@@ -32,7 +32,7 @@ public class ItemService {
         try {
             itemDAO.add(item);
             DEBUG.debug((format("New item - %s was added", item.toString())));
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -43,7 +43,7 @@ public class ItemService {
             Item item = itemDAO.findById(id);
             DEBUG.debug(format("Item with id - %d was returned", id));
             return item;
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -54,7 +54,7 @@ public class ItemService {
             List<Item> itemList = itemDAO.findAll();
             DEBUG.debug("All items was returned");
             return itemList;
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -64,7 +64,7 @@ public class ItemService {
         try {
             itemDAO.removeById(id);
             DEBUG.debug(format("Item with id - %d is removed", id));
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }

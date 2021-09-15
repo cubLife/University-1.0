@@ -1,8 +1,7 @@
 package com.gmail.sergick6690.implementation;
 
-import com.gmail.sergick6690.DAO.TeacherDAO;
 import com.gmail.sergick6690.PropertyLoader;
-import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.exceptions.RepositoryException;
 import com.gmail.sergick6690.university.Teacher;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,8 +12,8 @@ import java.util.List;
 import java.util.Properties;
 
 @Repository
-@Transactional(rollbackFor = DaoException.class)
-public class TeacherRepository implements TeacherDAO {
+@Transactional(rollbackFor = RepositoryException.class)
+public class JpaTeacherRepository implements com.gmail.sergick6690.Repository.TeacherRepository {
     @PersistenceContext
     private EntityManager entityManager;
     private Properties properties = new PropertyLoader("Queries/teacherQueries.properties").loadProperty();
@@ -22,26 +21,26 @@ public class TeacherRepository implements TeacherDAO {
     private static final String FIND_WITH_EQUAL_DEGREE = "findAllTeachersWithEqualDegree";
 
     @Override
-    public void add(Teacher teacher) throws DaoException {
+    public void add(Teacher teacher) throws RepositoryException {
         try {
             entityManager.persist(teacher);
         } catch (Exception e) {
-            throw new DaoException("Can't add teacher - " + teacher, e);
+            throw new RepositoryException("Can't add teacher - " + teacher, e);
         }
     }
 
     @Override
-    public void removeById(int id) throws DaoException {
+    public void removeById(int id) throws RepositoryException {
         try {
             Teacher teacher = findById(id);
             entityManager.remove(teacher);
         } catch (Exception e) {
-            throw new DaoException("Can't remove teacher with id - " + id, e);
+            throw new RepositoryException("Can't remove teacher with id - " + id, e);
         }
     }
 
     @Override
-    public Teacher findById(int id) throws DaoException {
+    public Teacher findById(int id) throws RepositoryException {
         try {
             Teacher teacher = entityManager.find(Teacher.class, id);
             if (teacher != null) {
@@ -50,27 +49,27 @@ public class TeacherRepository implements TeacherDAO {
                 throw new IllegalArgumentException("Teacher not found - " + id);
             }
         } catch (Exception e) {
-            throw new DaoException("Teacher not found - " + id);
+            throw new RepositoryException("Teacher not found - " + id);
         }
     }
 
     @Override
-    public List<Teacher> findAll() throws DaoException {
+    public List<Teacher> findAll() throws RepositoryException {
         try {
             return entityManager.createQuery(properties.getProperty(FIND_ALL), Teacher.class).getResultList();
         } catch (Exception e) {
-            throw new DaoException("Can't find any teacher", e);
+            throw new RepositoryException("Can't find any teacher", e);
         }
     }
 
     @Override
-    public Long findTeachersCountWithEqualDegree(String degree) throws DaoException {
+    public Long findTeachersCountWithEqualDegree(String degree) throws RepositoryException {
         try {
             return entityManager.createQuery(properties.getProperty(FIND_WITH_EQUAL_DEGREE), Long.class)
                     .setParameter("degree", degree)
                     .getSingleResult();
         } catch (Exception e) {
-            throw new DaoException("Can't find any teacher with degree - " + degree + e, e);
+            throw new RepositoryException("Can't find any teacher with degree - " + degree + e, e);
         }
     }
 }

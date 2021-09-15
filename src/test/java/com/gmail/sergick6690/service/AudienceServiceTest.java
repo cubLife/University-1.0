@@ -1,8 +1,8 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.exceptions.RepositoryException;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.implementation.AudienceRepository;
+import com.gmail.sergick6690.implementation.JpaAudienceRepository;
 import com.gmail.sergick6690.university.Audience;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,33 +19,33 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class AudienceServiceTest {
     @Mock
-    private AudienceRepository audienceDAO;
+    private JpaAudienceRepository audienceRepository;
     @InjectMocks
     private AudienceService audienceService;
     private static final int ID = 1;
 
     @Test
-    void shouldInvokeAdd() throws ServiceException, DaoException {
+    void shouldInvokeAdd() throws ServiceException, RepositoryException {
         audienceService.add(new Audience());
-        verify(audienceDAO).add(new Audience());
+        verify(audienceRepository).add(new Audience());
     }
 
     @Test
-    void ShouldInvokeFindById() throws ServiceException, DaoException {
+    void ShouldInvokeFindById() throws ServiceException, RepositoryException {
         audienceService.findById(ID);
-        verify(audienceDAO).findById(ID);
+        verify(audienceRepository).findById(ID);
     }
 
     @Test
-    void shouldInvokeFindAll() throws ServiceException, DaoException {
+    void shouldInvokeFindAll() throws ServiceException, RepositoryException {
         audienceService.findAll();
-        verify(audienceDAO).findAll();
+        verify(audienceRepository).findAll();
     }
 
     @Test
-    void shouldInvokeRemoveById() throws ServiceException, DaoException {
+    void shouldInvokeRemoveById() throws ServiceException, RepositoryException {
         audienceService.removeById(ID);
-        verify(audienceDAO).removeById(ID);
+        verify(audienceRepository).removeById(ID);
     }
 
     @Test
@@ -58,32 +58,32 @@ class AudienceServiceTest {
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenAddMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(audienceDAO).add(new Audience());
+    void shouldThrowServiceExceptionWhenAddMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(audienceRepository).add(new Audience());
         assertThrows(ServiceException.class, () -> {
             audienceService.add(new Audience());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenFindByIdMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(audienceDAO).findById(anyInt());
+    void shouldThrowServiceExceptionWhenFindByIdMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(audienceRepository).findById(anyInt());
         assertThrows(ServiceException.class, () -> {
             audienceService.findById(anyInt());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenFindAllMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(audienceDAO).findAll();
+    void shouldThrowServiceExceptionWhenFindAllMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(audienceRepository).findAll();
         assertThrows(ServiceException.class, () -> {
             audienceService.findAll();
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenRemoveByIdMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(audienceDAO).removeById(anyInt());
+    void shouldThrowServiceExceptionWhenRemoveByIdMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(audienceRepository).removeById(anyInt());
         assertThrows(ServiceException.class, () -> {
             audienceService.removeById(anyInt());
         });

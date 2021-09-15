@@ -1,7 +1,7 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.DAO.AudienceDAO;
-import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.Repository.AudienceRepository;
+import com.gmail.sergick6690.exceptions.RepositoryException;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.university.Audience;
 import org.slf4j.Logger;
@@ -15,13 +15,13 @@ import static java.lang.String.format;
 
 @Service
 public class AudienceService {
-    private AudienceDAO audienceDAO;
+    private AudienceRepository audienceRepository;
     private static final Logger ERROR = LoggerFactory.getLogger("com.gmail.sergick6690.error");
     private static final Logger DEBUG = LoggerFactory.getLogger("com.gmail.sergick6690.debug");
 
     @Autowired
-    public AudienceService(AudienceDAO audienceDAO) {
-        this.audienceDAO = audienceDAO;
+    public AudienceService(AudienceRepository audienceRepository) {
+        this.audienceRepository = audienceRepository;
     }
 
     public void add(Audience audience) throws ServiceException {
@@ -30,9 +30,9 @@ public class AudienceService {
             throw new IllegalArgumentException("Input parameter can't be null");
         }
         try {
-            audienceDAO.add(audience);
+            audienceRepository.add(audience);
             DEBUG.debug(format("New audience - %s is added", audience.toString()));
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -40,10 +40,10 @@ public class AudienceService {
 
     public Audience findById(int id) throws ServiceException {
         try {
-            Audience audience = audienceDAO.findById(id);
+            Audience audience = audienceRepository.findById(id);
             DEBUG.debug(format("Audience with id - %d was returned", id));
             return audience;
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -51,10 +51,10 @@ public class AudienceService {
 
     public List<Audience> findAll() throws ServiceException {
         try {
-            List<Audience> audienceList = audienceDAO.findAll();
+            List<Audience> audienceList = audienceRepository.findAll();
             DEBUG.debug("All audiences was returned");
             return audienceList;
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -62,9 +62,9 @@ public class AudienceService {
 
     public void removeById(int id) throws ServiceException {
         try {
-            audienceDAO.removeById(id);
+            audienceRepository.removeById(id);
             DEBUG.debug(format("Audience with id - %d is removed", id));
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }

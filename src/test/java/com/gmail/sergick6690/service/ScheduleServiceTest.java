@@ -1,8 +1,8 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.exceptions.RepositoryException;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.implementation.ScheduleRepository;
+import com.gmail.sergick6690.implementation.JpaScheduleRepository;
 import com.gmail.sergick6690.university.Schedule;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,33 +19,33 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class ScheduleServiceTest {
     @Mock
-    private ScheduleRepository dao;
+    private JpaScheduleRepository scheduleRepository;
     @InjectMocks
     private ScheduleService service;
     private static final int ID = 1;
 
     @Test
-    void shouldInvokeAdd() throws ServiceException, DaoException {
+    void shouldInvokeAdd() throws ServiceException, RepositoryException {
         service.add(new Schedule());
-        verify(dao).add(new Schedule());
+        verify(scheduleRepository).add(new Schedule());
     }
 
     @Test
-    void shouldInvokeFindById() throws ServiceException, DaoException {
+    void shouldInvokeFindById() throws ServiceException, RepositoryException {
         service.findById(ID);
-        verify(dao).findById(ID);
+        verify(scheduleRepository).findById(ID);
     }
 
     @Test
-    void shouldInvokeFindAll() throws ServiceException, DaoException {
+    void shouldInvokeFindAll() throws ServiceException, RepositoryException {
         service.findAll();
-        verify(dao).findAll();
+        verify(scheduleRepository).findAll();
     }
 
     @Test
-    void shouldInvokeRemoveById() throws ServiceException, DaoException {
+    void shouldInvokeRemoveById() throws ServiceException, RepositoryException {
         service.removeById(ID);
-        verify(dao).removeById(ID);
+        verify(scheduleRepository).removeById(ID);
     }
 
     @Test
@@ -58,32 +58,32 @@ class ScheduleServiceTest {
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenAddMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).add(new Schedule());
+    void shouldThrowServiceExceptionWhenAddMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(scheduleRepository).add(new Schedule());
         assertThrows(ServiceException.class, () -> {
             service.add(new Schedule());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenFindByIdMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).findById(anyInt());
+    void shouldThrowServiceExceptionWhenFindByIdMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(scheduleRepository).findById(anyInt());
         assertThrows(ServiceException.class, () -> {
             service.findById(anyInt());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenFindAllMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).findAll();
+    void shouldThrowServiceExceptionWhenFindAllMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(scheduleRepository).findAll();
         assertThrows(ServiceException.class, () -> {
             service.findAll();
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenRemoveByIdMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).removeById(anyInt());
+    void shouldThrowServiceExceptionWhenRemoveByIdMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(scheduleRepository).removeById(anyInt());
         assertThrows(ServiceException.class, () -> {
             service.removeById(anyInt());
         });

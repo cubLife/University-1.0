@@ -1,8 +1,8 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.exceptions.RepositoryException;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.implementation.SubjectRepository;
+import com.gmail.sergick6690.implementation.JpaSubjectRepository;
 import com.gmail.sergick6690.university.Subject;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -20,40 +20,40 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class SubjectServiceTest {
     @Mock
-    private SubjectRepository dao;
+    private JpaSubjectRepository subjectRepository;
     @InjectMocks
     private SubjectService service;
     private static final int ID = 1;
 
     @Test
-    void shouldInvokeAdd() throws ServiceException, DaoException {
+    void shouldInvokeAdd() throws ServiceException, RepositoryException {
         service.add(new Subject());
-        verify(dao).add(new Subject());
+        verify(subjectRepository).add(new Subject());
     }
 
     @Test
-    void shouldFindById() throws ServiceException, DaoException {
+    void shouldFindById() throws ServiceException, RepositoryException{
         service.findById(ID);
-        verify(dao).findById(ID);
+        verify(subjectRepository).findById(ID);
     }
 
     @Test
-    void shouldInvokeFindAll() throws ServiceException, DaoException {
+    void shouldInvokeFindAll() throws ServiceException, RepositoryException {
         service.findAll();
-        verify(dao).findAll();
+        verify(subjectRepository).findAll();
     }
 
     @Test
-    void shouldInvokeRemoveById() throws ServiceException, DaoException {
+    void shouldInvokeRemoveById() throws ServiceException, RepositoryException {
         service.removeById(ID);
-        verify(dao).removeById(ID);
+        verify(subjectRepository).removeById(ID);
     }
 
     @SneakyThrows
     @Test
     void shouldInvokeFindAllSubjectRelatedToAudience() {
         service.findAllSubjectRelatedToAudience(ID);
-        verify(dao).findAllSubjectRelatedToAudience(ID);
+        verify(subjectRepository).findAllSubjectRelatedToAudience(ID);
     }
 
     @Test
@@ -66,40 +66,40 @@ class SubjectServiceTest {
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenAddMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).add(new Subject());
+    void shouldThrowServiceExceptionWhenAddMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(subjectRepository).add(new Subject());
         assertThrows(ServiceException.class, () -> {
             service.add(new Subject());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenFindByIdMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).findById(anyInt());
+    void shouldThrowServiceExceptionWhenFindByIdMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(subjectRepository).findById(anyInt());
         assertThrows(ServiceException.class, () -> {
             service.findById(anyInt());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenFindAllMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).findAll();
+    void shouldThrowServiceExceptionWhenFindAllMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(subjectRepository).findAll();
         assertThrows(ServiceException.class, () -> {
             service.findAll();
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenRemoveByIdMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).removeById(anyInt());
+    void shouldThrowServiceExceptionWhenRemoveByIdMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(subjectRepository).removeById(anyInt());
         assertThrows(ServiceException.class, () -> {
             service.removeById(anyInt());
         });
     }
 
     @Test
-    void shouldThrowDaoExceptionWhenFindAllSubjectRelatedToAudienceMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).findAllSubjectRelatedToAudience(anyInt());
+    void shouldThrowDaoExceptionWhenFindAllSubjectRelatedToAudienceMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(subjectRepository).findAllSubjectRelatedToAudience(anyInt());
         assertThrows(ServiceException.class, () -> {
             service.findAllSubjectRelatedToAudience(anyInt());
         });
