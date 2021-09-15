@@ -32,17 +32,13 @@ import static org.mockito.Mockito.doThrow;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @ActiveProfiles("test")
 class JpaTeacherRepositoryTest {
+    @Autowired
     private TeacherRepository teacherRepository;
+    @Autowired
     private ScheduleRepository scheduleRepository;
     @Mock
     private JpaTeacherRepository mockTeacherRepository;
     private static final String TEST = "Test";
-
-    @Autowired
-    public JpaTeacherRepositoryTest(TeacherRepository teacherRepository, ScheduleRepository scheduleRepository) {
-        this.teacherRepository = teacherRepository;
-        this.scheduleRepository = scheduleRepository;
-    }
 
     @Test
     void shouldAddTeacher() throws RepositoryException {
@@ -94,9 +90,8 @@ class JpaTeacherRepositoryTest {
 
     @Test
     void shouldThrowRepositoryExceptionWhenFindTeacherByIdMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(mockTeacherRepository).findById(anyInt());
         assertThrows(RepositoryException.class, () -> {
-            mockTeacherRepository.findById(anyInt());
+            teacherRepository.findById(1);
         });
     }
 

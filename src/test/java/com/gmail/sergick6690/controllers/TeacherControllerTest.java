@@ -38,6 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 class TeacherControllerTest {
     private MockMvc mockMvc;
+    @Autowired
     private WebApplicationContext webApplicationContext;
     @MockBean
     private TeacherService service;
@@ -65,11 +66,6 @@ class TeacherControllerTest {
     private static final String SCHEDULE_ID = "scheduleId";
     private static final String MESSAGE = "message";
     private static final String VALUE = "1";
-
-    @Autowired
-    public TeacherControllerTest(WebApplicationContext webApplicationContext) {
-        this.webApplicationContext = webApplicationContext;
-    }
 
     @BeforeAll
     void setUp() {

@@ -26,15 +26,10 @@ import static org.mockito.Mockito.doThrow;
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class JpaAudienceRepositoryTest {
+    @Autowired
     private AudienceRepository audienceRepository;
     @Mock
     private AudienceRepository mockAudienceRepository;
-
-    @Autowired
-    public JpaAudienceRepositoryTest(AudienceRepository audienceRepository) {
-        this.audienceRepository = audienceRepository;
-    }
-
 
     @Test
     void shouldAddAudience() throws RepositoryException {
@@ -85,10 +80,9 @@ class JpaAudienceRepositoryTest {
     }
 
     @Test
-    void shouldThrowRepositoryExceptionWhenFindAudienceByIdCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(mockAudienceRepository).findById(anyInt());
+    void shouldThrowRepositoryExceptionWhenFindAudienceByIdCall() {
         assertThrows(RepositoryException.class, () -> {
-            mockAudienceRepository.findById(0);
+            audienceRepository.findById(1);
         });
     }
 
@@ -102,9 +96,8 @@ class JpaAudienceRepositoryTest {
 
     @Test
     void shouldThrowRepositoryExceptionWhenRemoveAudienceByIdeCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(mockAudienceRepository).removeById(anyInt());
         assertThrows(RepositoryException.class, () -> {
-            mockAudienceRepository.removeById(0);
+            audienceRepository.removeById(0);
         });
     }
 

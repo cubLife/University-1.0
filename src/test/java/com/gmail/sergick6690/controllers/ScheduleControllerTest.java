@@ -33,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 class ScheduleControllerTest {
     private MockMvc mockMvc;
+    @Autowired
     private WebApplicationContext webApplicationContext;
     @MockBean
     ScheduleService service;
@@ -48,11 +49,6 @@ class ScheduleControllerTest {
     private static final String REDIRECT = "/schedules";
     private static final String SCHEDULE = "schedule";
     private static final String SCHEDULES = "schedules";
-
-    @Autowired
-    public ScheduleControllerTest(WebApplicationContext webApplicationContext) {
-        this.webApplicationContext = webApplicationContext;
-    }
 
     @BeforeAll
     void setUp() {

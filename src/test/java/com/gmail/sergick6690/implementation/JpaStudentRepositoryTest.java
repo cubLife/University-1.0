@@ -27,23 +27,19 @@ import static org.mockito.Mockito.doThrow;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @ActiveProfiles("test")
 class JpaStudentRepositoryTest {
+    @Autowired
     private StudentRepository studentRepository;
+    @Autowired
     private GroupRepository groupRepository;
+    @Autowired
     private CathedraRepository cathedraRepository;
+    @Autowired
     private ScheduleRepository scheduleRepository;
+    @Autowired
     private FacultyRepository facultyRepository;
     @Mock
     private JpaStudentRepository mockStudentRepository;
     private static final String TEST = "test";
-
-    @Autowired
-    public JpaStudentRepositoryTest(StudentRepository mockStudentRepository, GroupRepository groupRepository, CathedraRepository cathedraRepository, ScheduleRepository scheduleRepository, FacultyRepository facultyRepository) {
-        this.studentRepository = mockStudentRepository;
-        this.groupRepository = groupRepository;
-        this.cathedraRepository = cathedraRepository;
-        this.scheduleRepository = scheduleRepository;
-        this.facultyRepository = facultyRepository;
-    }
 
     @Test
     void shouldAddStudent() throws RepositoryException {
@@ -66,7 +62,7 @@ class JpaStudentRepositoryTest {
     }
 
     @Test
-    void shouldFindAllStudents() throws RepositoryException{
+    void shouldFindAllStudents() throws RepositoryException {
         createTestData();
         for (int i = 0; i < 5; i++) {
             studentRepository.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).group(groupRepository.findById(1)).course(0).build());
@@ -118,9 +114,8 @@ class JpaStudentRepositoryTest {
 
     @Test
     void shouldThrowDaoExceptionWhenFindStudentByIdMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(mockStudentRepository).findById(anyInt());
         assertThrows(RepositoryException.class, () -> {
-            mockStudentRepository.findById(anyInt());
+            studentRepository.findById(1);
         });
     }
 
@@ -149,7 +144,7 @@ class JpaStudentRepositoryTest {
     }
 
     @Test
-    void shouldThrowRepositoryExceptionWhenAssignCourseMethodCall() throws RepositoryException{
+    void shouldThrowRepositoryExceptionWhenAssignCourseMethodCall() throws RepositoryException {
         doThrow(RepositoryException.class).when(mockStudentRepository).assignCourse(anyInt(), anyInt());
         assertThrows(RepositoryException.class, () -> {
             mockStudentRepository.assignCourse(anyInt(), anyInt());

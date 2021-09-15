@@ -35,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 class GroupControllerTest {
     private MockMvc mockMvc;
+    @Autowired
     private WebApplicationContext webApplicationContext;
     @MockBean
     private GroupService service;
@@ -52,11 +53,6 @@ class GroupControllerTest {
     private static final String REDIRECT = "/groups";
     private static final String GROUP = "group";
     private static final String GROUPS = "groups";
-
-    @Autowired
-    public GroupControllerTest(WebApplicationContext webApplicationContext) {
-        this.webApplicationContext = webApplicationContext;
-    }
 
     @BeforeAll
     void setUp() {

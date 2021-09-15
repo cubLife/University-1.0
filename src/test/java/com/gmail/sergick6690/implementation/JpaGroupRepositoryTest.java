@@ -4,8 +4,8 @@ import com.gmail.sergick6690.Repository.CathedraRepository;
 import com.gmail.sergick6690.Repository.FacultyRepository;
 import com.gmail.sergick6690.Repository.GroupRepository;
 import com.gmail.sergick6690.Repository.ScheduleRepository;
-import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.exceptions.RepositoryException;
+import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.university.Cathedra;
 import com.gmail.sergick6690.university.Faculty;
 import com.gmail.sergick6690.university.Group;
@@ -33,21 +33,17 @@ import static org.mockito.Mockito.doThrow;
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class JpaGroupRepositoryTest {
+    @Autowired
     private GroupRepository groupRepository;
+    @Autowired
     private ScheduleRepository scheduleRepository;
+    @Autowired
     private CathedraRepository cathedraRepository;
+    @Autowired
     private FacultyRepository facultyRepository;
     @Mock
     private JpaGroupRepository mockGroupRepository;
     private static final String TEST = "test";
-
-    @Autowired
-    public JpaGroupRepositoryTest(GroupRepository groupRepository, ScheduleRepository scheduleDAO, CathedraRepository cathedraRepository, FacultyRepository facultyRepository) {
-        this.groupRepository = groupRepository;
-        this.scheduleRepository = scheduleDAO;
-        this.cathedraRepository = cathedraRepository;
-        this.facultyRepository = facultyRepository;
-    }
 
     @Test
     void shouldAddGroup() throws RepositoryException {
@@ -58,7 +54,7 @@ class JpaGroupRepositoryTest {
     }
 
     @Test
-    void shouldFindGroupById() throws NotImplementedException, RepositoryException{
+    void shouldFindGroupById() throws NotImplementedException, RepositoryException {
         generateTestData();
         Group expected = new Group(5, TEST, null, new Schedule(1, null, null), new Cathedra(2, TEST, new Faculty(1, TEST, null), null));
         Group actual = groupRepository.findById(5);
@@ -130,7 +126,7 @@ class JpaGroupRepositoryTest {
         });
     }
 
-    public void generateTestData() throws RepositoryException{
+    public void generateTestData() throws RepositoryException {
         Faculty faculty = new Faculty();
         faculty.setName(TEST);
         facultyRepository.add(faculty);

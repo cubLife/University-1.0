@@ -1,8 +1,8 @@
 package com.gmail.sergick6690.implementation;
 
 import com.gmail.sergick6690.Repository.FacultyRepository;
-import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.exceptions.RepositoryException;
+import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.university.Faculty;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.Test;
@@ -27,15 +27,11 @@ import static org.mockito.Mockito.doThrow;
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class JpaFacultyRepositoryTest {
+    @Autowired
     private FacultyRepository facultyRepository;
     @Mock
     private JpaFacultyRepository mockFacultyRepository;
     private static final String TEST = "test";
-
-    @Autowired
-    public JpaFacultyRepositoryTest(FacultyRepository facultyRepository) {
-        this.facultyRepository = facultyRepository;
-    }
 
     @Test
     void shouldAddFaculty() throws RepositoryException {
@@ -90,9 +86,8 @@ class JpaFacultyRepositoryTest {
 
     @Test
     void shouldThrowRepositoryExceptionWhenFindByIdMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(mockFacultyRepository).findById(anyInt());
         assertThrows(RepositoryException.class, () -> {
-            mockFacultyRepository.findById(0);
+            facultyRepository.findById(1);
         });
     }
 

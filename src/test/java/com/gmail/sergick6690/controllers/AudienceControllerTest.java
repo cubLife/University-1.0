@@ -33,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 class AudienceControllerTest {
     private MockMvc mockMvc;
+    @Autowired
     private WebApplicationContext webApplicationContext;
     @MockBean
     private AudienceService audienceService;
@@ -48,11 +49,6 @@ class AudienceControllerTest {
     private static final String AUDIENCES = "audiences";
     private static final String AUDIENCE = "audience";
     private static final String REDIRECT = "/audiences";
-
-    @Autowired
-    public AudienceControllerTest(WebApplicationContext webApplicationContext) {
-        this.webApplicationContext = webApplicationContext;
-    }
 
     @BeforeAll
     public void setup() {

@@ -2,8 +2,8 @@ package com.gmail.sergick6690.implementation;
 
 import com.gmail.sergick6690.Repository.CathedraRepository;
 import com.gmail.sergick6690.Repository.FacultyRepository;
-import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.exceptions.RepositoryException;
+import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.university.Cathedra;
 import com.gmail.sergick6690.university.Faculty;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
@@ -18,7 +18,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.context.web.WebAppConfiguration;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doThrow;
 
@@ -28,17 +29,13 @@ import static org.mockito.Mockito.doThrow;
 @ActiveProfiles("test")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 class JpaCathedraRepositoryTest {
+    @Autowired
     private CathedraRepository cathedraRepository;
+    @Autowired
     private FacultyRepository facultyRepository;
     @Mock
     private JpaCathedraRepository mockCathedraRepository;
     private final String TEST = "test";
-
-    @Autowired
-    public JpaCathedraRepositoryTest(CathedraRepository cathedraRepository, FacultyRepository facultyRepository) {
-        this.cathedraRepository = cathedraRepository;
-        this.facultyRepository = facultyRepository;
-    }
 
     @Test
     void shouldAddCathedra() throws RepositoryException {
@@ -75,7 +72,7 @@ class JpaCathedraRepositoryTest {
     }
 
     @Test
-    void shouldThrowRepositoryExceptionWhenAddCathedraMethodCall() throws RepositoryException{
+    void shouldThrowRepositoryExceptionWhenAddCathedraMethodCall() throws RepositoryException {
         doThrow(RepositoryException.class).when(mockCathedraRepository).add(new Cathedra(1, TEST, new Faculty(), null));
         assertThrows(RepositoryException.class, () -> {
             mockCathedraRepository.add(new Cathedra(1, TEST, new Faculty(), null));
@@ -83,10 +80,9 @@ class JpaCathedraRepositoryTest {
     }
 
     @Test
-    void shouldThrowRepositoryExceptionWhenFindByIdMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(mockCathedraRepository).findById(anyInt());
+    void shouldThrowRepositoryExceptionWhenFindByIdMethodCall() {
         assertThrows(RepositoryException.class, () -> {
-            mockCathedraRepository.findById(0);
+            cathedraRepository.findById(0);
         });
     }
 

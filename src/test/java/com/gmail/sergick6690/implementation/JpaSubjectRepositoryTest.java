@@ -1,8 +1,8 @@
 package com.gmail.sergick6690.implementation;
 
 import com.gmail.sergick6690.Repository.*;
-import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.exceptions.RepositoryException;
+import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.university.*;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.Test;
@@ -27,24 +27,19 @@ import static org.mockito.Mockito.doThrow;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @ActiveProfiles("test")
 class JpaSubjectRepositoryTest {
+    @Autowired
     private ItemRepository itemRepository;
+    @Autowired
     private ScheduleRepository scheduleRepository;
+    @Autowired
     private SubjectRepository subjectRepository;
+    @Autowired
     private AudienceRepository audienceRepository;
+    @Autowired
     private TeacherRepository teacherRepository;
     @Mock
     private SubjectRepository mockSubjectRepository;
     private static final String TEST = "Test";
-
-    @Autowired
-    public JpaSubjectRepositoryTest(ItemRepository itemRepository, ScheduleRepository scheduleRepository, SubjectRepository subjectRepository,
-                                    AudienceRepository audienceRepository, TeacherRepository teacherRepository) {
-        this.itemRepository = itemRepository;
-        this.scheduleRepository = scheduleRepository;
-        this.subjectRepository = subjectRepository;
-        this.audienceRepository = audienceRepository;
-        this.teacherRepository = teacherRepository;
-    }
 
     @Test
     void shouldAddSubject() throws RepositoryException {
@@ -97,9 +92,8 @@ class JpaSubjectRepositoryTest {
 
     @Test
     void shouldThrowRepositoryExceptionWhenFindByIdMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(mockSubjectRepository).findById(anyInt());
         assertThrows(RepositoryException.class, () -> {
-            mockSubjectRepository.findById(anyInt());
+            subjectRepository.findById(1);
         });
     }
 

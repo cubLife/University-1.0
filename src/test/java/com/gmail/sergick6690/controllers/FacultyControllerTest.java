@@ -33,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 class FacultyControllerTest {
     private MockMvc mockMvc;
+    @Autowired
     private WebApplicationContext webApplicationContext;
     @MockBean
     private FacultyService service;
@@ -48,11 +49,6 @@ class FacultyControllerTest {
     private static final String FACULTY = "faculty";
     private static final String FACULTIES = "faculties";
     private static final String REDIRECT = "/faculties";
-
-    @Autowired
-    public FacultyControllerTest(WebApplicationContext webApplicationContext) {
-        this.webApplicationContext = webApplicationContext;
-    }
 
     @BeforeAll
     void setUp() {

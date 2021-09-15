@@ -1,8 +1,8 @@
 package com.gmail.sergick6690.implementation;
 
 import com.gmail.sergick6690.Repository.*;
-import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.exceptions.RepositoryException;
+import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.university.*;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.Test;
@@ -27,24 +27,19 @@ import static org.mockito.Mockito.doThrow;
 @WebAppConfiguration
 @ActiveProfiles("test")
 class JpaItemRepositoryTest {
+    @Autowired
     private ItemRepository itemRepository;
+    @Autowired
     private ScheduleRepository scheduleRepository;
+    @Autowired
     private SubjectRepository subjectRepository;
+    @Autowired
     private AudienceRepository audienceRepository;
+    @Autowired
     private TeacherRepository teacherRepository;
     @Mock
     private JpaItemRepository mockItemRepository;
     private static final String TEST = "Test";
-
-    @Autowired
-    public JpaItemRepositoryTest(ItemRepository itemRepository, ScheduleRepository scheduleRepository,
-                                 SubjectRepository subjectRepository, AudienceRepository audienceRepository, TeacherRepository teacherRepository) {
-        this.itemRepository = itemRepository;
-        this.scheduleRepository = scheduleRepository;
-        this.subjectRepository = subjectRepository;
-        this.audienceRepository = audienceRepository;
-        this.teacherRepository = teacherRepository;
-    }
 
     @Test
     void shouldAddItem() throws RepositoryException {
@@ -63,7 +58,7 @@ class JpaItemRepositoryTest {
     }
 
     @Test
-    void shouldFindAllItems() throws RepositoryException{
+    void shouldFindAllItems() throws RepositoryException {
         generateTestData();
         int expected = 5;
         int actual = itemRepository.findAll().size();
@@ -88,10 +83,9 @@ class JpaItemRepositoryTest {
     }
 
     @Test
-    void shouldThrowRepositoryExceptionWhenFindByIdItemMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(mockItemRepository).findById(anyInt());
+    void shouldThrowRepositoryExceptionWhenFindByIdItemMethodCall() {
         assertThrows(RepositoryException.class, () -> {
-            mockItemRepository.findById(0);
+            itemRepository.findById(1);
         });
     }
 

@@ -1,8 +1,8 @@
 package com.gmail.sergick6690.implementation;
 
 import com.gmail.sergick6690.Repository.ScheduleRepository;
-import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.exceptions.RepositoryException;
+import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.university.Schedule;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.Test;
@@ -27,15 +27,11 @@ import static org.mockito.Mockito.doThrow;
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @ActiveProfiles("test")
 class JpaScheduleRepositoryTest {
+    @Autowired
     private ScheduleRepository scheduleRepository;
     @Mock
     private JpaScheduleRepository mockScheduleRepository;
     private static final String TEST = "test";
-
-    @Autowired
-    public JpaScheduleRepositoryTest(ScheduleRepository scheduleRepository) {
-        this.scheduleRepository = scheduleRepository;
-    }
 
     @Test
     void shouldAddSchedule() throws RepositoryException {
@@ -87,9 +83,8 @@ class JpaScheduleRepositoryTest {
 
     @Test
     void shouldThrowWhenFindScheduleByIdMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(mockScheduleRepository).findById(anyInt());
         assertThrows(RepositoryException.class, () -> {
-            mockScheduleRepository.findById(anyInt());
+            scheduleRepository.findById(1);
         });
     }
 
