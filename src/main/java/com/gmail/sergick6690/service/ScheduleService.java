@@ -1,10 +1,8 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.DAO.GenericDao;
-import com.gmail.sergick6690.DAO.ScheduleDAO;
-import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.Repository.ScheduleRepository;
+import com.gmail.sergick6690.exceptions.RepositoryException;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.implementation.JdbcScheduleDAO;
 import com.gmail.sergick6690.university.Schedule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,17 +14,16 @@ import java.util.List;
 import static java.lang.String.format;
 
 @Service
-public class ScheduleService implements GenericDao<Schedule> {
-    private ScheduleDAO scheduleDAO;
+public class ScheduleService {
+    private ScheduleRepository scheduleDAO;
     private static final Logger ERROR = LoggerFactory.getLogger("com.gmail.sergick6690.error");
     private static final Logger DEBUG = LoggerFactory.getLogger("com.gmail.sergick6690.debug");
 
     @Autowired
-    public ScheduleService(JdbcScheduleDAO scheduleDAO) {
+    public ScheduleService(ScheduleRepository scheduleDAO) {
         this.scheduleDAO = scheduleDAO;
     }
 
-    @Override
     public void add(Schedule schedule) throws ServiceException {
         if (schedule == null) {
             ERROR.error("Input parameter was null", new IllegalArgumentException("Input parameter can't be null"));
@@ -35,42 +32,39 @@ public class ScheduleService implements GenericDao<Schedule> {
         try {
             scheduleDAO.add(schedule);
             DEBUG.debug((format("New schedule - %s was added", schedule.toString())));
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
     }
 
-    @Override
     public Schedule findById(int id) throws ServiceException {
         try {
             Schedule schedule = scheduleDAO.findById(id);
             DEBUG.debug(format("Item with id - %d was returned", id));
             return schedule;
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
     }
 
-    @Override
     public List<Schedule> findAll() throws ServiceException {
         try {
             List<Schedule> scheduleList = scheduleDAO.findAll();
             DEBUG.debug("All schedules was returned");
             return scheduleList;
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
     }
 
-    @Override
     public void removeById(int id) throws ServiceException {
         try {
             scheduleDAO.removeById(id);
             DEBUG.debug(format("Schedule with id - %d is removed", id));
-        } catch (DaoException e) {
+        } catch (RepositoryException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }

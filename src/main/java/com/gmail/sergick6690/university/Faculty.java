@@ -1,20 +1,33 @@
 package com.gmail.sergick6690.university;
 
+import lombok.ToString;
+
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
 public class Faculty {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    private List<Cathedra> cathedra;
+    @OneToMany(mappedBy = "faculty", cascade = CascadeType.ALL)
+    private List<Cathedra> cathedras = new ArrayList<>();
 
     public Faculty() {
     }
 
-    public Faculty(int id, String name, List<Cathedra> cathedra) {
+    public Faculty(int id, String name, List<Cathedra> cathedras) {
         this.id = id;
         this.name = name;
-        this.cathedra = cathedra;
+        this.cathedras = cathedras;
+    }
+
+    public Faculty(int id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public int getId() {
@@ -33,12 +46,12 @@ public class Faculty {
         this.name = name;
     }
 
-    public List<Cathedra> getCathedra() {
-        return cathedra;
+    public List<Cathedra> getCathedras() {
+        return cathedras;
     }
 
-    public void setCathedra(List<Cathedra> cathedra) {
-        this.cathedra = cathedra;
+    public void setCathedras(List<Cathedra> cathedras) {
+        this.cathedras = cathedras;
     }
 
     @Override
@@ -48,12 +61,12 @@ public class Faculty {
         Faculty faculty = (Faculty) o;
         return getId() == faculty.getId() &&
                 Objects.equals(getName(), faculty.getName()) &&
-                Objects.equals(getCathedra(), faculty.getCathedra());
+                Objects.equals(getCathedras(), faculty.getCathedras());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getCathedra());
+        return Objects.hash(getId(), getName(), getCathedras());
     }
 
     @Override
@@ -61,7 +74,6 @@ public class Faculty {
         return "Faculty{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", cathedra=" + cathedra +
                 '}';
     }
 }

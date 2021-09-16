@@ -1,83 +1,59 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.exceptions.RepositoryException;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.implementation.JdbcTeacherDAO;
+import com.gmail.sergick6690.implementation.JpaTeacherRepository;
 import com.gmail.sergick6690.university.Teacher;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InOrder;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class TeacherServiceTest {
     @Mock
-    private JdbcTeacherDAO dao;
+    private JpaTeacherRepository teacherRepository;
     @InjectMocks
     private TeacherService service;
     private static final String TEST = "Test";
     private static final int ID = 1;
 
     @Test
-    void shouldInvokeAdd() throws ServiceException, DaoException {
+    void shouldInvokeAdd() throws ServiceException, RepositoryException {
         service.add(Teacher.builder().build());
-        verify(dao).add(Teacher.builder().build());
+        verify(teacherRepository).add(Teacher.builder().build());
     }
 
     @Test
-    void shouldInvokeFindById() throws ServiceException, DaoException {
+    void shouldInvokeFindById() throws ServiceException, RepositoryException {
         service.findById(ID);
-        verify(dao).findById(ID);
+        verify(teacherRepository).findById(ID);
     }
 
     @Test
-    void shouldInvokeFindAll() throws ServiceException, DaoException {
+    void shouldInvokeFindAll() throws ServiceException, RepositoryException {
         service.findAll();
-        verify(dao).findAll();
+        verify(teacherRepository).findAll();
     }
 
     @Test
-    void shouldInvokeRemoveById() throws ServiceException, DaoException {
+    void shouldInvokeRemoveById() throws ServiceException, RepositoryException {
         service.removeById(ID);
-        verify(dao).removeById(ID);
+        verify(teacherRepository).removeById(ID);
     }
 
     @Test
-    void shouldInvokeFindTeachersCountWithEqualDegree() throws ServiceException, DaoException {
+    void shouldInvokeFindTeachersCountWithEqualDegree() throws ServiceException, RepositoryException {
         service.findTeachersCountWithEqualDegree(TEST);
-        verify(dao).findTeachersCountWithEqualDegree(TEST);
+        verify(teacherRepository).findTeachersCountWithEqualDegree(TEST);
     }
 
-    @Test
-    void shouldInvokeRemoveSchedule() throws ServiceException, DaoException {
-        service.removeSchedule(ID);
-        verify(dao).removeSchedule(ID);
-    }
-
-    @Test
-    void shouldInvokeAssignSchedule() throws ServiceException, DaoException {
-        service.assignSchedule(ID, ID);
-        verify(dao).assignSchedule(ID, ID);
-    }
-
-    @Test
-    void shouldInvokeChangeSchedule() throws ServiceException, DaoException {
-        InOrder inOrder = Mockito.inOrder(dao);
-        service.changeSchedule(ID, ID);
-        inOrder.verify(dao).removeSchedule(ID);
-        inOrder.verify(dao).assignSchedule(ID, ID);
-        inOrder.verifyNoMoreInteractions();
-    }
 
     @Test
     void shouldThrowIllegalArgumentExceptionWhenAddMethodCall() {
@@ -89,58 +65,43 @@ class TeacherServiceTest {
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenAddMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).add(new Teacher());
+    void shouldThrowServiceExceptionWhenAddMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(teacherRepository).add(new Teacher());
         assertThrows(ServiceException.class, () -> {
             service.add(new Teacher());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenFindByIdMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).findById(anyInt());
+    void shouldThrowServiceExceptionWhenFindByIdMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(teacherRepository).findById(anyInt());
         assertThrows(ServiceException.class, () -> {
             service.findById(anyInt());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenFindAllMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).findAll();
+    void shouldThrowServiceExceptionWhenFindAllMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(teacherRepository).findAll();
         assertThrows(ServiceException.class, () -> {
             service.findAll();
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenRemoveByIdMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).removeById(anyInt());
+    void shouldThrowServiceExceptionWhenRemoveByIdMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(teacherRepository).removeById(anyInt());
         assertThrows(ServiceException.class, () -> {
             service.removeById(anyInt());
         });
     }
 
     @Test
-    void shouldThrowServiceWhenFindAllTeachersWithEqualDegreeMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).findTeachersCountWithEqualDegree(anyString());
+    void shouldThrowServiceWhenFindAllTeachersWithEqualDegreeMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(teacherRepository).findTeachersCountWithEqualDegree(anyString());
         assertThrows(ServiceException.class, () -> {
             service.findTeachersCountWithEqualDegree(anyString());
         });
     }
 
-    @Test
-    void shouldThrowDaoExceptionAssignScheduleWhenMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).assignSchedule(anyInt(), anyInt());
-        assertThrows(ServiceException.class, () -> {
-            service.assignSchedule(anyInt(), anyInt());
-        });
-    }
-
-    @Test
-    void shouldThrowDaoExceptionRemoveScheduleWhenMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).removeSchedule(anyInt());
-        assertThrows(ServiceException.class, () -> {
-            service.removeSchedule(anyInt());
-        });
-    }
 }

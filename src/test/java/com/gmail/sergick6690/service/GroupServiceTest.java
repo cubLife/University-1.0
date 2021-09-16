@@ -1,8 +1,8 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.exceptions.DaoException;
+import com.gmail.sergick6690.exceptions.RepositoryException;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.implementation.JdbcGroupDAO;
+import com.gmail.sergick6690.implementation.JpaGroupRepository;
 import com.gmail.sergick6690.university.Group;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,43 +19,43 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class GroupServiceTest {
     @Mock
-    private JdbcGroupDAO dao;
+    private JpaGroupRepository repository;
     @InjectMocks
     private GroupService service;
     private static final int ID = 1;
 
     @Test
-    void shouldInvokeAdd() throws ServiceException, DaoException {
+    void shouldInvokeAdd() throws ServiceException, RepositoryException {
         service.add(new Group());
-        verify(dao).add(new Group());
+        verify(repository).add(new Group());
     }
 
     @Test
-    void shouldFindById() throws ServiceException, DaoException {
+    void shouldFindById() throws ServiceException, RepositoryException {
         service.findById(ID);
-        verify(dao).findById(ID);
+        verify(repository).findById(ID);
     }
 
     @Test
-    void shouldInvokeFindAll() throws ServiceException, DaoException {
+    void shouldInvokeFindAll() throws ServiceException, RepositoryException {
         service.findAll();
-        verify(dao).findAll();
+        verify(repository).findAll();
     }
 
     @Test
-    void shouldRemoveById() throws ServiceException, DaoException {
+    void shouldRemoveById() throws ServiceException, RepositoryException {
         service.removeById(ID);
-        verify(dao).removeById(ID);
+        verify(repository).removeById(ID);
     }
 
     @Test
-    void shouldInvokeFindAllGroupsRelatedToCathedra() throws DaoException, ServiceException {
+    void shouldInvokeFindAllGroupsRelatedToCathedra() throws RepositoryException, ServiceException {
         service.findAllGroupsRelatedToCathedra(ID);
-        verify(dao).findAllGroupsRelatedToCathedra(ID);
+        verify(repository).findAllGroupsRelatedToCathedra(ID);
     }
 
     @Test
-    void shouldThrowIllegalArgumentExceptionWhenAddMethodCall(){
+    void shouldThrowIllegalArgumentExceptionWhenAddMethodCall() {
         String expected = "Input parameter can't be null";
         String actual = assertThrows(IllegalArgumentException.class, () -> {
             service.add(null);
@@ -64,40 +64,40 @@ class GroupServiceTest {
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenAddMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).add(new Group());
+    void shouldThrowServiceExceptionWhenAddMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(repository).add(new Group());
         assertThrows(ServiceException.class, () -> {
             service.add(new Group());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenFindByIdMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).findById(anyInt());
+    void shouldThrowServiceExceptionWhenFindByIdMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(repository).findById(anyInt());
         assertThrows(ServiceException.class, () -> {
             service.findById(anyInt());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenFindAllMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).findAll();
+    void shouldThrowServiceExceptionWhenFindAllMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(repository).findAll();
         assertThrows(ServiceException.class, () -> {
             service.findAll();
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenRemoveByIdMethodCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).removeById(anyInt());
+    void shouldThrowServiceExceptionWhenRemoveByIdMethodCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(repository).removeById(anyInt());
         assertThrows(ServiceException.class, () -> {
             service.removeById(anyInt());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenFindAllGroupsRelatedToCathedraCall() throws DaoException {
-        doThrow(DaoException.class).when(dao).findAllGroupsRelatedToCathedra(anyInt());
+    void shouldThrowServiceExceptionWhenFindAllGroupsRelatedToCathedraCall() throws RepositoryException {
+        doThrow(RepositoryException.class).when(repository).findAllGroupsRelatedToCathedra(anyInt());
         assertThrows(ServiceException.class, () -> {
             service.findAllGroupsRelatedToCathedra(anyInt());
         });

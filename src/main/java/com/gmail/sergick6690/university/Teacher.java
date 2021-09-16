@@ -2,22 +2,29 @@ package com.gmail.sergick6690.university;
 
 import lombok.Builder;
 
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "teachers")
 public class Teacher extends Human {
     private String degree;
-    private int scheduleId;
-    private List<Subject> subjects;
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "scheduleId")
+    private Schedule schedule;
+    @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
+    private List<Subject> subjects = new ArrayList<>();
 
     public Teacher() {
     }
 
     @Builder
-    private Teacher(int id, String firstName, String lastName, String sex, int age, String degree, int scheduleId, List<Subject> subjects) {
+    private Teacher(int id, String firstName, String lastName, String sex, int age, String degree, Schedule schedule, List<Subject> subjects) {
         super(id, firstName, lastName, sex, age);
         this.degree = degree;
-        this.scheduleId = scheduleId;
+        this.schedule = schedule;
         this.subjects = subjects;
     }
 
@@ -30,12 +37,12 @@ public class Teacher extends Human {
         this.degree = degree;
     }
 
-    public int getScheduleId() {
-        return scheduleId;
+    public Schedule getSchedule() {
+        return schedule;
     }
 
-    public void setScheduleId(int scheduleId) {
-        this.scheduleId = scheduleId;
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
     }
 
     public List<Subject> getSubjects() {
@@ -53,21 +60,21 @@ public class Teacher extends Human {
         if (!super.equals(o)) return false;
         Teacher teacher = (Teacher) o;
         return Objects.equals(getDegree(), teacher.getDegree()) &&
-                Objects.equals(getScheduleId(), teacher.getScheduleId()) &&
+                Objects.equals(getSchedule(), teacher.getSchedule()) &&
                 Objects.equals(getSubjects(), teacher.getSubjects());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getDegree(), getScheduleId(), getSubjects());
+        return Objects.hash(super.hashCode(), getDegree(), getSchedule(), getSubjects());
     }
 
     @Override
     public String toString() {
-        return "Teacher{" +
+        return super.toString() + "Teacher{" +
                 "degree='" + degree + '\'' +
-                ", schedule=" + scheduleId +
+                ", schedule=" + schedule +
                 ", subjects=" + subjects +
-                '}';
+                "} ";
     }
 }

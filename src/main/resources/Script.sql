@@ -8,6 +8,14 @@ DROP TABLE IF EXISTS faculty CASCADE;
 DROP TABLE IF EXISTS items CASCADE;
 DROP TABLE IF EXISTS schedules CASCADE;
 DROP TABLE IF EXISTS teachers CASCADE;
+
+CREATE TABLE Audience
+(
+    id     SERIAL,
+    number INTEGER,
+    PRIMARY KEY (id)
+);
+
 CREATE TABLE Faculty
 (
     id   SERIAL,
@@ -23,12 +31,6 @@ CREATE TABLE Cathedra
     FOREIGN KEY (facultyId) REFERENCES Faculty (id)
 );
 
-CREATE TABLE Audience
-(
-    id     SERIAL,
-    number INTEGER,
-    PRIMARY KEY (id)
-);
 CREATE TABLE Schedules
 (
     id   SERIAL,

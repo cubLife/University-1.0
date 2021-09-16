@@ -21,8 +21,8 @@
                 <tr>
                     <th><p th:text="${group.getId()}">VALUE</p></th>
                     <th><p th:text="${group.getName()}">VALUE</p></th>
-                    <th><p th:text="${group.getCathedraId()}">VALUE</p></th>
-                    <th><p th:text="${group.getScheduleId()}">VALUE</p></th>
+                    <th><p th:text="${group.getCathedra().getId()}">VALUE</p></th>
+                    <th><p th:text="${group.getSchedule().getId()}">VALUE</p></th>
                 </tr>
             </div>
         </table>

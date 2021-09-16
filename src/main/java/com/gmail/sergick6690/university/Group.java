@@ -1,30 +1,40 @@
 package com.gmail.sergick6690.university;
 
+import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "groups")
 public class Group {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
+    @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<Student> students;
-    private int scheduleId;
-    private int cathedraId;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "scheduleId")
+    private Schedule schedule;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cathedraId")
+    private Cathedra cathedra;
 
     public Group() {
     }
 
-    public Group(int id, String name, List<Student> students, int scheduleId, int cathedraId) {
+    public Group(int id, String name, List<Student> students, Schedule schedule, Cathedra cathedra) {
         this.id = id;
         this.name = name;
         this.students = students;
-        this.scheduleId = scheduleId;
-        this.cathedraId = cathedraId;
+        this.schedule = schedule;
+        this.cathedra = cathedra;
     }
 
-    public Group(String name, int scheduleId, int cathedraId) {
+    public Group(String name, Schedule schedule, Cathedra cathedra) {
         this.name = name;
-        this.scheduleId = scheduleId;
-        this.cathedraId = cathedraId;
+        this.schedule = schedule;
+        this.cathedra = cathedra;
     }
 
     public int getId() {
@@ -51,20 +61,20 @@ public class Group {
         this.students = students;
     }
 
-    public int getScheduleId() {
-        return scheduleId;
+    public Schedule getSchedule() {
+        return schedule;
     }
 
-    public void setScheduleId(int scheduleId) {
-        this.scheduleId = scheduleId;
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
     }
 
-    public int getCathedraId() {
-        return cathedraId;
+    public Cathedra getCathedra() {
+        return cathedra;
     }
 
-    public void setCathedraId(int cathedraId) {
-        this.cathedraId = cathedraId;
+    public void setCathedra(Cathedra cathedra) {
+        this.cathedra = cathedra;
     }
 
     @Override
@@ -73,15 +83,12 @@ public class Group {
         if (!(o instanceof Group)) return false;
         Group group = (Group) o;
         return getId() == group.getId() &&
-                getScheduleId() == group.getScheduleId() &&
-                getCathedraId() == group.getCathedraId() &&
-                Objects.equals(getName(), group.getName()) &&
-                Objects.equals(getStudents(), group.getStudents());
+                Objects.equals(getName(), group.getName());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getStudents(), getScheduleId(), getCathedraId());
+        return Objects.hash(getId(), getName(), getStudents(), getSchedule(), getCathedra());
     }
 
     @Override
@@ -89,9 +96,8 @@ public class Group {
         return "Group{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", students=" + students +
-                ", scheduleId=" + scheduleId +
-                ", cathedraId=" + cathedraId +
+                ", schedule=" + schedule +
+                ", cathedra=" + cathedra +
                 '}';
     }
 }

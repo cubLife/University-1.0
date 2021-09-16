@@ -2,29 +2,27 @@ package com.gmail.sergick6690.university;
 
 import lombok.Builder;
 
+import javax.persistence.*;
 import java.util.Objects;
 
+@Entity
+@Table(name = "students")
 public class Student extends Human {
-    private int groupId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "groupId")
+    private Group group;
     private int course;
 
     public Student() {
     }
 
     @Builder
-    private Student(int id, String firstName, String lastNAme, String sex, int age, int course, int groupID) {
+    private Student(int id, String firstName, String lastNAme, String sex, int age, int course, Group group) {
         super(id, firstName, lastNAme, sex, age);
-        this.groupId = groupID;
+        this.group = group;
         this.course = course;
     }
 
-    public int getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(int groupId) {
-        this.groupId = groupId;
-    }
 
     public int getCourse() {
         return course;
@@ -34,25 +32,33 @@ public class Student extends Human {
         this.course = course;
     }
 
+    public Group getGroup() {
+        return group;
+    }
+
+    public void setGroup(Group group) {
+        this.group = group;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Student)) return false;
         if (!super.equals(o)) return false;
         Student student = (Student) o;
-        return getGroupId() == student.getGroupId() &&
-                getCourse() == student.getCourse();
+        return getCourse() == student.getCourse() &&
+                Objects.equals(group, student.group);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), getGroupId(), getCourse());
+        return Objects.hash(super.hashCode(), group, getCourse());
     }
 
     @Override
     public String toString() {
         return super.toString() + "Student{" +
-                "groupID=" + groupId +
+                "group=" + group +
                 ", course=" + course +
                 '}';
     }

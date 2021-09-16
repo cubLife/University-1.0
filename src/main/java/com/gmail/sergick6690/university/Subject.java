@@ -1,20 +1,37 @@
 package com.gmail.sergick6690.university;
 
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
+@Entity
+@Table(name = "subjects")
 public class Subject {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    private int teacherId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "teacherId")
+    private Teacher teacher;
     private String description;
+    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
+    private List<Item> items = new ArrayList<>();
 
     public Subject() {
     }
 
-    public Subject(int id, String name, int teacherId, String description) {
+    public Subject(int id, String name, Teacher teacherId, String description) {
         this.id = id;
         this.name = name;
-        this.teacherId = teacherId;
+        this.teacher = teacherId;
+        this.description = description;
+    }
+
+    public Subject(String name, Teacher teacher, String description) {
+        this.name = name;
+        this.teacher = teacher;
         this.description = description;
     }
 
@@ -34,12 +51,12 @@ public class Subject {
         this.name = name;
     }
 
-    public int getTeacherId() {
-        return teacherId;
+    public Teacher getTeacher() {
+        return teacher;
     }
 
-    public void setTeacherId(int teacherId) {
-        this.teacherId = teacherId;
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
     }
 
     public String getDescription() {
