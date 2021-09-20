@@ -8,7 +8,7 @@ import org.springframework.web.servlet.ModelAndView;
 @ControllerAdvice
 public class ExceptionsHandler {
 
-    @ExceptionHandler({ServiceException.class, IllegalArgumentException.class})
+    @ExceptionHandler({ServiceException.class})
     public ModelAndView serviceExceptionHandler(ServiceException ex) {
         ModelAndView model = new ModelAndView("error");
         model.addObject("message", ex.toString());
