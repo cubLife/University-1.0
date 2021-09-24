@@ -14,4 +14,18 @@ public class ExceptionsHandler {
         model.addObject("message", ex.toString());
         return model;
     }
+
+    @ExceptionHandler({IllegalArgumentException.class})
+    public ModelAndView illegalArgumentExceptionHandler(IllegalArgumentException ex) {
+        ModelAndView model = new ModelAndView("error");
+        model.addObject("message", ex.toString());
+        return model;
+    }
+
+    @ExceptionHandler({Exception.class})
+    public ModelAndView exceptionHandler(Exception ex) {
+        ModelAndView model = new ModelAndView("error");
+        model.addObject("message", ex.toString());
+        return model;
+    }
 }

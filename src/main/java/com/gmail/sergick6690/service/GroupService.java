@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static java.lang.String.format;
 
@@ -31,9 +32,9 @@ public class GroupService {
         try {
             groupRepository.save(group);
             DEBUG.debug((format("New group - %s was added", group.toString())));
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't add group - " + group, e);
+            throw new ServiceException("Can't add group - " + group + e, e);
         }
     }
 
@@ -42,9 +43,9 @@ public class GroupService {
             Group group = groupRepository.findById(id).get();
             DEBUG.debug(format("Group with id - %d was returned", id));
             return group;
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Group not found - " + id, e);
+            throw new ServiceException("Group not found - " + id + e, e);
         }
     }
 
@@ -53,9 +54,9 @@ public class GroupService {
             List<Group> groupList = groupRepository.findAll();
             DEBUG.debug("All groups was returned");
             return groupList;
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't find any group", e);
+            throw new ServiceException("Can't find any group " + e, e);
         }
     }
 
@@ -63,9 +64,9 @@ public class GroupService {
         try {
             groupRepository.delete(this.findById(id));
             DEBUG.debug(format("Group with id - %d is removed", id));
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't remove group with id - " + id, e);
+            throw new ServiceException("Can't remove group with id - " + id + e, e);
         }
     }
 
@@ -74,9 +75,9 @@ public class GroupService {
             List<Group> groupList = groupRepository.findAllByCathedra_Id(id);
             DEBUG.debug(String.format("Was returned %d related to cathedra with id - %d", groupList.size(), id));
             return groupList;
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Cant find any groups related to cathedra with cathedta id - " + id, e);
+            throw new ServiceException("Cant find any groups related to cathedra with cathedta id - " + id + e, e);
         }
     }
 }

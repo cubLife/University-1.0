@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static java.lang.String.format;
 
@@ -37,9 +38,9 @@ public class SubjectService {
         try {
             subjectRepository.save(subject);
             DEBUG.debug((format("New subject - %s was added", subject.toString())));
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't add subject - " + subject, e);
+            throw new ServiceException("Can't add subject - " + subject + e, e);
         }
     }
 
@@ -48,9 +49,9 @@ public class SubjectService {
             Subject subject = subjectRepository.findById(id).get();
             DEBUG.debug(format("Subject with id - %d was returned", id));
             return subject;
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Subject not found - " + id, e);
+            throw new ServiceException("Subject not found - " + id + e, e);
         }
     }
 
@@ -59,9 +60,9 @@ public class SubjectService {
             List<Subject> subjectList = subjectRepository.findAll();
             DEBUG.debug("All subjects was returned");
             return subjectList;
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't find any subject", e);
+            throw new ServiceException("Can't find any subject " + e, e);
         }
     }
 
@@ -69,9 +70,9 @@ public class SubjectService {
         try {
             subjectRepository.delete(this.findById(id));
             DEBUG.debug(format("Subject with id - %d is removed", id));
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't remove subject with id - " + id, e);
+            throw new ServiceException("Can't remove subject with id - " + id + e, e);
         }
     }
 
@@ -80,9 +81,9 @@ public class SubjectService {
             List<Subject> subjectList = subjectRepository.findAllSubjectRelatedToAudience(id);
             DEBUG.debug("All subjects related to audience with id - " + id + " was returned");
             return subjectList;
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't find any subjaect related to audience where audience id - " + id, e);
+            throw new ServiceException("Can't find any subjaect related to audience where audience id - " + id + e, e);
         }
     }
 
@@ -92,9 +93,9 @@ public class SubjectService {
             Subject subject = this.findById(subjectId);
             subject.setTeacher(teacher);
             DEBUG.debug("For subject with id" + subjectId + " was assigned teacher with id - " + teacherId);
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't assign teacher with id - " + teacherId + "for subject with id - " + subjectId, e);
+            throw new ServiceException("Can't assign teacher with id - " + teacherId + "for subject with id - " + subjectId + e, e);
         }
     }
 
@@ -104,9 +105,9 @@ public class SubjectService {
             Subject subject = this.findById(subjectId);
             subject.setTeacher(teacher);
             DEBUG.debug("For subject with id - " + subjectId + " was removed teacher");
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't remove teacher for subject with id - " + subjectId, e);
+            throw new ServiceException("Can't remove teacher for subject with id - " + subjectId + e, e);
         }
     }
 
@@ -115,9 +116,9 @@ public class SubjectService {
             this.removeTeacher(subjectId);
             this.assignTeacher(subjectId, teacherId);
             DEBUG.debug("For subject with id -" + subjectId + " was changed teacher on teacher with id - " + teacherId);
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error("Can't change teacher for subject with id - " + subjectId, e);
-            throw new ServiceException("Can't change teacher for subject with id - " + subjectId, e);
+            throw new ServiceException("Can't change teacher for subject with id - " + subjectId + e, e);
         }
     }
 }

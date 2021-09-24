@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static java.lang.String.format;
 
@@ -31,7 +32,7 @@ public class AudienceService {
         try {
             audienceRepository.save(audience);
             DEBUG.debug(format("New audience - %s is added", audience.toString()));
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException("Cant't add audience" + e, e);
         }
@@ -42,7 +43,7 @@ public class AudienceService {
             Audience audience = audienceRepository.findById(id).get();
             DEBUG.debug(format("Audience with id - %d was returned", id));
             return audience;
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException("Can't find any audience with id - " + id + e, e);
         }
@@ -53,9 +54,9 @@ public class AudienceService {
             List<Audience> audienceList = audienceRepository.findAll();
             DEBUG.debug("All audiences was returned");
             return audienceList;
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't find any audiences", e);
+            throw new ServiceException("Can't find any audiences " + e, e);
         }
     }
 
@@ -63,9 +64,9 @@ public class AudienceService {
         try {
             audienceRepository.delete(this.findById(id));
             DEBUG.debug(format("Audience with id - %d is removed", id));
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't remove audience with id - " + id, e);
+            throw new ServiceException("Can't remove audience with id - " + id + e, e);
         }
     }
 }

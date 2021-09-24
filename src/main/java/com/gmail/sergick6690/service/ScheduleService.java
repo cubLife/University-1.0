@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static java.lang.String.format;
 
@@ -31,9 +32,9 @@ public class ScheduleService {
         try {
             scheduleRepository.save(schedule);
             DEBUG.debug((format("New schedule - %s was added", schedule.toString())));
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't add schedule - " + schedule, e);
+            throw new ServiceException("Can't add schedule - " + schedule + e, e);
         }
     }
 
@@ -42,9 +43,9 @@ public class ScheduleService {
             Schedule schedule = scheduleRepository.findById(id).get();
             DEBUG.debug(format("Item with id - %d was returned", id));
             return schedule;
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Schedule not found - " + id, e);
+            throw new ServiceException("Schedule not found - " + id + e, e);
         }
     }
 
@@ -53,9 +54,9 @@ public class ScheduleService {
             List<Schedule> scheduleList = scheduleRepository.findAll();
             DEBUG.debug("All schedules was returned");
             return scheduleList;
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't find any schedule", e);
+            throw new ServiceException("Can't find any schedule " + e, e);
         }
     }
 
@@ -63,9 +64,9 @@ public class ScheduleService {
         try {
             scheduleRepository.delete(this.findById(id));
             DEBUG.debug(format("Schedule with id - %d is removed", id));
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't remove schedule with id - " + id, e);
+            throw new ServiceException("Can't remove schedule with id - " + id + e, e);
         }
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static java.lang.String.format;
 
@@ -31,7 +32,7 @@ public class CathedraService {
         try {
             cathedraRepository.save(cathedra);
             DEBUG.debug((format("New cathedra - %s was added", cathedra.toString())));
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException("Cant't add cathedra" + e, e);
         }
@@ -42,9 +43,9 @@ public class CathedraService {
             Cathedra cathedra = cathedraRepository.findById(id).get();
             DEBUG.debug(format("Cathedra with id - %d was returned", id));
             return cathedra;
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Cathedra not found - " + id, e);
+            throw new ServiceException("Cathedra not found - " + id + e, e);
         }
     }
 
@@ -53,9 +54,9 @@ public class CathedraService {
             List<Cathedra> cathedraList = cathedraRepository.findAll();
             DEBUG.debug("All cathedras was returned");
             return cathedraList;
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't find any cathedras", e);
+            throw new ServiceException("Can't find any cathedras" + e, e);
         }
     }
 
@@ -63,9 +64,9 @@ public class CathedraService {
         try {
             cathedraRepository.delete(this.findById(id));
             DEBUG.debug(format("Cathedra with id - %d is removed", id));
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Cant remove cathedra with id - " + id, e);
+            throw new ServiceException("Cant remove cathedra with id - " + id + e, e);
         }
     }
 }

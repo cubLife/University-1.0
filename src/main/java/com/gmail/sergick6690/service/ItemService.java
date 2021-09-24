@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static java.lang.String.format;
 
@@ -31,9 +32,9 @@ public class ItemService {
         try {
             itemRepository.save(item);
             DEBUG.debug((format("New item - %s was added", item.toString())));
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't add item - " + item, e);
+            throw new ServiceException("Can't add item - " + item + e, e);
         }
     }
 
@@ -42,9 +43,9 @@ public class ItemService {
             Item item = itemRepository.findById(id).get();
             DEBUG.debug(format("Item with id - %d was returned", id));
             return item;
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Item not found - " + id, e);
+            throw new ServiceException("Item not found - " + id + e, e);
         }
     }
 
@@ -53,9 +54,9 @@ public class ItemService {
             List<Item> itemList = itemRepository.findAll();
             DEBUG.debug("All items was returned");
             return itemList;
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't find any items", e);
+            throw new ServiceException("Can't find any items " + e, e);
         }
     }
 
@@ -63,9 +64,9 @@ public class ItemService {
         try {
             itemRepository.delete(this.findById(id));
             DEBUG.debug(format("Item with id - %d is removed", id));
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't remove item with id - " + id, e);
+            throw new ServiceException("Can't remove item with id - " + id + e, e);
         }
     }
 }

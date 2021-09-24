@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static java.lang.String.format;
 
@@ -36,9 +37,9 @@ public class StudentService {
         try {
             studentRepository.save(student);
             DEBUG.debug((format("New student - %s was added", student.toString())));
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't add student - " + student, e);
+            throw new ServiceException("Can't add student - " + student + e, e);
         }
     }
 
@@ -47,9 +48,9 @@ public class StudentService {
             Student student = studentRepository.findById(id).get();
             DEBUG.debug(format("Student with id - %d was returned", id));
             return student;
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Student not found - " + id, e);
+            throw new ServiceException("Student not found - " + id + e, e);
         }
     }
 
@@ -58,9 +59,9 @@ public class StudentService {
             List<Student> studentList = studentRepository.findAll();
             DEBUG.debug("All students was returned");
             return studentList;
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't find any student", e);
+            throw new ServiceException("Can't find any student " + e, e);
         }
     }
 
@@ -68,9 +69,9 @@ public class StudentService {
         try {
             studentRepository.delete(this.findById(id));
             DEBUG.debug(format("Student with id - %d is removed", id));
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't remove student with id - " + id, e);
+            throw new ServiceException("Can't remove student with id - " + id + e, e);
         }
     }
 
@@ -81,7 +82,7 @@ public class StudentService {
             Student student = this.findById(studentId);
             student.setGroup(group);
             DEBUG.debug("Group with id - " + groupId + " was assigned to student with id - " + studentId);
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -94,7 +95,7 @@ public class StudentService {
             Student student = this.findById(studentId);
             student.setGroup(group);
             DEBUG.debug("Student with id - " + studentId + " was removed from group");
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -106,9 +107,9 @@ public class StudentService {
             Student student = this.findById(studentId);
             student.setCourse(course);
             DEBUG.debug("Course number - " + course + " was assigned to student with id - " + studentId);
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't assign course - " + course + "for student - " + studentId, e);
+            throw new ServiceException("Can't assign course - " + course + "for student - " + studentId + e, e);
         }
     }
 
@@ -117,9 +118,9 @@ public class StudentService {
             Student student = this.findById(studentId);
             student.setCourse(DEFAULT_COURSE);
             DEBUG.debug("For student with id - " + studentId + " was removed course");
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't remove student with id - " + studentId + " from course", e);
+            throw new ServiceException("Can't remove student with id - " + studentId + " from course " + e, e);
         }
     }
 
@@ -129,9 +130,9 @@ public class StudentService {
             this.removeFromGroup(studentId);
             this.assignGroup(studentId, groupId);
             DEBUG.debug("For student with id - " + studentId + " was changed group on group with id - " + groupId);
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error("Can't change group for student with id - " + studentId, e);
-            throw new ServiceException("Can't change group for student with id - " + studentId, e);
+            throw new ServiceException("Can't change group for student with id - " + studentId + e, e);
         }
     }
 
@@ -140,9 +141,9 @@ public class StudentService {
             this.removeFromCourse(studentId);
             this.assignCourse(studentId, course);
             DEBUG.debug("For student with id - " + studentId + " was changed course on course with id - " + course);
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error("Can't change course for student with id - " + studentId, e);
-            throw new ServiceException("Can't change course for student with id - " + studentId, e);
+            throw new ServiceException("Can't change course for student with id - " + studentId + e, e);
         }
     }
 }

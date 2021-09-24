@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static java.lang.String.format;
 
@@ -31,7 +32,7 @@ public class FacultyService {
         try {
             facultyRepository.save(faculty);
             DEBUG.debug((format("New faculty - %s was added", faculty.toString())));
-        } catch (Exception e) {
+        } catch (NumberFormatException e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException("Can't add faculty - " + faculty + e, e);
         }
@@ -42,9 +43,9 @@ public class FacultyService {
             Faculty faculty = facultyRepository.findById(id).get();
             DEBUG.debug(format("Faculty with id - %d was returned", id));
             return faculty;
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Faculty not found - " + id, e);
+            throw new ServiceException("Faculty not found - " + id + e, e);
         }
     }
 
@@ -53,9 +54,9 @@ public class FacultyService {
             List<Faculty> facultyList = facultyRepository.findAll();
             DEBUG.debug("All faculties was returned");
             return facultyList;
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't find any faculties", e);
+            throw new ServiceException("Can't find any faculties " + e, e);
         }
     }
 
@@ -63,9 +64,9 @@ public class FacultyService {
         try {
             facultyRepository.delete(this.findById(id));
             DEBUG.debug(format("Cathedra with id - %d is removed", id));
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException("Can't remove faculty with id - " + id, e);
+            throw new ServiceException("Can't remove faculty with id - " + id + e, e);
         }
     }
 }
