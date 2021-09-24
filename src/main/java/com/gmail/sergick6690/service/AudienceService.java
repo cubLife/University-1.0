@@ -1,7 +1,6 @@
 package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.Repository.AudienceRepository;
-import com.gmail.sergick6690.exceptions.RepositoryException;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.university.Audience;
 import org.slf4j.Logger;
@@ -30,22 +29,22 @@ public class AudienceService {
             throw new IllegalArgumentException("Input parameter can't be null");
         }
         try {
-            audienceRepository.add(audience);
+            audienceRepository.save(audience);
             DEBUG.debug(format("New audience - %s is added", audience.toString()));
-        } catch (RepositoryException e) {
+        } catch (Exception e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException(e);
+            throw new ServiceException("Cant't add audience" + e, e);
         }
     }
 
     public Audience findById(int id) throws ServiceException {
         try {
-            Audience audience = audienceRepository.findById(id);
+            Audience audience = audienceRepository.findById(id).get();
             DEBUG.debug(format("Audience with id - %d was returned", id));
             return audience;
-        } catch (RepositoryException e) {
+        } catch (Exception e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException(e);
+            throw new ServiceException("Can't find any audience with id - " + id + e, e);
         }
     }
 
@@ -54,19 +53,19 @@ public class AudienceService {
             List<Audience> audienceList = audienceRepository.findAll();
             DEBUG.debug("All audiences was returned");
             return audienceList;
-        } catch (RepositoryException e) {
+        } catch (Exception e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException(e);
+            throw new ServiceException("Can't find any audiences", e);
         }
     }
 
     public void removeById(int id) throws ServiceException {
         try {
-            audienceRepository.removeById(id);
+            audienceRepository.delete(this.findById(id));
             DEBUG.debug(format("Audience with id - %d is removed", id));
-        } catch (RepositoryException e) {
+        } catch (Exception e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException(e);
+            throw new ServiceException("Can't remove audience with id - " + id, e);
         }
     }
 }

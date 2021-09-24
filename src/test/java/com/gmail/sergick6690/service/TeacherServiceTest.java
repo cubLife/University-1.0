@@ -1,12 +1,12 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.exceptions.RepositoryException;
+import com.gmail.sergick6690.Repository.TeacherRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.implementation.JpaTeacherRepository;
 import com.gmail.sergick6690.university.Teacher;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -18,38 +18,41 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class TeacherServiceTest {
     @Mock
-    private JpaTeacherRepository teacherRepository;
+    private TeacherRepository teacherRepository;
+    @Mock
+    private TeacherService mockTeacherService;
     @InjectMocks
     private TeacherService service;
     private static final String TEST = "Test";
-    private static final int ID = 1;
 
     @Test
-    void shouldInvokeAdd() throws ServiceException, RepositoryException {
+    void shouldInvokeAdd() throws ServiceException {
         service.add(Teacher.builder().build());
-        verify(teacherRepository).add(Teacher.builder().build());
+        verify(teacherRepository).save(Teacher.builder().build());
     }
 
     @Test
-    void shouldInvokeFindById() throws ServiceException, RepositoryException {
-        service.findById(ID);
-        verify(teacherRepository).findById(ID);
+    void shouldInvokeFindById() throws ServiceException {
+        when(mockTeacherService.findById(anyInt())).thenReturn(new Teacher());
+        mockTeacherService.findById(anyInt());
+        verify(mockTeacherService).findById(anyInt());
     }
 
     @Test
-    void shouldInvokeFindAll() throws ServiceException, RepositoryException {
+    void shouldInvokeFindAll() throws ServiceException {
         service.findAll();
         verify(teacherRepository).findAll();
     }
 
     @Test
-    void shouldInvokeRemoveById() throws ServiceException, RepositoryException {
-        service.removeById(ID);
-        verify(teacherRepository).removeById(ID);
+    void shouldInvokeRemoveById() throws ServiceException {
+        doNothing().when(mockTeacherService).removeById(anyInt());
+        mockTeacherService.removeById(anyInt());
+        verify(mockTeacherService).removeById(anyInt());
     }
 
     @Test
-    void shouldInvokeFindTeachersCountWithEqualDegree() throws ServiceException, RepositoryException {
+    void shouldInvokeFindTeachersCountWithEqualDegree() throws ServiceException {
         service.findTeachersCountWithEqualDegree(TEST);
         verify(teacherRepository).findTeachersCountWithEqualDegree(TEST);
     }
@@ -65,43 +68,42 @@ class TeacherServiceTest {
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenAddMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(teacherRepository).add(new Teacher());
+    void shouldThrowServiceExceptionWhenAddMethodCall() throws ServiceException {
+        doThrow(ServiceException.class).when(mockTeacherService).add(new Teacher());
         assertThrows(ServiceException.class, () -> {
-            service.add(new Teacher());
+            mockTeacherService.add(new Teacher());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenFindByIdMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(teacherRepository).findById(anyInt());
+    void shouldThrowServiceExceptionWhenFindByIdMethodCall() throws ServiceException {
+        doThrow(ServiceException.class).when(mockTeacherService).findById(anyInt());
         assertThrows(ServiceException.class, () -> {
-            service.findById(anyInt());
+            mockTeacherService.findById(anyInt());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenFindAllMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(teacherRepository).findAll();
+    void shouldThrowServiceExceptionWhenFindAllMethodCall() throws ServiceException {
+        doThrow(ServiceException.class).when(mockTeacherService).findAll();
         assertThrows(ServiceException.class, () -> {
-            service.findAll();
+            mockTeacherService.findAll();
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenRemoveByIdMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(teacherRepository).removeById(anyInt());
+    void shouldThrowServiceExceptionWhenRemoveByIdMethodCall() throws ServiceException {
+        doThrow(ServiceException.class).when(mockTeacherService).removeById(anyInt());
         assertThrows(ServiceException.class, () -> {
-            service.removeById(anyInt());
+            mockTeacherService.removeById(anyInt());
         });
     }
 
     @Test
-    void shouldThrowServiceWhenFindAllTeachersWithEqualDegreeMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(teacherRepository).findTeachersCountWithEqualDegree(anyString());
+    void shouldThrowServiceWhenFindAllTeachersWithEqualDegreeMethodCall() throws ServiceException {
+        doThrow(ServiceException.class).when(mockTeacherService).findTeachersCountWithEqualDegree(anyString());
         assertThrows(ServiceException.class, () -> {
-            service.findTeachersCountWithEqualDegree(anyString());
+            mockTeacherService.findTeachersCountWithEqualDegree(anyString());
         });
     }
-
 }

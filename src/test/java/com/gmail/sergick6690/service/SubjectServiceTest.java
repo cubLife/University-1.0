@@ -1,8 +1,7 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.exceptions.RepositoryException;
+import com.gmail.sergick6690.Repository.SubjectRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.implementation.JpaSubjectRepository;
 import com.gmail.sergick6690.university.Subject;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -14,39 +13,41 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class SubjectServiceTest {
     @Mock
-    private JpaSubjectRepository subjectRepository;
+    private SubjectRepository subjectRepository;
+    @Mock
+    private SubjectService mockSubjectService;
     @InjectMocks
     private SubjectService service;
     private static final int ID = 1;
 
     @Test
-    void shouldInvokeAdd() throws ServiceException, RepositoryException {
+    void shouldInvokeAdd() throws ServiceException {
         service.add(new Subject());
-        verify(subjectRepository).add(new Subject());
+        verify(subjectRepository).save(new Subject());
     }
 
     @Test
-    void shouldFindById() throws ServiceException, RepositoryException{
-        service.findById(ID);
-        verify(subjectRepository).findById(ID);
+    void shouldFindById() throws ServiceException {
+        mockSubjectService.findById(anyInt());
+        verify(mockSubjectService).findById(anyInt());
     }
 
     @Test
-    void shouldInvokeFindAll() throws ServiceException, RepositoryException {
+    void shouldInvokeFindAll() throws ServiceException {
         service.findAll();
         verify(subjectRepository).findAll();
     }
 
     @Test
-    void shouldInvokeRemoveById() throws ServiceException, RepositoryException {
-        service.removeById(ID);
-        verify(subjectRepository).removeById(ID);
+    void shouldInvokeRemoveById() throws ServiceException {
+        doNothing().when(mockSubjectService).removeById(anyInt());
+        mockSubjectService.removeById(anyInt());
+        verify(mockSubjectService).removeById(anyInt());
     }
 
     @SneakyThrows
@@ -66,42 +67,42 @@ class SubjectServiceTest {
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenAddMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(subjectRepository).add(new Subject());
+    void shouldThrowServiceExceptionWhenAddMethodCall() throws ServiceException {
+        doThrow(ServiceException.class).when(mockSubjectService).add(new Subject());
         assertThrows(ServiceException.class, () -> {
-            service.add(new Subject());
+            mockSubjectService.add(new Subject());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenFindByIdMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(subjectRepository).findById(anyInt());
+    void shouldThrowServiceExceptionWhenFindByIdMethodCall() throws ServiceException {
+        doThrow(ServiceException.class).when(mockSubjectService).findById(anyInt());
         assertThrows(ServiceException.class, () -> {
-            service.findById(anyInt());
+            mockSubjectService.findById(anyInt());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenFindAllMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(subjectRepository).findAll();
+    void shouldThrowServiceExceptionWhenFindAllMethodCall() throws ServiceException {
+        doThrow(ServiceException.class).when(mockSubjectService).findAll();
         assertThrows(ServiceException.class, () -> {
-            service.findAll();
+            mockSubjectService.findAll();
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenRemoveByIdMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(subjectRepository).removeById(anyInt());
+    void shouldThrowServiceExceptionWhenRemoveByIdMethodCall() throws ServiceException {
+        doThrow(ServiceException.class).when(mockSubjectService).removeById(anyInt());
         assertThrows(ServiceException.class, () -> {
-            service.removeById(anyInt());
+            mockSubjectService.removeById(anyInt());
         });
     }
 
     @Test
-    void shouldThrowDaoExceptionWhenFindAllSubjectRelatedToAudienceMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(subjectRepository).findAllSubjectRelatedToAudience(anyInt());
+    void shouldThrowDaoExceptionWhenFindAllSubjectRelatedToAudienceMethodCall() throws ServiceException {
+        doThrow(ServiceException.class).when(mockSubjectService).findAllSubjectRelatedToAudience(anyInt());
         assertThrows(ServiceException.class, () -> {
-            service.findAllSubjectRelatedToAudience(anyInt());
+            mockSubjectService.findAllSubjectRelatedToAudience(anyInt());
         });
     }
 

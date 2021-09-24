@@ -1,6 +1,6 @@
 package com.gmail.sergick6690;
 
-import com.gmail.sergick6690.exceptions.RepositoryException;
+import com.gmail.sergick6690.exceptions.ServiceException;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +17,7 @@ import java.net.URISyntaxException;
 import java.util.Objects;
 
 @Component
-@Transactional(rollbackFor = RepositoryException.class)
+@Transactional(rollbackFor = ServiceException.class)
 public class TablesCreator {
     @PersistenceContext
     private EntityManager entityManager;

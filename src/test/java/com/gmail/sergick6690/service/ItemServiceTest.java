@@ -1,8 +1,7 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.exceptions.RepositoryException;
+import com.gmail.sergick6690.Repository.ItemRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.implementation.JpaItemRepository;
 import com.gmail.sergick6690.university.Item;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,39 +12,41 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ItemServiceTest {
     @Mock
-    private JpaItemRepository repository;
+    private ItemRepository repository;
+    @Mock
+    private ItemService mockItemService;
     @InjectMocks
     private ItemService service;
-    private static final int ID = 1;
 
     @Test
-    void shouldInvokeAdd() throws ServiceException, RepositoryException {
+    void shouldInvokeAdd() throws ServiceException {
         service.add(new Item());
-        verify(repository).add(new Item());
+        verify(repository).save(new Item());
     }
 
     @Test
-    void findById() throws ServiceException, RepositoryException {
-        service.findById(ID);
-        verify(repository).findById(ID);
+    void findById() throws ServiceException {
+        when(mockItemService.findById(anyInt())).thenReturn(new Item());
+        mockItemService.findById(anyInt());
+        verify(mockItemService).findById(anyInt());
     }
 
     @Test
-    void shouldInvokeFindAll() throws ServiceException, RepositoryException {
+    void shouldInvokeFindAll() throws ServiceException {
         service.findAll();
         verify(repository).findAll();
     }
 
     @Test
-    void shouldInvokeRemoveById() throws ServiceException, RepositoryException {
-        service.removeById(ID);
-        verify(repository).removeById(ID);
+    void shouldInvokeRemoveById() throws ServiceException {
+        doNothing().when(mockItemService).removeById(anyInt());
+        mockItemService.removeById(anyInt());
+        verify(mockItemService).removeById(anyInt());
     }
 
     @Test
@@ -58,34 +59,34 @@ class ItemServiceTest {
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenAddMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(repository).add(new Item());
+    void shouldThrowServiceExceptionWhenAddMethodCall() throws ServiceException {
+        doThrow(ServiceException.class).when(mockItemService).add(new Item());
         assertThrows(ServiceException.class, () -> {
-            service.add(new Item());
+            mockItemService.add(new Item());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenFindByIdMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(repository).findById(anyInt());
+    void shouldThrowServiceExceptionWhenFindByIdMethodCall() throws ServiceException {
+        doThrow(ServiceException.class).when(mockItemService).findById(anyInt());
         assertThrows(ServiceException.class, () -> {
-            service.findById(anyInt());
+            mockItemService.findById(anyInt());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenFindAllMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(repository).findAll();
+    void shouldThrowServiceExceptionWhenFindAllMethodCall() throws ServiceException {
+        doThrow(ServiceException.class).when(mockItemService).findAll();
         assertThrows(ServiceException.class, () -> {
-            service.findAll();
+            mockItemService.findAll();
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenRemoveByIdMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(repository).removeById(anyInt());
+    void shouldThrowServiceExceptionWhenRemoveByIdMethodCall() throws ServiceException {
+        doThrow(ServiceException.class).when(mockItemService).removeById(anyInt());
         assertThrows(ServiceException.class, () -> {
-            service.removeById(anyInt());
+            mockItemService.removeById(anyInt());
         });
     }
 }

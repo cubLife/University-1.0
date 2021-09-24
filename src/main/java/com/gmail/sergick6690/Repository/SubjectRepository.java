@@ -1,28 +1,18 @@
 package com.gmail.sergick6690.Repository;
 
-import com.gmail.sergick6690.exceptions.RepositoryException;
 import com.gmail.sergick6690.university.Subject;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface SubjectRepository extends GenericRepository<Subject> {
-    @Override
-    default void add(Subject obj) throws RepositoryException {
-    }
+@Repository
+@PropertySource("classpath:subjectQueries.properties")
+public interface SubjectRepository extends JpaRepository<Subject, Integer> {
 
-    @Override
-    default Subject findById(int id) throws RepositoryException {
-        return null;
-    }
-
-    @Override
-    default List<Subject> findAll() throws RepositoryException {
-        return null;
-    }
-
-    @Override
-    default void removeById(int id) throws RepositoryException {
-    }
-
-    public List<Subject> findAllSubjectRelatedToAudience(int id) throws RepositoryException;
+    @Query("SELECT s FROM Subject s JOIN Item i ON s.id=i.subject.id and i.audience.id=(SELECT a.id FROM Audience a WHERE a.id=:id)")
+    public List<Subject> findAllSubjectRelatedToAudience(@Param("id") int id);
 }

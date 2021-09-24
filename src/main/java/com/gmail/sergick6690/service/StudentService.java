@@ -1,8 +1,6 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.Repository.GroupRepository;
 import com.gmail.sergick6690.Repository.StudentRepository;
-import com.gmail.sergick6690.exceptions.RepositoryException;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.university.Group;
 import com.gmail.sergick6690.university.Student;
@@ -18,15 +16,16 @@ import static java.lang.String.format;
 
 @Service
 public class StudentService {
-    private StudentRepository studentDAO;
-    private GroupRepository groupDAO;
+    private StudentRepository studentRepository;
+    private GroupService groupService;
     private static final Logger ERROR = LoggerFactory.getLogger("com.gmail.sergick6690.error");
     private static final Logger DEBUG = LoggerFactory.getLogger("com.gmail.sergick6690.debug");
+    private static final int DEFAULT_COURSE = 1;
 
     @Autowired
-    public StudentService(StudentRepository studentDAO, GroupRepository groupDAO) {
-        this.studentDAO = studentDAO;
-        this.groupDAO = groupDAO;
+    public StudentService(StudentRepository studentRepository, GroupService groupService) {
+        this.studentRepository = studentRepository;
+        this.groupService = groupService;
     }
 
     public void add(Student student) throws ServiceException {
@@ -35,67 +34,67 @@ public class StudentService {
             throw new IllegalArgumentException("Input parameter can't be null");
         }
         try {
-            studentDAO.add(student);
+            studentRepository.save(student);
             DEBUG.debug((format("New student - %s was added", student.toString())));
-        } catch (RepositoryException e) {
+        } catch (Exception e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException(e);
+            throw new ServiceException("Can't add student - " + student, e);
         }
     }
 
     public Student findById(int id) throws ServiceException {
         try {
-            Student student = studentDAO.findById(id);
+            Student student = studentRepository.findById(id).get();
             DEBUG.debug(format("Student with id - %d was returned", id));
             return student;
-        } catch (RepositoryException e) {
+        } catch (Exception e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException(e);
+            throw new ServiceException("Student not found - " + id, e);
         }
     }
 
     public List<Student> findAll() throws ServiceException {
         try {
-            List<Student> studentList = studentDAO.findAll();
+            List<Student> studentList = studentRepository.findAll();
             DEBUG.debug("All students was returned");
             return studentList;
-        } catch (RepositoryException e) {
+        } catch (Exception e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException(e);
+            throw new ServiceException("Can't find any student", e);
         }
     }
 
     public void removeById(int id) throws ServiceException {
         try {
-            studentDAO.removeById(id);
+            studentRepository.delete(this.findById(id));
             DEBUG.debug(format("Student with id - %d is removed", id));
-        } catch (RepositoryException e) {
+        } catch (Exception e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException(e);
+            throw new ServiceException("Can't remove student with id - " + id, e);
         }
     }
 
-    @Transactional(rollbackFor = RepositoryException.class)
+    @Transactional(rollbackFor = ServiceException.class)
     public void assignGroup(int studentId, int groupId) throws ServiceException {
         try {
-            Group group = groupDAO.findById(groupId);
-            Student student = studentDAO.findById(studentId);
+            Group group = groupService.findById(groupId);
+            Student student = this.findById(studentId);
             student.setGroup(group);
             DEBUG.debug("Group with id - " + groupId + " was assigned to student with id - " + studentId);
-        } catch (RepositoryException e) {
+        } catch (Exception e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
     }
 
-    @Transactional(rollbackFor = RepositoryException.class)
+    @Transactional(rollbackFor = ServiceException.class)
     public void removeFromGroup(int studentId) throws ServiceException {
         try {
-            Group group = groupDAO.findById(1);
-            Student student = studentDAO.findById(studentId);
+            Group group = groupService.findById(1);
+            Student student = this.findById(studentId);
             student.setGroup(group);
             DEBUG.debug("Student with id - " + studentId + " was removed from group");
-        } catch (RepositoryException e) {
+        } catch (Exception e) {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException(e);
         }
@@ -104,21 +103,23 @@ public class StudentService {
 
     public void assignCourse(int studentId, int course) throws ServiceException {
         try {
-            studentDAO.assignCourse(studentId, course);
+            Student student = this.findById(studentId);
+            student.setCourse(course);
             DEBUG.debug("Course number - " + course + " was assigned to student with id - " + studentId);
-        } catch (RepositoryException e) {
+        } catch (Exception e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException(e);
+            throw new ServiceException("Can't assign course - " + course + "for student - " + studentId, e);
         }
     }
 
     public void removeFromCourse(int studentId) throws ServiceException {
         try {
-            studentDAO.removeFromCourse(studentId);
+            Student student = this.findById(studentId);
+            student.setCourse(DEFAULT_COURSE);
             DEBUG.debug("For student with id - " + studentId + " was removed course");
-        } catch (RepositoryException e) {
+        } catch (Exception e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException(e);
+            throw new ServiceException("Can't remove student with id - " + studentId + " from course", e);
         }
     }
 
@@ -136,10 +137,10 @@ public class StudentService {
 
     public void changeCourse(int studentId, int course) throws ServiceException {
         try {
-            studentDAO.removeFromCourse(studentId);
-            studentDAO.assignCourse(studentId, course);
+            this.removeFromCourse(studentId);
+            this.assignCourse(studentId, course);
             DEBUG.debug("For student with id - " + studentId + " was changed course on course with id - " + course);
-        } catch (RepositoryException e) {
+        } catch (Exception e) {
             ERROR.error("Can't change course for student with id - " + studentId, e);
             throw new ServiceException("Can't change course for student with id - " + studentId, e);
         }

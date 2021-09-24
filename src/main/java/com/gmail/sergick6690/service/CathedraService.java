@@ -1,7 +1,6 @@
 package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.Repository.CathedraRepository;
-import com.gmail.sergick6690.exceptions.RepositoryException;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.university.Cathedra;
 import org.slf4j.Logger;
@@ -30,22 +29,22 @@ public class CathedraService {
             throw new IllegalArgumentException("Input parameter can't be null");
         }
         try {
-            cathedraRepository.add(cathedra);
+            cathedraRepository.save(cathedra);
             DEBUG.debug((format("New cathedra - %s was added", cathedra.toString())));
-        } catch (RepositoryException e) {
+        } catch (Exception e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException(e);
+            throw new ServiceException("Cant't add cathedra" + e, e);
         }
     }
 
     public Cathedra findById(int id) throws ServiceException {
         try {
-            Cathedra cathedra = cathedraRepository.findById(id);
+            Cathedra cathedra = cathedraRepository.findById(id).get();
             DEBUG.debug(format("Cathedra with id - %d was returned", id));
             return cathedra;
-        } catch (RepositoryException e) {
+        } catch (Exception e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException(e);
+            throw new ServiceException("Cathedra not found - " + id, e);
         }
     }
 
@@ -54,19 +53,19 @@ public class CathedraService {
             List<Cathedra> cathedraList = cathedraRepository.findAll();
             DEBUG.debug("All cathedras was returned");
             return cathedraList;
-        } catch (RepositoryException e) {
+        } catch (Exception e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException(e);
+            throw new ServiceException("Can't find any cathedras", e);
         }
     }
 
     public void removeById(int id) throws ServiceException {
         try {
-            cathedraRepository.removeById(id);
+            cathedraRepository.delete(this.findById(id));
             DEBUG.debug(format("Cathedra with id - %d is removed", id));
-        } catch (RepositoryException e) {
+        } catch (Exception e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException(e);
+            throw new ServiceException("Cant remove cathedra with id - " + id, e);
         }
     }
 }
