@@ -1,6 +1,7 @@
 package com.gmail.sergick6690.controllers;
 
 import com.gmail.sergick6690.exceptions.ServiceException;
+import com.gmail.sergick6690.modelsForms.ItemForm;
 import com.gmail.sergick6690.service.AudienceService;
 import com.gmail.sergick6690.service.ItemService;
 import com.gmail.sergick6690.service.ScheduleService;
@@ -12,8 +13,11 @@ import com.gmail.sergick6690.university.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/items")
@@ -33,7 +37,7 @@ public class ItemController {
 
     @GetMapping()
     public String startPage(Model model) {
-        model.addAttribute("item", new Item());
+        model.addAttribute("itemForm", new ItemForm());
         return "items/index";
     }
 
@@ -56,9 +60,11 @@ public class ItemController {
     }
 
     @PostMapping("/add")
-    public String add(@RequestParam("subjectId") int subjectId, @RequestParam("day") String day, @RequestParam("hour") int hour, @RequestParam("audienceId") int audienceId
-            , @RequestParam("duration") int duration, @RequestParam("scheduleId") int scheduleId, RedirectAttributes attributes) throws ServiceException {
-        Item item = createNewItem(subjectId, day, hour, audienceId, duration, scheduleId);
+    public String add(@ModelAttribute("itemForm") @Valid ItemForm itemForm, BindingResult bindingResult, RedirectAttributes attributes) throws ServiceException {
+        if (bindingResult.hasErrors()) {
+            return "items/index";
+        }
+        Item item = createNewItem(itemForm);
         itemService.add(item);
         attributes.addFlashAttribute("message", "Was added new item - " + item);
         return "redirect:/items";
@@ -71,10 +77,13 @@ public class ItemController {
         return "redirect:/items";
     }
 
-    private Item createNewItem(int subjectId, String day, int hour, int audienceId, int duration, int scheduleId) throws ServiceException {
-        Subject subject = subjectService.findById(subjectId);
-        Audience audience = audienceService.findById(audienceId);
-        Schedule schedule = scheduleService.findById(scheduleId);
+    private Item createNewItem(ItemForm itemForm) throws ServiceException {
+        Subject subject = subjectService.findById(itemForm.getSubjectId());
+        Audience audience = audienceService.findById(itemForm.getAudienceId());
+        Schedule schedule = scheduleService.findById(itemForm.getScheduleId());
+        String day = itemForm.getDay();
+        int hour = itemForm.getHour();
+        int duration = itemForm.getDuration();
         return new Item(subject, day, hour, audience, duration, schedule);
     }
 }

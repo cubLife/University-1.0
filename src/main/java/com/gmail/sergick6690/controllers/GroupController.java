@@ -1,17 +1,19 @@
 package com.gmail.sergick6690.controllers;
 
 import com.gmail.sergick6690.exceptions.ServiceException;
+import com.gmail.sergick6690.modelsForms.GroupForm;
 import com.gmail.sergick6690.service.CathedraService;
 import com.gmail.sergick6690.service.GroupService;
 import com.gmail.sergick6690.service.ScheduleService;
-import com.gmail.sergick6690.university.Cathedra;
 import com.gmail.sergick6690.university.Group;
-import com.gmail.sergick6690.university.Schedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/groups")
@@ -29,7 +31,7 @@ public class GroupController {
 
     @GetMapping()
     public String startPage(Model model) {
-        model.addAttribute("group", new Group());
+        model.addAttribute("groupForm", new GroupForm());
         return "groups/index";
     }
 
@@ -58,9 +60,11 @@ public class GroupController {
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute("group") Group group, @RequestParam("scheduleId") int scheduleId
-            , @RequestParam("cathedraId") int cathedraId, RedirectAttributes attributes) throws ServiceException {
-        service.add(setScheduleAndCathedra(group, scheduleId, cathedraId));
+    public String add(@ModelAttribute("groupForm") @Valid GroupForm groupForm, BindingResult bindingResult, RedirectAttributes attributes) throws ServiceException {
+        if (bindingResult.hasErrors()) {
+            return "groups/index";
+        }
+        Group group = createNewGroup(groupForm);
         attributes.addFlashAttribute("message", "Was added new group - " + group);
         return "redirect:/groups";
     }
@@ -72,11 +76,11 @@ public class GroupController {
         return "redirect:/groups";
     }
 
-    private Group setScheduleAndCathedra(Group group, int scheduleId, int cathedraId) throws ServiceException {
-        Schedule schedule = scheduleService.findById(scheduleId);
-        Cathedra cathedra = cathedraService.findById(cathedraId);
-        group.setSchedule(schedule);
-        group.setCathedra(cathedra);
+    private Group createNewGroup(GroupForm groupForm) throws ServiceException {
+        Group group = new Group();
+        group.setName(groupForm.getName());
+        group.setCathedra(cathedraService.findById(groupForm.getCathedraId()));
+        group.setSchedule(scheduleService.findById(groupForm.getScheduleId()));
         return group;
     }
 }

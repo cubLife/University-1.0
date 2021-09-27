@@ -3,6 +3,9 @@ package com.gmail.sergick6690.university;
 import lombok.Builder;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
@@ -11,6 +14,9 @@ public class Student extends Human {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "groupId")
     private Group group;
+    @NotNull
+    @Min(value = 1, message = "Course can't be less than 1")
+    @Max(value = 7, message = "Course can't be bigger than 7")
     private int course;
 
     public Student() {

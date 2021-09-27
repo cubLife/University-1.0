@@ -1,6 +1,8 @@
 package com.gmail.sergick6690.university;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -10,6 +12,8 @@ public class Audience {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NotNull
+    @Min(value = 0, message = "Audience number can't be less than 0")
     private int number;
     @OneToMany(mappedBy = "audience", cascade = CascadeType.ALL)
     private List<Item> items = new ArrayList<>();

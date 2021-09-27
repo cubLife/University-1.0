@@ -35,18 +35,24 @@
 </nav>
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <form class="d-flex" th:method="POST" th:action="@{/teachers/add}" th:object="${teacher}">
+        <form class="d-grid" th:method="POST" th:action="@{/teachers/add}" th:object="${teacherForm}">
             <input class="form-control me-2" type="text" th:field="*{firstName}" placeholder="First name"
                    aria-label="First name" name="firstName"/>
+            <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First name error</div>
             <input class="form-control me-2" type="text" th:field="*{lastName}" placeholder="Last name"
                    aria-label="Last name" name="LastName"/>
+            <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last name error</div>
             <input class="form-control me-2" type="text" th:field="*{sex}" placeholder="Sex" aria-label="" name="sex"/>
+            <div th:if="${#fields.hasErrors('sex')}" th:errors="*{sex}">Sex name error</div>
             <input class="form-control me-2" type="number" th:field="*{age}" placeholder="Age" aria-label="Age"
                    name="age"/>
+            <div th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age</div>
             <input class="form-control me-2" type="text" th:field="*{degree}" placeholder="Degree" aria-label="Degree"
                    name="degree"/>
-            <input class="form-control me-2" type="text" placeholder="Schedule Id"
-                   aria-label="Sxhedule id" name="scheduleId"/>
+            <div th:if="${#fields.hasErrors('degree')}" th:errors="*{degree}">Degree name error</div>
+            <input class="form-control me-2" type="text" th:field="*{scheduleId}" placeholder="Schedule Id"
+                   aria-label="Schedule id" name="scheduleId"/>
+            <div th:if="${#fields.hasErrors('scheduleId')}" th:errors="*{scheduleId}">Schedule id name error</div>
             <button class="btn btn-outline-success" type="submit">Add new teacher</button>
         </form>
     </div>

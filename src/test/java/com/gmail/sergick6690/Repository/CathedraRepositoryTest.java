@@ -64,7 +64,9 @@ class CathedraRepositoryTest {
     }
 
     private void generateTestData() {
-        facultyRepository.save(new Faculty());
+        Faculty facultyTest = new Faculty();
+        facultyTest.setName(TEST);
+        facultyRepository.save(facultyTest);
         Faculty faculty = facultyRepository.findById(1).get();
         for (int i = 0; i < 5; i++) {
             cathedraRepository.save(new Cathedra(TEST, faculty));

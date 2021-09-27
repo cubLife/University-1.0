@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en"
-xmlns:th=xmlns:th="http://www.w3.org/1999/xhtml">
+      xmlns:th=xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>faculties</title>
@@ -24,9 +24,10 @@ xmlns:th=xmlns:th="http://www.w3.org/1999/xhtml">
 </nav>
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <form class="d-flex" th:method="POST" th:action="@{/faculties/add}" th:object="${faculty}">
+        <form class="d-grid" th:method="POST" th:action="@{/faculties/add}" th:object="${faculty}">
             <input class="form-control me-2" type="text" th:field="*{name}" placeholder="Faculty name"
                    aria-label="Faculty name" name="name"/>
+            <div th:errors="*{name}" th:errorclass="error-field">Name error</div>
             <button class="btn btn-outline-success" type="submit">Add new faculty</button>
         </form>
     </div>

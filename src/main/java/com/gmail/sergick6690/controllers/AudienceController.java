@@ -6,8 +6,11 @@ import com.gmail.sergick6690.university.Audience;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/audiences")
@@ -44,7 +47,10 @@ public class AudienceController {
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute("audience") Audience audience, RedirectAttributes attributes) throws ServiceException {
+    public String add(@Valid Audience audience, BindingResult bindingResult, RedirectAttributes attributes) throws ServiceException {
+        if (bindingResult.hasErrors()) {
+            return "audiences/index";
+        }
         service.add(audience);
         attributes.addFlashAttribute("message", "Was added new audience - " + audience);
         return "redirect:/audiences";

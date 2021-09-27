@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class ScheduleRepositoryTest {
     @Autowired
     private ScheduleRepository scheduleRepository;
-    private static final String TEST = "test";
+    private static final String TEST = "test1";
 
     @Test
     void shouldAddSchedule() {
@@ -47,7 +47,7 @@ class ScheduleRepositoryTest {
     @Test
     void findAllSchedules() {
         for (int i = 0; i < 5; i++) {
-            scheduleRepository.save(new Schedule());
+            scheduleRepository.save(new Schedule(TEST));
         }
         int expected = 5;
         int actual = scheduleRepository.findAll().size();
@@ -57,7 +57,7 @@ class ScheduleRepositoryTest {
     @Test
     void removeScheduleById() {
         for (int i = 0; i < 5; i++) {
-            scheduleRepository.save(new Schedule());
+            scheduleRepository.save(new Schedule(TEST));
         }
         Schedule schedule = scheduleRepository.findById(1).get();
         scheduleRepository.delete(schedule);

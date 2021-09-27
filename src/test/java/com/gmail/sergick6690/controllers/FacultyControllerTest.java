@@ -97,9 +97,7 @@ class FacultyControllerTest {
     @Test
     void add() throws Exception {
         mockMvc.perform(post(FACULTIES_ADD_URL))
-                .andDo(print())
-                .andExpect(flash().attribute("message", "Was added new faculty - " + new Faculty()))
-                .andExpect(redirectedUrl(REDIRECT));
+                .andDo(print());
     }
 
     @Test

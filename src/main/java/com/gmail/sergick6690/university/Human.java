@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 
 @Getter
@@ -14,9 +17,16 @@ public class Human {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NotBlank(message = "First name can't be empty")
+    @Size(min = 3, message = "First name size can't be less than 3 characters")
     private String firstName;
+    @NotBlank(message = "Last name can't be empty")
+    @Size(min = 3, message = "Last name size can't be less than 3 characters")
     private String lastName;
+    @NotBlank(message = "Sex can't be empty")
+    @Size(min = 3, max = 5, message = "Sex size should be between 3 and 5 characters")
     private String sex;
+    @Min(value = 1, message = "Age should be more than 0")
     private int age;
 
     public Human() {

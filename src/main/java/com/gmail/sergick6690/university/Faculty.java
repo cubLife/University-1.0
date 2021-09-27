@@ -1,8 +1,9 @@
 package com.gmail.sergick6690.university;
 
-import lombok.ToString;
-
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -12,8 +13,11 @@ public class Faculty {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NotBlank(message = "Name can't be empty")
+    @Size(min = 3, message = "Name size can't be less than 3 characters")
     private String name;
     @OneToMany(mappedBy = "faculty", cascade = CascadeType.ALL)
+    @NotNull
     private List<Cathedra> cathedras = new ArrayList<>();
 
     public Faculty() {

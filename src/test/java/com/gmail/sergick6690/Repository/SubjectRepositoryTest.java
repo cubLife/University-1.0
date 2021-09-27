@@ -34,12 +34,12 @@ class SubjectRepositoryTest {
     private TeacherRepository teacherRepository;
     @Mock
     private SubjectRepository mockSubjectRepository;
-    private static final String TEST = "Test";
+    private static final String TEST = "Test1";
 
     @Test
     void shouldAddSubject() {
         generateTestData();
-        Subject expected = new Subject(1, TEST, teacherRepository.findById(1).get(), TEST);
+        Subject expected = new Subject(1, TEST, teacherRepository.findById(1).get(), TEST+TEST);
         Subject actual = subjectRepository.findAll().get(0);
         assertEquals(expected, actual);
     }
@@ -47,7 +47,7 @@ class SubjectRepositoryTest {
     @Test
     void findSubjectById() throws NotImplementedException {
         generateTestData();
-        Subject expected = new Subject(4, TEST, teacherRepository.findById(1).get(), TEST);
+        Subject expected = new Subject(4, TEST, teacherRepository.findById(1).get(), TEST+TEST);
         Subject actual = subjectRepository.findById(4).get();
         assertEquals(expected, actual);
     }
@@ -80,7 +80,7 @@ class SubjectRepositoryTest {
 
     private void generateTestData() {
         scheduleRepository.save(new Schedule(TEST));
-        Teacher teacher = Teacher.builder().firstName(TEST).lastName(TEST).sex(TEST).age(0).degree(TEST).build();
+        Teacher teacher = Teacher.builder().firstName(TEST).lastName(TEST).sex(TEST).age(1).degree(TEST).build();
         teacherRepository.save(teacher);
         Audience audience = new Audience();
         audience.setNumber(0);
@@ -89,9 +89,9 @@ class SubjectRepositoryTest {
         audienceRepository.save(audience);
         audienceRepository.save(audience1);
         for (int i = 0; i < 5; i++) {
-            subjectRepository.save(new Subject(TEST, teacherRepository.findById(1).get(), TEST));
-            itemRepository.save(new Item(subjectRepository.findById(1).get(), TEST, 1, audienceRepository.findById(1).get(), 1, scheduleRepository.findById(1).get()));
-            itemRepository.save(new Item(subjectRepository.findById(1).get(), TEST, 1, audienceRepository.findById(2).get(), 1, scheduleRepository.findById(1).get()));
+            subjectRepository.save(new Subject(TEST, teacherRepository.findById(1).get(), TEST+TEST));
+            itemRepository.save(new Item(subjectRepository.findById(1).get(), TEST, 9, audienceRepository.findById(1).get(), 1, scheduleRepository.findById(1).get()));
+            itemRepository.save(new Item(subjectRepository.findById(1).get(), TEST, 9, audienceRepository.findById(2).get(), 1, scheduleRepository.findById(1).get()));
         }
     }
 }

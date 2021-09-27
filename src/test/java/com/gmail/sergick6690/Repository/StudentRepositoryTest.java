@@ -31,13 +31,13 @@ class StudentRepositoryTest {
     private ScheduleRepository scheduleRepository;
     @Autowired
     private FacultyRepository facultyRepository;
-    private static final String TEST = "test";
+    private static final String TEST = "test1";
 
     @Test
     void shouldAddStudent() {
         createTestData();
-        studentRepository.save(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).group(groupRepository.findById(1).get()).course(0).build());
-        Student expected = Student.builder().id(1).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).group(groupRepository.findById(1).get()).course(0).build();
+        studentRepository.save(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(1).group(groupRepository.findById(1).get()).course(1).build());
+        Student expected = Student.builder().id(1).firstName(TEST).lastNAme(TEST).sex(TEST).age(1).group(groupRepository.findById(1).get()).course(1).build();
         Student actual = studentRepository.findAll().get(0);
         assertEquals(expected, actual);
     }
@@ -46,9 +46,9 @@ class StudentRepositoryTest {
     void shouldFindStudentById() throws NotImplementedException {
         createTestData();
         for (int i = 0; i < 5; i++) {
-            studentRepository.save(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).group(groupRepository.findById(1).get()).course(0).build());
+            studentRepository.save(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(1).group(groupRepository.findById(1).get()).course(1).build());
         }
-        Student expected = Student.builder().id(3).firstName(TEST).lastNAme(TEST).sex(TEST).age(0).group(groupRepository.findById(1).get()).course(0).build();
+        Student expected = Student.builder().id(3).firstName(TEST).lastNAme(TEST).sex(TEST).age(1).group(groupRepository.findById(1).get()).course(1).build();
         Student actual = studentRepository.findById(3).get();
         assertEquals(expected, actual);
     }
@@ -57,7 +57,7 @@ class StudentRepositoryTest {
     void shouldFindAllStudents() {
         createTestData();
         for (int i = 0; i < 5; i++) {
-            studentRepository.save(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).group(groupRepository.findById(1).get()).course(0).build());
+            studentRepository.save(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(1).group(groupRepository.findById(1).get()).course(1).build());
         }
         int expected = 5;
         int actual = studentRepository.findAll().size();
@@ -68,7 +68,7 @@ class StudentRepositoryTest {
     void shouldRemoveStudentById() {
         createTestData();
         for (int i = 0; i < 5; i++) {
-            studentRepository.save(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(0).group(groupRepository.findById(1).get()).course(0).build());
+            studentRepository.save(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(1).group(groupRepository.findById(1).get()).course(1).build());
         }
         Student student = studentRepository.findById(1).get();
         studentRepository.delete(student);
@@ -79,7 +79,7 @@ class StudentRepositoryTest {
 
 
     private void createTestData() {
-        scheduleRepository.save(new Schedule());
+        scheduleRepository.save(new Schedule(TEST));
         Faculty faculty = new Faculty();
         faculty.setName(TEST);
         facultyRepository.save(faculty);

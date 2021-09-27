@@ -1,6 +1,10 @@
 package com.gmail.sergick6690.university;
 
 import javax.persistence.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Entity
@@ -9,14 +13,21 @@ public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subjectId")
     private Subject subject;
+    @NotBlank(message = "Day can't be empty")
     private String day;
+    @NotNull
+    @Min(value = 9, message = "Hour can't be less than 9")
+    @Max(value = 17, message = "Hour can't be bigger than 17")
     private int hour;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "audienceId")
     private Audience audience;
+    @Min(1)
+    @Max(2)
     private int duration;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "scheduleId")

@@ -33,7 +33,7 @@ class TeacherRepositoryTest {
     @Test
     void shouldAddTeacher() {
         generateTestData();
-        Teacher expected = Teacher.builder().id(1).firstName(TEST).lastName(TEST).sex(TEST).age(0).degree(TEST).subjects(new ArrayList<>()).build();
+        Teacher expected = Teacher.builder().id(1).firstName(TEST).lastName(TEST).sex(TEST).age(1).degree(TEST).subjects(new ArrayList<>()).build();
         Teacher actual = teacherRepository.findAll().get(0);
         assertEquals(expected, actual);
     }
@@ -49,7 +49,7 @@ class TeacherRepositoryTest {
     @Test
     void shouldFindTeacherById() throws NotImplementedException {
         generateTestData();
-        Teacher expected = Teacher.builder().id(5).firstName(TEST).lastName(TEST).sex(TEST).age(0).degree(TEST).subjects(new ArrayList<>()).build();
+        Teacher expected = Teacher.builder().id(5).firstName(TEST).lastName(TEST).sex(TEST).age(1).degree(TEST).subjects(new ArrayList<>()).build();
         Teacher actual = teacherRepository.findById(5).get();
         assertEquals(expected, actual);
     }
@@ -71,12 +71,12 @@ class TeacherRepositoryTest {
     }
 
     private void generateTestData() {
-        scheduleRepository.save(new Schedule());
-        scheduleRepository.save(new Schedule());
+        scheduleRepository.save(new Schedule(TEST+1));
+        scheduleRepository.save(new Schedule(TEST+2));
         for (int i = 0; i < 5; i++) {
-            teacherRepository.save(Teacher.builder().firstName(TEST).lastName(TEST).sex(TEST).age(0).degree(TEST)
+            teacherRepository.save(Teacher.builder().firstName(TEST).lastName(TEST).sex(TEST).age(1).degree(TEST)
                     .subjects(null).build());
-            teacherRepository.save(Teacher.builder().firstName(TEST).lastName(TEST).sex(TEST).age(0).degree(TEST + 1).subjects(null).build());
+            teacherRepository.save(Teacher.builder().firstName(TEST).lastName(TEST).sex(TEST).age(1).degree(TEST + 1).subjects(null).build());
         }
     }
 }

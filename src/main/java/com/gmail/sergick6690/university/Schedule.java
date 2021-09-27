@@ -1,6 +1,8 @@
 package com.gmail.sergick6690.university;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,6 +12,8 @@ public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NotBlank(message = "Name can't be empty")
+    @Size(min = 5, message = "Name should be contain no less than 5 characters")
     private String name;
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
     private List<Item> items;

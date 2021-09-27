@@ -26,9 +26,7 @@ class FacultyRepositoryTest {
 
     @Test
     void shouldAddFaculty() {
-        Faculty faculty = new Faculty();
-        faculty.setName(TEST);
-        facultyRepository.save(faculty);
+        generateTestData();
         Faculty expected = new Faculty(1, "test");
         Faculty actual = facultyRepository.findAll().get(0);
         assertEquals(expected, actual);
@@ -36,11 +34,7 @@ class FacultyRepositoryTest {
 
     @Test
     void shouldFindFacultyById() {
-        for (int i = 0; i < 5; i++) {
-            Faculty faculty = new Faculty();
-            faculty.setName(TEST);
-            facultyRepository.save(faculty);
-        }
+        generateTestData();
         Faculty expected = (new Faculty(4, TEST));
         Faculty actual = facultyRepository.findById(4).get();
         assertEquals(expected, actual);
@@ -48,9 +42,7 @@ class FacultyRepositoryTest {
 
     @Test
     void shouldFindAllFaculties() {
-        for (int i = 0; i < 5; i++) {
-            facultyRepository.save(new Faculty());
-        }
+        generateTestData();
         int expected = 5;
         int actual = facultyRepository.findAll().size();
         assertEquals(expected, actual);
@@ -58,13 +50,19 @@ class FacultyRepositoryTest {
 
     @Test
     void shouldRemoveFacultyById() {
-        for (int i = 0; i < 5; i++) {
-            facultyRepository.save(new Faculty());
-        }
+        generateTestData();
         Faculty faculty = facultyRepository.findById(1).get();
         facultyRepository.delete(faculty);
         int expected = 4;
         int actual = facultyRepository.findAll().size();
         assertEquals(expected, actual);
+    }
+
+    private void generateTestData() {
+        for (int i = 0; i < 5; i++) {
+            Faculty faculty = new Faculty();
+            faculty.setName(TEST);
+            facultyRepository.save(faculty);
+        }
     }
 }
