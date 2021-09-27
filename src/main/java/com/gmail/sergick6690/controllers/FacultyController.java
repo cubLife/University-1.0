@@ -6,8 +6,11 @@ import com.gmail.sergick6690.university.Faculty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/faculties")
@@ -44,7 +47,10 @@ public class FacultyController {
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute("faculty") Faculty faculty, RedirectAttributes attributes) throws ServiceException {
+    public String add(@ModelAttribute("faculty") @Valid Faculty faculty, BindingResult bindingResult, RedirectAttributes attributes) throws ServiceException {
+        if (bindingResult.hasErrors()) {
+            return "faculties/index";
+        }
         service.add(faculty);
         attributes.addFlashAttribute("message", "Was added new faculty - " + faculty);
         return "redirect:/faculties";

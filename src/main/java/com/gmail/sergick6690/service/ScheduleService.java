@@ -1,7 +1,6 @@
 package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.Repository.ScheduleRepository;
-import com.gmail.sergick6690.exceptions.RepositoryException;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.university.Schedule;
 import org.slf4j.Logger;
@@ -10,18 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import static java.lang.String.format;
 
 @Service
 public class ScheduleService {
-    private ScheduleRepository scheduleDAO;
+    private ScheduleRepository scheduleRepository;
     private static final Logger ERROR = LoggerFactory.getLogger("com.gmail.sergick6690.error");
     private static final Logger DEBUG = LoggerFactory.getLogger("com.gmail.sergick6690.debug");
 
     @Autowired
-    public ScheduleService(ScheduleRepository scheduleDAO) {
-        this.scheduleDAO = scheduleDAO;
+    public ScheduleService(ScheduleRepository scheduleRepository) {
+        this.scheduleRepository = scheduleRepository;
     }
 
     public void add(Schedule schedule) throws ServiceException {
@@ -30,43 +30,43 @@ public class ScheduleService {
             throw new IllegalArgumentException("Input Parameter can't be null");
         }
         try {
-            scheduleDAO.add(schedule);
+            scheduleRepository.save(schedule);
             DEBUG.debug((format("New schedule - %s was added", schedule.toString())));
-        } catch (RepositoryException e) {
+        } catch (NumberFormatException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException(e);
+            throw new ServiceException("Can't add schedule - " + schedule + e, e);
         }
     }
 
     public Schedule findById(int id) throws ServiceException {
         try {
-            Schedule schedule = scheduleDAO.findById(id);
+            Schedule schedule = scheduleRepository.findById(id).get();
             DEBUG.debug(format("Item with id - %d was returned", id));
             return schedule;
-        } catch (RepositoryException e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException(e);
+            throw new ServiceException("Schedule not found - " + id + e, e);
         }
     }
 
     public List<Schedule> findAll() throws ServiceException {
         try {
-            List<Schedule> scheduleList = scheduleDAO.findAll();
+            List<Schedule> scheduleList = scheduleRepository.findAll();
             DEBUG.debug("All schedules was returned");
             return scheduleList;
-        } catch (RepositoryException e) {
+        } catch (NullPointerException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException(e);
+            throw new ServiceException("Can't find any schedule " + e, e);
         }
     }
 
     public void removeById(int id) throws ServiceException {
         try {
-            scheduleDAO.removeById(id);
+            scheduleRepository.delete(this.findById(id));
             DEBUG.debug(format("Schedule with id - %d is removed", id));
-        } catch (RepositoryException e) {
+        } catch (NoSuchElementException e) {
             ERROR.error(e.getMessage(), e);
-            throw new ServiceException(e);
+            throw new ServiceException("Can't remove schedule with id - " + id + e, e);
         }
     }
 }

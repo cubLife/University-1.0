@@ -27,6 +27,8 @@ import java.util.Properties;
 public class SpringConfig implements WebMvcConfigurer {
     private final ApplicationContext applicationContext;
     private DataSourceConfig dataSource;
+    private static final String H2_DIALECT = "org.hibernate.dialect.H2Dialect";
+    private static final String POSTGRE_SQLD_DIALECT = "org.hibernate.dialect.PostgreSQLDialect";
 
     @Autowired
     public SpringConfig(ApplicationContext applicationContext, DataSourceConfig dataSource) {
@@ -71,8 +73,8 @@ public class SpringConfig implements WebMvcConfigurer {
 
     private Properties additionalProperties() {
         Properties properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "create");
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+        properties.setProperty("hibernate.hbm2ddl.auto", "validate");
+        properties.setProperty("hibernate.dialect", POSTGRE_SQLD_DIALECT);
         properties.setProperty("show_sql", "true");
         properties.setProperty("hibernate.enable_lazy_load_no_trans", "true");
         return properties;

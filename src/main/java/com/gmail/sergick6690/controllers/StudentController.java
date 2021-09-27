@@ -1,14 +1,18 @@
 package com.gmail.sergick6690.controllers;
 
 import com.gmail.sergick6690.exceptions.ServiceException;
+import com.gmail.sergick6690.modelsForms.StudentForm;
 import com.gmail.sergick6690.service.GroupService;
 import com.gmail.sergick6690.service.StudentService;
 import com.gmail.sergick6690.university.Group;
 import com.gmail.sergick6690.university.Student;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/students")
@@ -23,7 +27,7 @@ public class StudentController {
 
     @GetMapping()
     public String startPage(Model model) {
-        model.addAttribute(new Student());
+        model.addAttribute(new StudentForm());
         return "students/index";
     }
 
@@ -46,9 +50,12 @@ public class StudentController {
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute("student") Student student, @RequestParam("groupId") int groupId, RedirectAttributes attributes) throws ServiceException {
-
-        studentService.add(setGroup(student, groupId));
+    public String add(@ModelAttribute("studentForm") @Valid StudentForm studentForm, BindingResult bindingResult, RedirectAttributes attributes) throws ServiceException {
+        if (bindingResult.hasErrors()) {
+            return "students/index";
+        }
+        Student student = createNewStudent(studentForm);
+        studentService.add(student);
         attributes.addFlashAttribute("message", "Was added new student - " + student);
         return "redirect:/students";
     }
@@ -102,9 +109,9 @@ public class StudentController {
         return "redirect:/students";
     }
 
-    private Student setGroup(Student student, int groupId) throws ServiceException {
-        Group group = groupService.findById(groupId);
-        student.setGroup(group);
-        return student;
+    private Student createNewStudent(StudentForm studentForm) throws ServiceException {
+        Group group = groupService.findById(studentForm.getGroupId());
+        return Student.builder().firstName(studentForm.getFirstName()).lastNAme(studentForm.getLastName())
+                .sex(studentForm.getSex()).age(studentForm.getAge()).course(studentForm.getCourse()).group(group).build();
     }
 }

@@ -25,15 +25,23 @@
 </nav>
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <form class="d-grid" th:method="POST" th:action="@{/items/add}">
-            <input class="form-control me-2" type="number" placeholder="Subject id" aria-label="Subject Id"
+        <form class="d-grid" th:method="POST" th:action="@{/items/add}" th:object="${itemForm}">
+            <input class="form-control me-2" type="number" th:field="*{subjectId}" placeholder="Subject id"
+                   aria-label="Subject Id"
                    name="subjectId"/>
-            <input class="form-control me-2" type="number" placeholder="Audience id" aria-label="Audience id"
+            <div th:if="${#fields.hasErrors('subjectId')}" th:errors="*{subjectId}">Subject id error</div>
+            <input class="form-control me-2" type="number" th:field="*{audienceId}" placeholder="Audience id"
+                   aria-label="Audience id"
                    name="audienceId"/>
-            <input class="form-control me-2" type="number" placeholder="Duration" aria-label="Duration"
+            <div th:if="${#fields.hasErrors('audienceId')}" th:errors="*{audienceId}">Audience id error</div>
+            <input class="form-control me-2" type="number" th:field="*{duration}" placeholder="Duration"
+                   aria-label="Duration"
                    name="duration"/>
-            <input class="form-control " type="number" placeholder="Schedule Id" aria-label="Schedule id"
+            <div th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}">Duration error</div>
+            <input class="form-control " type="number" th:field="*{scheduleId}" placeholder="Schedule Id"
+                   aria-label="Schedule id"
                    name="scheduleId"/>
+            <div th:if="${#fields.hasErrors('scheduleId')}" th:errors="*{scheduleId}">Schedule id error</div>
             <label>Day</label>
             <select class="form-control " name="day">
                 <option>Monday</option>
@@ -42,6 +50,7 @@
                 <option>Thursday</option>
                 <option>Friday</option>
             </select>
+            <div th:if="${#fields.hasErrors('day')}" th:errors="*{day}">Day error</div>
             <label>Hour</label>
             <select class="form-control " name="hour">
                 <option>9</option>
@@ -54,6 +63,7 @@
                 <option>16</option>
                 <option>17</option>
             </select>
+            <div th:if="${#fields.hasErrors('hour')}" th:errors="*{hour}">Hour id error</div>
             <button class="btn btn-outline-success" type="submit">Add new item</button>
         </form>
     </div>

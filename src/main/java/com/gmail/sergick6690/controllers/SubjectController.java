@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.validation.Valid;
+
 @Controller
 @RequestMapping("/subjects")
 public class SubjectController {
@@ -55,7 +57,7 @@ public class SubjectController {
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute("subject") Subject subject, @RequestParam("teacherId") int teacherId, RedirectAttributes attributes) throws ServiceException {
+    public String add(@ModelAttribute @Valid Subject subject, @RequestParam("teacherId") int teacherId, RedirectAttributes attributes) throws ServiceException {
         subjectService.add(setTeacher(subject, teacherId));
         attributes.addFlashAttribute("message", "Was added new subject - " + subject);
         return "redirect:/subjects";

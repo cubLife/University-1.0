@@ -35,13 +35,16 @@
 </nav>
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <form class="d-flex" th:method="POST" th:action="@{/groups/add}" th:object="${group}">
+        <form class="d-grid" th:method="POST" th:action="@{/groups/add}" th:object="${groupForm}">
             <input class="form-control me-2" type="text" th:field="*{name}" placeholder="Name" aria-label="Name"
                    name="name"/>
-            <input class="form-control me-2" type="number" placeholder="Schedule id "
+            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
+            <input class="form-control me-2" type="number" th:field="*{scheduleId}" placeholder="Schedule id "
                    aria-label="Schedule id" name="scheduleId"/>
-            <input class="form-control me-2" type="number" placeholder="Cathedrs id"
+            <div th:if="${#fields.hasErrors('scheduleId')}" th:errors="*{scheduleId}">Schedule id error</div>
+            <input class="form-control me-2" type="number" th:field="*{cathedraId}" placeholder="Cathedra id"
                    aria-label="Cathedra id" name="cathedraId"/>
+            <div th:if="${#fields.hasErrors('cathedraId')}" th:errors="*{cathedraId}">Cathedra id error</div>
             <button class="btn btn-outline-success" type="submit">Add new group</button>
         </form>
     </div>

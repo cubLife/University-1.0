@@ -3,7 +3,6 @@ package com.gmail.sergick6690.controllers;
 import com.gmail.sergick6690.service.TeacherService;
 import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.university.Schedule;
-import com.gmail.sergick6690.university.Subject;
 import com.gmail.sergick6690.university.Teacher;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -25,7 +24,7 @@ import org.springframework.web.context.WebApplicationContext;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;

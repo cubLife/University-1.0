@@ -1,6 +1,8 @@
 package com.gmail.sergick6690.university;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -11,10 +13,14 @@ public class Subject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NotBlank(message = "Name can't be empty")
+    @Size(min = 3, message = "Name should be contain no less than 3 characters")
     private String name;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacherId")
     private Teacher teacher;
+    @NotBlank(message = "Name can't be empty")
+    @Size(min = 10, max = 30, message = "Name should be between 10 and 30 characters")
     private String description;
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
     private List<Item> items = new ArrayList<>();

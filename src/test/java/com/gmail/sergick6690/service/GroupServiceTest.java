@@ -1,8 +1,7 @@
 package com.gmail.sergick6690.service;
 
-import com.gmail.sergick6690.exceptions.RepositoryException;
+import com.gmail.sergick6690.Repository.GroupRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.implementation.JpaGroupRepository;
 import com.gmail.sergick6690.university.Group;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,45 +12,49 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class GroupServiceTest {
     @Mock
-    private JpaGroupRepository repository;
+    private GroupRepository repository;
+    @Mock
+    private GroupService mockService;
     @InjectMocks
     private GroupService service;
     private static final int ID = 1;
 
     @Test
-    void shouldInvokeAdd() throws ServiceException, RepositoryException {
+    void shouldInvokeAdd() throws ServiceException {
         service.add(new Group());
-        verify(repository).add(new Group());
+        verify(repository).save(new Group());
     }
 
     @Test
-    void shouldFindById() throws ServiceException, RepositoryException {
-        service.findById(ID);
-        verify(repository).findById(ID);
+    void shouldFindById() throws ServiceException {
+        when(mockService.findById(anyInt())).thenReturn(new Group());
+        mockService.findById(anyInt());
+        verify(mockService).findById(anyInt());
+
     }
 
     @Test
-    void shouldInvokeFindAll() throws ServiceException, RepositoryException {
+    void shouldInvokeFindAll() throws ServiceException {
         service.findAll();
         verify(repository).findAll();
     }
 
     @Test
-    void shouldRemoveById() throws ServiceException, RepositoryException {
-        service.removeById(ID);
-        verify(repository).removeById(ID);
+    void shouldRemoveById() throws ServiceException {
+        doNothing().when(mockService).removeById(anyInt());
+        mockService.removeById(anyInt());
+        verify(mockService).removeById(anyInt());
     }
 
     @Test
-    void shouldInvokeFindAllGroupsRelatedToCathedra() throws RepositoryException, ServiceException {
+    void shouldInvokeFindAllGroupsRelatedToCathedra() throws ServiceException {
         service.findAllGroupsRelatedToCathedra(ID);
-        verify(repository).findAllGroupsRelatedToCathedra(ID);
+        verify(repository).findAllByCathedra_Id(ID);
     }
 
     @Test
@@ -64,42 +67,41 @@ class GroupServiceTest {
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenAddMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(repository).add(new Group());
+    void shouldThrowServiceExceptionWhenAddMethodCall() throws ServiceException {
+        doThrow(ServiceException.class).when(mockService).add(new Group());
         assertThrows(ServiceException.class, () -> {
-            service.add(new Group());
+            mockService.add(new Group());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenFindByIdMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(repository).findById(anyInt());
+    void shouldThrowServiceExceptionWhenFindByIdMethodCall() {
         assertThrows(ServiceException.class, () -> {
             service.findById(anyInt());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenFindAllMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(repository).findAll();
+    void shouldThrowServiceExceptionWhenFindAllMethodCall() throws ServiceException {
+        doThrow(ServiceException.class).when(mockService).findAll();
         assertThrows(ServiceException.class, () -> {
-            service.findAll();
+            mockService.findAll();
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenRemoveByIdMethodCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(repository).removeById(anyInt());
+    void shouldThrowServiceExceptionWhenRemoveByIdMethodCall() throws ServiceException {
+        doThrow(ServiceException.class).when(mockService).removeById(anyInt());
         assertThrows(ServiceException.class, () -> {
-            service.removeById(anyInt());
+            mockService.removeById(anyInt());
         });
     }
 
     @Test
-    void shouldThrowServiceExceptionWhenFindAllGroupsRelatedToCathedraCall() throws RepositoryException {
-        doThrow(RepositoryException.class).when(repository).findAllGroupsRelatedToCathedra(anyInt());
+    void shouldThrowServiceExceptionWhenFindAllGroupsRelatedToCathedraCall() throws ServiceException {
+        doThrow(ServiceException.class).when(mockService).findAllGroupsRelatedToCathedra(anyInt());
         assertThrows(ServiceException.class, () -> {
-            service.findAllGroupsRelatedToCathedra(anyInt());
+            mockService.findAllGroupsRelatedToCathedra(anyInt());
         });
     }
 }

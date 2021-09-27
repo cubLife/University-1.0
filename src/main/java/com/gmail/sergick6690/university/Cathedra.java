@@ -1,6 +1,7 @@
 package com.gmail.sergick6690.university;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,7 +15,7 @@ public class Cathedra {
     @JoinColumn(name = "facultyId")
     private Faculty faculty;
     @OneToMany(mappedBy = "cathedra", cascade = CascadeType.ALL)
-    private List<Group> groups;
+    private List<Group> groups = new ArrayList<>();
 
     public Cathedra() {
     }

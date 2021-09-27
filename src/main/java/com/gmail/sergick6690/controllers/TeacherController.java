@@ -1,6 +1,7 @@
 package com.gmail.sergick6690.controllers;
 
 import com.gmail.sergick6690.exceptions.ServiceException;
+import com.gmail.sergick6690.modelsForms.TeacherForm;
 import com.gmail.sergick6690.service.ScheduleService;
 import com.gmail.sergick6690.service.TeacherService;
 import com.gmail.sergick6690.university.Schedule;
@@ -8,8 +9,11 @@ import com.gmail.sergick6690.university.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/teachers")
@@ -25,7 +29,7 @@ public class TeacherController {
 
     @GetMapping()
     public String startPage(Model model) {
-        model.addAttribute("teacher", new Teacher());
+        model.addAttribute("teacherForm", new TeacherForm());
         return "teacher/index";
     }
 
@@ -55,8 +59,12 @@ public class TeacherController {
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute("teacher") Teacher teacher, @RequestParam("scheduleId") int scheduleId, RedirectAttributes attributes) throws ServiceException {
-        teacherService.add(setSchedule(teacher, scheduleId));
+    public String add(@ModelAttribute("teacherForm") @Valid TeacherForm teacherForm, BindingResult bindingResult, RedirectAttributes attributes) throws ServiceException {
+        if (bindingResult.hasErrors()) {
+            return "teacher/index";
+        }
+        Teacher teacher = createNewTeacher(teacherForm);
+        teacherService.add(teacher);
         attributes.addFlashAttribute("message", "Was added new teacher - " + teacher);
         return "redirect:/teachers";
     }
@@ -89,9 +97,9 @@ public class TeacherController {
         return "redirect:/teachers";
     }
 
-    private Teacher setSchedule(Teacher teacher, int scheduleId) throws ServiceException {
-        Schedule schedule = scheduleService.findById(scheduleId);
-        teacher.setSchedule(schedule);
-        return teacher;
+    private Teacher createNewTeacher(TeacherForm teacherForm) throws ServiceException {
+        Schedule schedule = scheduleService.findById(teacherForm.getScheduleId());
+        return Teacher.builder().firstName(teacherForm.getFirstName()).lastName(teacherForm.getLastName())
+                .age(teacherForm.getAge()).sex(teacherForm.getSex()).degree(teacherForm.getDegree()).schedule(schedule).build();
     }
 }

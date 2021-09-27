@@ -23,9 +23,10 @@
 </nav>
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <form class="d-flex" th:method="POST" th:action="@{/audiences/add}" th:object="${audience}">
+        <form class="d-grid" th:method="POST" th:action="@{/audiences/add}" th:object="${audience}">
             <input class="form-control me-2" type="number" th:field="*{number}" placeholder="Audience number"
-                   aria-label="Audience number" name="namber"/>
+                   aria-label="Audience number" name="number"/>
+            <div th:if="${#fields.hasErrors('number')}" th:errors="*{number}">Number error</div>
             <button class="btn btn-outline-success" type="submit">Add new audience</button>
         </form>
     </div>

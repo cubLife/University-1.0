@@ -24,11 +24,13 @@
 </div>
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <form class="d-flex" th:method="POST" th:action="@{/cathedras/add}" th:object="${cathedra}">
+        <form class="d-grid" th:method="POST" th:action="@{/cathedras/add}" th:object="${cathedraForm}">
             <input class="form-control me-2" type="text" th:field="*{name}" placeholder="Cathedra name"
                    aria-label="Cathedra name" name="name"/>
-            <input class="form-control me-2" type="text" placeholder="Faculty id" aria-label="Faculty id"
+            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error </div>
+            <input class="form-control me-2" type="number" placeholder="Faculty id" aria-label="Faculty id"
                    name="facultyId"/>
+            <div th:if="${#fields.hasErrors('facultyId')}" th:errors="*{facultyId}">Faculty id error </div>
             <button class="btn btn-outline-success btn-sm" type="submit">Add new cathedra</button>
         </form>
     </div>

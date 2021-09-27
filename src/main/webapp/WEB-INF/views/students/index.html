@@ -25,17 +25,24 @@
 </nav>
 <nav class="navbar navbar-light bg-light">
     <div class="container-fluid">
-        <form class="d-flex" th:method="POST" th:action="@{/students/add}" th:object="${student}">
+        <form class="d-sm-grid" th:method="POST" th:action="@{/students/add}" th:object="${studentForm}">
             <input class="form-control me-2" type="text" th:field="*{firstName}" placeholder="First name"
                    aria-label="First name" name="firstName"/>
+            <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First name error</div>
             <input class="form-control me-2" type="text" th:field="*{lastName}" placeholder="Last name"
                    aria-label="Last name" name="LastName"/>
+            <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last name error</div>
             <input class="form-control me-2" type="text" th:field="*{sex}" placeholder="Sex" aria-label="" name="sex"/>
+            <div th:if="${#fields.hasErrors('sex')}" th:errors="*{sex}">Sex error</div>
             <input class="form-control me-2" type="number" th:field="*{age}" placeholder="Age" aria-label="Age"
                    name="age"/>
+            <div th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Age error</div>
             <input class="form-control me-2" type="number" th:field="*{course}" placeholder="Course" aria-label="Course"
                    name="course"/>
-            <input class="form-control me-2" type="number" placeholder="Group Id" aria-label="Group id" name="groupId"/>
+            <div th:if="${#fields.hasErrors('course')}" th:errors="*{course}">Course name error</div>
+            <input class="form-control me-2" type="number" th:field="*{groupId}" placeholder="Group Id"
+                   aria-label="Group id" name="groupId"/>
+            <div th:if="${#fields.hasErrors('groupId')}" th:errors="*{groupId}">First name error</div>
             <button class="btn btn-outline-success" type="submit">Add new student</button>
         </form>
     </div>

@@ -1,6 +1,8 @@
 package com.gmail.sergick6690.university;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.List;
 import java.util.Objects;
 
@@ -10,6 +12,8 @@ public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @NotBlank(message = "Name can't be empty")
+    @Size(min = 5, max = 5, message = "Name of group should be equal 5 characters")
     private String name;
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
     private List<Student> students;
