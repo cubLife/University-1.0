@@ -1,4 +1,4 @@
-package com.gmail.sergick6690.university;
+package com.gmail.sergick6690.universityModels;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;

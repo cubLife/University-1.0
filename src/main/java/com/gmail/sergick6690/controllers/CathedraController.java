@@ -1,10 +1,11 @@
 package com.gmail.sergick6690.controllers;
 
+import com.gmail.sergick6690.ModelsCreator;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.modelsForms.CathedraForm;
 import com.gmail.sergick6690.service.CathedraService;
-import com.gmail.sergick6690.service.FacultyService;
-import com.gmail.sergick6690.university.Cathedra;
+import com.gmail.sergick6690.universityModels.Cathedra;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,11 +18,12 @@ import javax.validation.Valid;
 @RequestMapping("/cathedras")
 public class CathedraController {
     private CathedraService cathedraService;
-    private FacultyService facultyService;
+    private ModelsCreator modelsCreator;
 
-    public CathedraController(CathedraService cathedraService, FacultyService facultyService) {
+    @Autowired
+    public CathedraController(CathedraService cathedraService, ModelsCreator modelsCreator) {
         this.cathedraService = cathedraService;
-        this.facultyService = facultyService;
+        this.modelsCreator = modelsCreator;
     }
 
     @GetMapping()
@@ -54,7 +56,7 @@ public class CathedraController {
         if (bindingResult.hasErrors()) {
             return "cathedra/index";
         }
-        Cathedra cathedra = createNewCathedra(cathedraForm);
+        Cathedra cathedra = modelsCreator.createNewCathedra(cathedraForm);
         cathedraService.add(cathedra);
         attributes.addFlashAttribute("message", "Was added new cathedra - " + cathedra);
         return "redirect:/cathedras";
@@ -65,12 +67,5 @@ public class CathedraController {
         cathedraService.removeById(id);
         attributes.addFlashAttribute("message", "Was deleted cathedra with id - " + id);
         return "redirect:/cathedras";
-    }
-
-    private Cathedra createNewCathedra(CathedraForm cathedraForm) throws ServiceException {
-        Cathedra cathedra = new Cathedra();
-        cathedra.setName(cathedraForm.getName());
-        cathedra.setFaculty(facultyService.findById(cathedraForm.getFacultyId()));
-        return cathedra;
     }
 }

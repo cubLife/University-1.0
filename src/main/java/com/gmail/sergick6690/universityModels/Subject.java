@@ -1,4 +1,9 @@
-package com.gmail.sergick6690.university;
+package com.gmail.sergick6690.universityModels;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -18,11 +23,14 @@ public class Subject {
     private String name;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teacherId")
+    @JsonBackReference
     private Teacher teacher;
-    @NotBlank(message = "Name can't be empty")
-    @Size(min = 10, max = 30, message = "Name should be between 10 and 30 characters")
+    @NotBlank(message = "Description can't be empty")
+    @Size(min = 10, max = 30, message = "Description should be between 10 and 30 characters")
     private String description;
     @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonManagedReference
     private List<Item> items = new ArrayList<>();
 
     public Subject() {

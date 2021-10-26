@@ -1,5 +1,6 @@
-package com.gmail.sergick6690.university;
+package com.gmail.sergick6690.universityModels;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Builder;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.Objects;
 public class Student extends Human {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "groupId")
+    @JsonBackReference
     private Group group;
     @NotNull
     @Min(value = 1, message = "Course can't be less than 1")
@@ -28,7 +30,6 @@ public class Student extends Human {
         this.group = group;
         this.course = course;
     }
-
 
     public int getCourse() {
         return course;
@@ -52,8 +53,7 @@ public class Student extends Human {
         if (!(o instanceof Student)) return false;
         if (!super.equals(o)) return false;
         Student student = (Student) o;
-        return getCourse() == student.getCourse() &&
-                Objects.equals(group, student.group);
+        return getCourse() == student.getCourse();
     }
 
     @Override

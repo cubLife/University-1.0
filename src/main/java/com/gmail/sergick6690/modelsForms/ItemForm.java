@@ -1,5 +1,6 @@
 package com.gmail.sergick6690.modelsForms;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class ItemForm {
     @NotNull
     @Min(value = 1, message = "Value should be more than 0")

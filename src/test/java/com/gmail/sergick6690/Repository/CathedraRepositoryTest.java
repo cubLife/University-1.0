@@ -1,8 +1,8 @@
 package com.gmail.sergick6690.Repository;
 
 import com.gmail.sergick6690.spring.SpringConfig;
-import com.gmail.sergick6690.university.Cathedra;
-import com.gmail.sergick6690.university.Faculty;
+import com.gmail.sergick6690.universityModels.Cathedra;
+import com.gmail.sergick6690.universityModels.Faculty;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

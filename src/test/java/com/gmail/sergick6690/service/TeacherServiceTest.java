@@ -2,7 +2,7 @@ package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.Repository.TeacherRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.university.Teacher;
+import com.gmail.sergick6690.universityModels.Teacher;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -56,7 +56,6 @@ class TeacherServiceTest {
         service.findTeachersCountWithEqualDegree(TEST);
         verify(teacherRepository).findTeachersCountWithEqualDegree(TEST);
     }
-
 
     @Test
     void shouldThrowIllegalArgumentExceptionWhenAddMethodCall() {

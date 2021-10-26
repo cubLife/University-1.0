@@ -2,7 +2,7 @@ package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.Repository.SubjectRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.university.Subject;
+import com.gmail.sergick6690.universityModels.Subject;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -105,5 +105,4 @@ class SubjectServiceTest {
             mockSubjectService.findAllSubjectRelatedToAudience(anyInt());
         });
     }
-
 }

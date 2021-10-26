@@ -1,7 +1,7 @@
 package com.gmail.sergick6690.Repository;
 
 import com.gmail.sergick6690.spring.SpringConfig;
-import com.gmail.sergick6690.university.*;
+import com.gmail.sergick6690.universityModels.*;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -67,6 +67,7 @@ class SubjectRepositoryTest {
         subjectRepository.delete(subject);
         int expected = 4;
         int actual = subjectRepository.findAll().size();
+        System.out.println(actual);
         assertEquals(expected, actual);
     }
 

@@ -2,9 +2,9 @@ package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.Repository.CathedraRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.university.Cathedra;
-import com.gmail.sergick6690.university.Faculty;
-import com.gmail.sergick6690.university.Group;
+import com.gmail.sergick6690.universityModels.Cathedra;
+import com.gmail.sergick6690.universityModels.Faculty;
+import com.gmail.sergick6690.universityModels.Group;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

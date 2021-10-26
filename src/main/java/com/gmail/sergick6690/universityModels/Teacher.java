@@ -1,6 +1,10 @@
-package com.gmail.sergick6690.university;
+package com.gmail.sergick6690.universityModels;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Builder;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,8 +17,11 @@ public class Teacher extends Human {
     private String degree;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "scheduleId")
+    @JsonBackReference
     private Schedule schedule;
     @OneToMany(mappedBy = "teacher", cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonManagedReference
     private List<Subject> subjects = new ArrayList<>();
 
     public Teacher() {

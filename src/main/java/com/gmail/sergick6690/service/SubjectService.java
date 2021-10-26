@@ -2,8 +2,8 @@ package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.Repository.SubjectRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.university.Subject;
-import com.gmail.sergick6690.university.Teacher;
+import com.gmail.sergick6690.universityModels.Subject;
+import com.gmail.sergick6690.universityModels.Teacher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

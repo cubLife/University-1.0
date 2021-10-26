@@ -2,8 +2,8 @@ package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.Repository.StudentRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.university.Group;
-import com.gmail.sergick6690.university.Student;
+import com.gmail.sergick6690.universityModels.Group;
+import com.gmail.sergick6690.universityModels.Student;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -102,6 +102,7 @@ public class StudentService {
 
     }
 
+    @Transactional(rollbackFor = ServiceException.class)
     public void assignCourse(int studentId, int course) throws ServiceException {
         try {
             Student student = this.findById(studentId);
@@ -113,6 +114,7 @@ public class StudentService {
         }
     }
 
+    @Transactional(rollbackFor = ServiceException.class)
     public void removeFromCourse(int studentId) throws ServiceException {
         try {
             Student student = this.findById(studentId);
@@ -136,6 +138,7 @@ public class StudentService {
         }
     }
 
+    @Transactional(rollbackFor = ServiceException.class)
     public void changeCourse(int studentId, int course) throws ServiceException {
         try {
             this.removeFromCourse(studentId);

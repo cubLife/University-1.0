@@ -1,4 +1,9 @@
-package com.gmail.sergick6690.university;
+package com.gmail.sergick6690.universityModels;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,8 +18,11 @@ public class Cathedra {
     private String name;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "facultyId")
+    @JsonBackReference
     private Faculty faculty;
     @OneToMany(mappedBy = "cathedra", cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonManagedReference
     private List<Group> groups = new ArrayList<>();
 
     public Cathedra() {

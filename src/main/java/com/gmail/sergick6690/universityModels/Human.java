@@ -1,4 +1,4 @@
-package com.gmail.sergick6690.university;
+package com.gmail.sergick6690.universityModels;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

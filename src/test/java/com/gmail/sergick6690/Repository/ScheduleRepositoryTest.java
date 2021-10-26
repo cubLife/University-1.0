@@ -1,7 +1,7 @@
 package com.gmail.sergick6690.Repository;
 
 import com.gmail.sergick6690.spring.SpringConfig;
-import com.gmail.sergick6690.university.Schedule;
+import com.gmail.sergick6690.universityModels.Schedule;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
