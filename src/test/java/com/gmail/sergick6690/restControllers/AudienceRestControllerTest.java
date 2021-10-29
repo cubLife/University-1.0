@@ -36,7 +36,8 @@ class AudienceRestControllerTest {
     private ObjectMapper objectMapper;
     @MockBean
     private AudienceService audienceService;
-    private static final String DEV_AUDIENCES_URL = "/dev/audiences";
+    private static final String API_AUDIENCES_URL = "/api/audiences";
+    private static final String API_AUDIENCES_LIST_URL = "/api/audiences/list";
 
     @BeforeAll
     public void setup() {
@@ -45,27 +46,26 @@ class AudienceRestControllerTest {
 
     @Test
     void addAudience() throws Exception {
-        mockMvc.perform(post(DEV_AUDIENCES_URL).
+        mockMvc.perform(post(API_AUDIENCES_URL).
                 content(objectMapper.writeValueAsString(new Audience())).
                 contentType("application/json")).
                 andExpect(status().isCreated()).
                 andDo(print());
-
     }
 
     @Test
     void getAudience() throws Exception {
         when(audienceService.findById(1))
                 .thenReturn(new Audience(1, 1));
-        mockMvc.perform(get(DEV_AUDIENCES_URL)
-                .contentType("application/json").param("audienceId", "1"))
+        mockMvc.perform(get(API_AUDIENCES_URL)
+                .contentType("application/json").param("audience-id", "1"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }
 
     @Test
     void showAllAudience() throws Exception {
-        mockMvc.perform(get(DEV_AUDIENCES_URL)
+        mockMvc.perform(get(API_AUDIENCES_LIST_URL)
                 .contentType("application/json"))
                 .andDo(print())
                 .andExpect(status().isOk());
@@ -73,8 +73,8 @@ class AudienceRestControllerTest {
 
     @Test
     void deleteAudience() throws Exception {
-        mockMvc.perform(delete(DEV_AUDIENCES_URL + "/{audienceId}", 1)
-                .contentType("application/json").param("audienceId", "1"))
+        mockMvc.perform(delete(API_AUDIENCES_URL + "/{audience-id}", 1)
+                .contentType("application/json").param("audience-id", "1"))
                 .andDo(print())
                 .andExpect(status().isOk());
     }

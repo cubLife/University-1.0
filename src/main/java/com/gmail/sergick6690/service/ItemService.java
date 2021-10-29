@@ -1,8 +1,15 @@
 package com.gmail.sergick6690.service;
 
+import com.gmail.sergick6690.Repository.AudienceRepository;
 import com.gmail.sergick6690.Repository.ItemRepository;
+import com.gmail.sergick6690.Repository.ScheduleRepository;
+import com.gmail.sergick6690.Repository.SubjectRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
+import com.gmail.sergick6690.modelsForms.ItemForm;
+import com.gmail.sergick6690.universityModels.Audience;
 import com.gmail.sergick6690.universityModels.Item;
+import com.gmail.sergick6690.universityModels.Schedule;
+import com.gmail.sergick6690.universityModels.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +23,18 @@ import static java.lang.String.format;
 @Service
 public class ItemService {
     private ItemRepository itemRepository;
+   private SubjectRepository subjectRepository;
+    private AudienceRepository audienceRepository;
+    private ScheduleRepository scheduleRepository;
     private static final Logger ERROR = LoggerFactory.getLogger("com.gmail.sergick6690.error");
     private static final Logger DEBUG = LoggerFactory.getLogger("com.gmail.sergick6690.debug");
 
     @Autowired
-    public ItemService(ItemRepository itemRepository) {
+    public ItemService(ItemRepository itemRepository, SubjectRepository subjectRepository, AudienceRepository audienceRepository,ScheduleRepository scheduleRepository) {
         this.itemRepository = itemRepository;
+        this.subjectRepository = subjectRepository;
+        this.audienceRepository = audienceRepository;
+        this.scheduleRepository = scheduleRepository;
     }
 
     public void add(Item item) throws ServiceException {
@@ -68,5 +81,15 @@ public class ItemService {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException("Can't remove item with id - " + id + e, e);
         }
+    }
+
+    public Item createNewItem(ItemForm itemForm) throws ServiceException {
+        Subject subject = subjectRepository.findById(itemForm.getSubjectId()).get();
+        Audience audience = audienceRepository.findById(itemForm.getAudienceId()).get();
+        Schedule schedule = scheduleRepository.findById(itemForm.getScheduleId()).get();
+        String day = itemForm.getDay();
+        int hour = itemForm.getHour();
+        int duration = itemForm.getDuration();
+        return new Item(subject, day, hour, audience, duration, schedule);
     }
 }

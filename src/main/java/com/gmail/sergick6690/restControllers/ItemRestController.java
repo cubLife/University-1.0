@@ -1,6 +1,5 @@
 package com.gmail.sergick6690.restControllers;
 
-import com.gmail.sergick6690.ModelsCreator;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.modelsForms.ItemForm;
 import com.gmail.sergick6690.service.ItemService;
@@ -12,40 +11,38 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "dev/items", produces = {"application/xml", "application/json"})
+@RequestMapping(value = "api/items", produces = {"application/xml", "application/json"})
 public class ItemRestController {
     private ItemService itemService;
-    private ModelsCreator modelsCreator;
 
     @Autowired
-    public ItemRestController(ItemService itemService, ModelsCreator modelsCreator) {
+    public ItemRestController(ItemService itemService) {
         this.itemService = itemService;
-        this.modelsCreator = modelsCreator;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Item add(@RequestBody ItemForm itemForm) throws ServiceException {
-        Item item = modelsCreator.createNewItem(itemForm);
+        Item item = itemService.createNewItem(itemForm);
         itemService.add(item);
         return item;
     }
 
-    @GetMapping
+    @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
-    public List<Item> showAllSubjects() throws ServiceException {
+    public List<Item> showAllItems() throws ServiceException {
         return itemService.findAll();
     }
 
-    @GetMapping("/{itemId}")
+    @GetMapping("/{item-id}")
     @ResponseStatus(HttpStatus.OK)
-    public Item showById(@PathVariable("itemId") int id) throws ServiceException {
+    public Item showById(@PathVariable("item-id") int id) throws ServiceException {
         return itemService.findById(id);
     }
 
-    @DeleteMapping("/{itemId}")
+    @DeleteMapping("/{item-id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteById(@PathVariable("itemId") int id) throws ServiceException {
+    public void deleteById(@PathVariable("item-id") int id) throws ServiceException {
         itemService.removeById(id);
     }
 }

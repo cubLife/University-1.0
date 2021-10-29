@@ -1,7 +1,9 @@
 package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.Repository.CathedraRepository;
+import com.gmail.sergick6690.Repository.FacultyRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
+import com.gmail.sergick6690.modelsForms.CathedraForm;
 import com.gmail.sergick6690.universityModels.Cathedra;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,12 +18,14 @@ import static java.lang.String.format;
 @Service
 public class CathedraService {
     private CathedraRepository cathedraRepository;
+    private FacultyRepository facultyRepository;
     private static final Logger ERROR = LoggerFactory.getLogger("com.gmail.sergick6690.error");
     private static final Logger DEBUG = LoggerFactory.getLogger("com.gmail.sergick6690.debug");
 
     @Autowired
-    public CathedraService(CathedraRepository cathedraRepository) {
+    public CathedraService(CathedraRepository cathedraRepository, FacultyRepository facultyRepository) {
         this.cathedraRepository = cathedraRepository;
+        this.facultyRepository=facultyRepository;
     }
 
     public void add(Cathedra cathedra) throws ServiceException {
@@ -68,5 +72,12 @@ public class CathedraService {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException("Cant remove cathedra with id - " + id + e, e);
         }
+    }
+
+    public Cathedra createNewCathedra(CathedraForm cathedraForm){
+        Cathedra cathedra = new Cathedra();
+        cathedra.setName(cathedraForm.getName());
+            cathedra.setFaculty(facultyRepository.findById(cathedraForm.getFacultyId()).get());
+        return cathedra;
     }
 }

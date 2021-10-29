@@ -1,6 +1,5 @@
 package com.gmail.sergick6690.controllers;
 
-import com.gmail.sergick6690.ModelsCreator;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.modelsForms.CathedraForm;
 import com.gmail.sergick6690.service.CathedraService;
@@ -18,12 +17,10 @@ import javax.validation.Valid;
 @RequestMapping("/cathedras")
 public class CathedraController {
     private CathedraService cathedraService;
-    private ModelsCreator modelsCreator;
 
     @Autowired
-    public CathedraController(CathedraService cathedraService, ModelsCreator modelsCreator) {
+    public CathedraController(CathedraService cathedraService) {
         this.cathedraService = cathedraService;
-        this.modelsCreator = modelsCreator;
     }
 
     @GetMapping()
@@ -56,7 +53,7 @@ public class CathedraController {
         if (bindingResult.hasErrors()) {
             return "cathedra/index";
         }
-        Cathedra cathedra = modelsCreator.createNewCathedra(cathedraForm);
+        Cathedra cathedra = cathedraService.createNewCathedra(cathedraForm);
         cathedraService.add(cathedra);
         attributes.addFlashAttribute("message", "Was added new cathedra - " + cathedra);
         return "redirect:/cathedras";

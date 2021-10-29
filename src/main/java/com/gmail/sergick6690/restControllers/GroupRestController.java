@@ -1,6 +1,5 @@
 package com.gmail.sergick6690.restControllers;
 
-import com.gmail.sergick6690.ModelsCreator;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.modelsForms.GroupForm;
 import com.gmail.sergick6690.service.GroupService;
@@ -11,45 +10,43 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "dev/groups", produces = {"application/xml", "application/json"})
+@RequestMapping(value = "api/groups", produces = {"application/xml", "application/json"})
 public class GroupRestController {
     private GroupService groupService;
-    private ModelsCreator modelsCreator;
 
-    public GroupRestController(GroupService groupService, ModelsCreator modelsCreator) {
+    public GroupRestController(GroupService groupService) {
         this.groupService = groupService;
-        this.modelsCreator = modelsCreator;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Group addGroup(@RequestBody GroupForm groupForm) throws ServiceException {
-        Group group = modelsCreator.createNewGroup(groupForm);
+        Group group = groupService.createNewGroup(groupForm);
         groupService.add(group);
         return group;
     }
 
-    @GetMapping
+    @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
     public List<Group> showAllGroups() throws ServiceException {
         return groupService.findAll();
     }
 
-    @GetMapping("/{groupId}")
+    @GetMapping("/{group-id}")
     @ResponseStatus(HttpStatus.OK)
-    public Group showById(@PathVariable int groupId) throws ServiceException {
+    public Group showById(@PathVariable("group-id") int groupId) throws ServiceException {
         return groupService.findById(groupId);
     }
 
-    @GetMapping("/related/{cathedraId}")
+    @GetMapping("/related/{cathedra-id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<Group> showGroupsRelatedToCathedra(@PathVariable int cathedraId) throws ServiceException {
+    public List<Group> showGroupsRelatedToCathedra(@PathVariable("cathedra-id") int cathedraId) throws ServiceException {
         return groupService.findAllGroupsRelatedToCathedra(cathedraId);
     }
 
-    @DeleteMapping("/{groupId}")
+    @DeleteMapping("/{group-id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteById(@PathVariable int groupId) throws ServiceException {
+    public void deleteById(@PathVariable("group-id") int groupId) throws ServiceException {
         groupService.removeById(groupId);
     }
 }

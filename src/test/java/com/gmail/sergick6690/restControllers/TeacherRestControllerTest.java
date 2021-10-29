@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -23,6 +24,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -34,6 +36,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 class TeacherRestControllerTest {
     private MockMvc mockMvc;
+    @MockBean
+    private TeacherService mockTeacherService;
     @Autowired
     private TeacherService teacherService;
     @Autowired
@@ -43,12 +47,13 @@ class TeacherRestControllerTest {
     @Autowired
     ObjectMapper objectMapper;
     private static final String TEST = "Test";
-    private static final String DEV_TEACHERS_URL = "/dev/teachers";
-    private static final String DEV_TEACHERS_ASSIGN_SCHEDULE_URL = "/dev/teachers/assign/schedule";
-    private static final String DEV_TEACHERS_REMOVE_SCHEDULE_URL = "/dev/teachers/remove/schedule";
-    private static final String DEV_TEACHERS_CHANGE_SCHEDULE_URL = "/dev/teachers/change/schedule";
-    private static final String TEACHER_ID = "teacherId";
-    private static final String SCHEDULE_ID = "scheduleId";
+    private static final String API_TEACHERS_URL = "/api/teachers";
+    private static final String API_TEACHERS_LIST_URL = "/api/teachers/list";
+    private static final String API_TEACHERS_ASSIGN_SCHEDULE_URL = "/api/teachers/assign/schedule";
+    private static final String API_TEACHERS_REMOVE_SCHEDULE_URL = "/api/teachers/remove/schedule";
+    private static final String API_TEACHERS_CHANGE_SCHEDULE_URL = "/api/teachers/change/schedule";
+    private static final String TEACHER_ID = "teacher-id";
+    private static final String SCHEDULE_ID = "schedule-id";
     private static final String VALUE = "1";
 
     @BeforeAll
@@ -59,7 +64,7 @@ class TeacherRestControllerTest {
     @Test
     void addTeacher() throws Exception {
         generateTestData();
-        mockMvc.perform(post(DEV_TEACHERS_URL)
+        mockMvc.perform(post(API_TEACHERS_URL)
                 .content(objectMapper.writeValueAsString(new TeacherForm(TEST, TEST, TEST, 1, TEST, 1)))
                 .contentType("application/json"))
                 .andExpect(status().isCreated())
@@ -68,7 +73,7 @@ class TeacherRestControllerTest {
 
     @Test
     void showAllTeachers() throws Exception {
-        mockMvc.perform(get(DEV_TEACHERS_URL)
+        mockMvc.perform(get(API_TEACHERS_LIST_URL)
                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -76,7 +81,7 @@ class TeacherRestControllerTest {
 
     @Test
     void showTeachersById() throws Exception {
-        mockMvc.perform(get(DEV_TEACHERS_URL).param("teacherId", "1")
+        mockMvc.perform(get(API_TEACHERS_URL).param(TEACHER_ID, VALUE)
                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -88,17 +93,16 @@ class TeacherRestControllerTest {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add(TEACHER_ID, VALUE);
         params.add(SCHEDULE_ID, VALUE);
-        mockMvc.perform(put(DEV_TEACHERS_ASSIGN_SCHEDULE_URL).params(params)
+        mockMvc.perform(put(API_TEACHERS_ASSIGN_SCHEDULE_URL).params(params)
                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andDo(print());
-
     }
 
     @Test
     void removeSchedule() throws Exception {
         generateTestData();
-        mockMvc.perform(put(DEV_TEACHERS_REMOVE_SCHEDULE_URL).param(TEACHER_ID, VALUE)
+        mockMvc.perform(put(API_TEACHERS_REMOVE_SCHEDULE_URL).param(TEACHER_ID, VALUE)
                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -110,7 +114,7 @@ class TeacherRestControllerTest {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add(TEACHER_ID, VALUE);
         params.add(SCHEDULE_ID, VALUE);
-        mockMvc.perform(put(DEV_TEACHERS_CHANGE_SCHEDULE_URL).params(params)
+        mockMvc.perform(put(API_TEACHERS_CHANGE_SCHEDULE_URL).params(params)
                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -118,8 +122,8 @@ class TeacherRestControllerTest {
 
     @Test
     void removeTeacher() throws Exception {
-        generateTestData();
-        mockMvc.perform(delete(DEV_TEACHERS_URL + "/{teacherId}", 1).param("teacherId", "1")
+        doNothing().when(mockTeacherService).add(new Teacher());
+        mockMvc.perform(delete(API_TEACHERS_URL + "/{teacherId}", 1).param(TEACHER_ID, VALUE)
                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andDo(print());

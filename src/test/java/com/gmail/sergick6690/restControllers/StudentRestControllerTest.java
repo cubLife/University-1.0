@@ -12,6 +12,7 @@ import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -23,6 +24,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
+import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -35,6 +37,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 class StudentRestControllerTest {
     private MockMvc mockMvc;
+    @MockBean
+    private StudentService mockStudentService;
     @Autowired
     private StudentService studentService;
     @Autowired
@@ -49,15 +53,16 @@ class StudentRestControllerTest {
     private WebApplicationContext webApplicationContext;
     @Autowired
     ObjectMapper objectMapper;
-    private static final String DEV_STUDENTS_URL = "/dev/students";
-    private static final String DEV_STUDENTS_ASSIGN_GROUP_URL = "/dev/students/assign/group";
-    private static final String DEV_STUDENTS_REMOVE_GROUP_URL = "/dev/students/remove/group";
-    private static final String DEV_STUDENTS_CHANGE_GROUP_URL = "/dev/students/change/group";
-    private static final String DEV_STUDENTS_ASSIGN_COURSE_URL = "/dev/students/assign/course";
-    private static final String DEV_STUDENTS_CHANGE_COURSE_URL = "/dev/students/change/course";
-    private static final String DEV_STUDENTS_REMOVE_COURSE_URL = "/dev/students/remove/course";
-    private static final String STUDENT_ID = "studentId";
-    private static final String GROUP_ID = "groupId";
+    private static final String API_STUDENTS_URL = "/api/students";
+    private static final String API_STUDENTS_LIST_URL = "/api/students/list";
+    private static final String API_STUDENTS_ASSIGN_GROUP_URL = "/api/students/assign/group";
+    private static final String API_STUDENTS_REMOVE_GROUP_URL = "/api/students/remove/group";
+    private static final String API_STUDENTS_CHANGE_GROUP_URL = "/api/students/change/group";
+    private static final String API_STUDENTS_ASSIGN_COURSE_URL = "/api/students/assign/course";
+    private static final String API_STUDENTS_CHANGE_COURSE_URL = "/api/students/change/course";
+    private static final String API_STUDENTS_REMOVE_COURSE_URL = "/api/students/remove/course";
+    private static final String STUDENT_ID = "student-id";
+    private static final String GROUP_ID = "group-id";
     private static final String COURSE = "course";
     private static final String VALUE = "1";
     private static final String TEST = "Test";
@@ -70,7 +75,7 @@ class StudentRestControllerTest {
     @Test
     void add() throws Exception {
         createTestData();
-        mockMvc.perform(post(DEV_STUDENTS_URL).
+        mockMvc.perform(post(API_STUDENTS_URL).
                 content(objectMapper.writeValueAsString(new StudentForm(TEST, TEST, TEST, 1, 1, 1))).
                 contentType("application/json")).
                 andExpect(status().isCreated()).
@@ -79,7 +84,7 @@ class StudentRestControllerTest {
 
     @Test
     void showAllStudents() throws Exception {
-        mockMvc.perform(get(DEV_STUDENTS_URL)
+        mockMvc.perform(get(API_STUDENTS_LIST_URL)
                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -87,7 +92,7 @@ class StudentRestControllerTest {
 
     @Test
     void showById() throws Exception {
-        mockMvc.perform(get(DEV_STUDENTS_URL).param("studentId", "1")
+        mockMvc.perform(get(API_STUDENTS_URL).param("studentI-id", "1")
                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -95,10 +100,9 @@ class StudentRestControllerTest {
 
     @Test
     void delete() throws Exception {
-        createTestData();
-        // studentService.add(Student.builder().firstName(TEST).lastNAme(TEST).sex(TEST).age(1).group(groupService.findById(1)).course(1).build());
-        mockMvc.perform(MockMvcRequestBuilders.delete(DEV_STUDENTS_URL + "/{studentId}", 1)
-                .contentType("application/json").param("studentId", "1"))
+        doNothing().when(mockStudentService).add(new Student());
+        mockMvc.perform(MockMvcRequestBuilders.delete(API_STUDENTS_URL + "/{student-id}", 1)
+                .contentType("application/json").param("student-id", "1"))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
@@ -109,7 +113,7 @@ class StudentRestControllerTest {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add(STUDENT_ID, VALUE);
         params.add(GROUP_ID, VALUE);
-        mockMvc.perform(put(DEV_STUDENTS_ASSIGN_GROUP_URL).params(params)
+        mockMvc.perform(put(API_STUDENTS_ASSIGN_GROUP_URL).params(params)
                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -118,7 +122,7 @@ class StudentRestControllerTest {
     @Test
     void removeFromGroup() throws Exception {
         createTestData();
-        mockMvc.perform(put(DEV_STUDENTS_REMOVE_GROUP_URL).param(STUDENT_ID, VALUE)
+        mockMvc.perform(put(API_STUDENTS_REMOVE_GROUP_URL).param(STUDENT_ID, VALUE)
                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -130,7 +134,7 @@ class StudentRestControllerTest {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add(STUDENT_ID, VALUE);
         params.add(GROUP_ID, VALUE);
-        mockMvc.perform(put(DEV_STUDENTS_CHANGE_GROUP_URL).params(params)
+        mockMvc.perform(put(API_STUDENTS_CHANGE_GROUP_URL).params(params)
                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -142,7 +146,7 @@ class StudentRestControllerTest {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add(STUDENT_ID, VALUE);
         params.add(COURSE, VALUE);
-        mockMvc.perform(put(DEV_STUDENTS_ASSIGN_COURSE_URL).params(params)
+        mockMvc.perform(put(API_STUDENTS_ASSIGN_COURSE_URL).params(params)
                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -151,7 +155,7 @@ class StudentRestControllerTest {
     @Test
     void removeFromCourse() throws Exception {
         createTestData();
-        mockMvc.perform(put(DEV_STUDENTS_REMOVE_COURSE_URL).param(STUDENT_ID, VALUE)
+        mockMvc.perform(put(API_STUDENTS_REMOVE_COURSE_URL).param(STUDENT_ID, VALUE)
                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -164,7 +168,7 @@ class StudentRestControllerTest {
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add(STUDENT_ID, VALUE);
         params.add(COURSE, VALUE);
-        mockMvc.perform(put(DEV_STUDENTS_CHANGE_COURSE_URL).params(params)
+        mockMvc.perform(put(API_STUDENTS_CHANGE_COURSE_URL).params(params)
                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andDo(print());

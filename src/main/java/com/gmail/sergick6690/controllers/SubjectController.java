@@ -1,6 +1,5 @@
 package com.gmail.sergick6690.controllers;
 
-import com.gmail.sergick6690.ModelsCreator;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.modelsForms.SubjectForm;
 import com.gmail.sergick6690.service.SubjectService;
@@ -17,12 +16,10 @@ import javax.validation.Valid;
 @RequestMapping("/subjects")
 public class SubjectController {
     private SubjectService subjectService;
-    private ModelsCreator modelsCreator;
 
     @Autowired
-    public SubjectController(SubjectService subjectService, ModelsCreator modelsCreator) {
+    public SubjectController(SubjectService subjectService) {
         this.subjectService = subjectService;
-        this.modelsCreator = modelsCreator;
     }
 
     @GetMapping()
@@ -58,7 +55,7 @@ public class SubjectController {
 
     @PostMapping("/add")
     public String add(@ModelAttribute @Valid SubjectForm subjectForm, RedirectAttributes attributes) throws ServiceException {
-        Subject subject = modelsCreator.createNewSubject(subjectForm);
+        Subject subject = subjectService.createNewSubject(subjectForm);
         subjectService.add(subject);
         attributes.addFlashAttribute("message", "Was added new subject - " + subject);
         return "redirect:/subjects";

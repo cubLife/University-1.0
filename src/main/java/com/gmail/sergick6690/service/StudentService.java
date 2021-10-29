@@ -2,6 +2,7 @@ package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.Repository.StudentRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
+import com.gmail.sergick6690.modelsForms.StudentForm;
 import com.gmail.sergick6690.universityModels.Group;
 import com.gmail.sergick6690.universityModels.Student;
 import org.slf4j.Logger;
@@ -148,5 +149,11 @@ public class StudentService {
             ERROR.error("Can't change course for student with id - " + studentId, e);
             throw new ServiceException("Can't change course for student with id - " + studentId + e, e);
         }
+    }
+
+    public Student createNewStudent(StudentForm studentForm) throws ServiceException {
+        Group group = groupService.findById(studentForm.getGroupId());
+        return Student.builder().firstName(studentForm.getFirstName()).lastNAme(studentForm.getLastName())
+                .sex(studentForm.getSex()).age(studentForm.getAge()).course(studentForm.getCourse()).group(group).build();
     }
 }

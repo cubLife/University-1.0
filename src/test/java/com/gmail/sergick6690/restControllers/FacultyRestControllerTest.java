@@ -34,7 +34,8 @@ class FacultyRestControllerTest {
     private WebApplicationContext webApplicationContext;
     @Autowired
     ObjectMapper objectMapper;
-    private static final String DEV_FACULTIES_URL = "/dev/faculties";
+    private static final String API_FACULTIES_URL = "/api/faculties";
+    private static final String API_FACULTIES_LIST_URL = "/api/faculties/list";
 
     @BeforeAll
     public void setup() {
@@ -43,7 +44,7 @@ class FacultyRestControllerTest {
 
     @Test
     void add() throws Exception {
-        mockMvc.perform(post(DEV_FACULTIES_URL).
+        mockMvc.perform(post(API_FACULTIES_URL).
                 content(objectMapper.writeValueAsString(new Faculty())).
                 contentType("application/json")).
                 andExpect(status().isCreated()).
@@ -52,7 +53,7 @@ class FacultyRestControllerTest {
 
     @Test
     void showAllFaculties() throws Exception {
-        mockMvc.perform(get(DEV_FACULTIES_URL)
+        mockMvc.perform(get(API_FACULTIES_LIST_URL)
                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -60,17 +61,17 @@ class FacultyRestControllerTest {
 
     @Test
     void showById() throws Exception {
-        mockMvc.perform(get(DEV_FACULTIES_URL)
-                .contentType("application/json").param("facultyId", "1"))
+        mockMvc.perform(get(API_FACULTIES_URL)
+                .contentType("application/json").param("faculty-id", "1"))
                 .andExpect(status().isOk())
                 .andDo(print());
-
     }
 
     @Test
     void deleteFaculty() throws Exception {
-        mockMvc.perform(delete(DEV_FACULTIES_URL + "/{facultyId}", 1)
-                .contentType("application/json").param("facultyId", "1"))
+        facultyService.add(new Faculty("Test"));
+        mockMvc.perform(delete(API_FACULTIES_URL + "/{faculty-id}", 1)
+                .contentType("application/json").param("faculty-id", "1"))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

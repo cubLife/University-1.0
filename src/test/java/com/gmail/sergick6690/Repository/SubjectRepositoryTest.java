@@ -39,7 +39,7 @@ class SubjectRepositoryTest {
     @Test
     void shouldAddSubject() {
         generateTestData();
-        Subject expected = new Subject(1, TEST, teacherRepository.findById(1).get(), TEST+TEST);
+        Subject expected = new Subject(1, TEST, teacherRepository.findById(1).get(), TEST + TEST);
         Subject actual = subjectRepository.findAll().get(0);
         assertEquals(expected, actual);
     }
@@ -47,7 +47,7 @@ class SubjectRepositoryTest {
     @Test
     void findSubjectById() throws NotImplementedException {
         generateTestData();
-        Subject expected = new Subject(4, TEST, teacherRepository.findById(1).get(), TEST+TEST);
+        Subject expected = new Subject(4, TEST, teacherRepository.findById(1).get(), TEST + TEST);
         Subject actual = subjectRepository.findById(4).get();
         assertEquals(expected, actual);
     }
@@ -63,11 +63,9 @@ class SubjectRepositoryTest {
     @Test
     void removeSubjectById() {
         generateTestData();
-        Subject subject = subjectRepository.findById(1).get();
-        subjectRepository.delete(subject);
+        subjectRepository.deleteById(1);
         int expected = 4;
         int actual = subjectRepository.findAll().size();
-        System.out.println(actual);
         assertEquals(expected, actual);
     }
 
@@ -90,7 +88,7 @@ class SubjectRepositoryTest {
         audienceRepository.save(audience);
         audienceRepository.save(audience1);
         for (int i = 0; i < 5; i++) {
-            subjectRepository.save(new Subject(TEST, teacherRepository.findById(1).get(), TEST+TEST));
+            subjectRepository.save(new Subject(TEST, teacherRepository.findById(1).get(), TEST + TEST));
             itemRepository.save(new Item(subjectRepository.findById(1).get(), TEST, 9, audienceRepository.findById(1).get(), 1, scheduleRepository.findById(1).get()));
             itemRepository.save(new Item(subjectRepository.findById(1).get(), TEST, 9, audienceRepository.findById(2).get(), 1, scheduleRepository.findById(1).get()));
         }

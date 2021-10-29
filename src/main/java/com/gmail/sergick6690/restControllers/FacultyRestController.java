@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "dev/faculties", produces = {"application/json", "application/xml"})
+@RequestMapping(value = "api/faculties", produces = {"application/json", "application/xml"})
 public class FacultyRestController {
     private FacultyService facultyService;
 
@@ -26,21 +26,21 @@ public class FacultyRestController {
         return faculty;
     }
 
-    @GetMapping()
+    @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
     public List<Faculty> showAllFaculties() throws ServiceException {
         return facultyService.findAll();
     }
 
-    @GetMapping("/{facultyId}")
+    @GetMapping("/{faculty-id}")
     @ResponseStatus(HttpStatus.OK)
-    public Faculty showById(@PathVariable int facultyId) throws ServiceException {
+    public Faculty showById(@PathVariable("faculty-id") int facultyId) throws ServiceException {
         return facultyService.findById(facultyId);
     }
 
-    @DeleteMapping("/{facultyId}")
+    @DeleteMapping("/{faculty-id}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteFaculty(@PathVariable int facultyId) throws ServiceException {
+    public void deleteFaculty(@PathVariable("faculty-id") int facultyId) throws ServiceException {
         facultyService.removeById(facultyId);
     }
 }

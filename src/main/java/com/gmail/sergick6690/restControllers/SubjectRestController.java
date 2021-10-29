@@ -1,6 +1,5 @@
 package com.gmail.sergick6690.restControllers;
 
-import com.gmail.sergick6690.ModelsCreator;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.modelsForms.SubjectForm;
 import com.gmail.sergick6690.service.SubjectService;
@@ -12,61 +11,60 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "dev/subjects", produces = {"application/xml", "application/json"})
+@RequestMapping(value = "api/subjects", produces = {"application/xml", "application/json"})
 public class SubjectRestController {
     private SubjectService subjectService;
-    private ModelsCreator modelsCreator;
 
     @Autowired
-    public SubjectRestController(SubjectService subjectService, ModelsCreator modelsCreator) {
+    public SubjectRestController(SubjectService subjectService) {
         this.subjectService = subjectService;
-        this.modelsCreator = modelsCreator;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Subject addSubject(@RequestBody SubjectForm subjectForm) throws ServiceException {
-        Subject subject = modelsCreator.createNewSubject(subjectForm);
+        Subject subject = subjectService.createNewSubject(subjectForm);
+        subjectService.add(subject);
         return subject;
     }
 
-    @GetMapping
+    @GetMapping("/list")
     @ResponseStatus(HttpStatus.OK)
     public List<Subject> showAllSubjects() throws ServiceException {
         return subjectService.findAll();
     }
 
-    @GetMapping("/{subjectId}")
+    @GetMapping("/{subject-id}")
     @ResponseStatus(HttpStatus.OK)
-    public Subject showSubjectById(@PathVariable int subjectId) throws ServiceException {
+    public Subject showSubjectById(@PathVariable("subject-id") int subjectId) throws ServiceException {
         return subjectService.findById(subjectId);
     }
 
     @PutMapping("/assign/teacher")
     @ResponseStatus(HttpStatus.OK)
-    public void assignTeacher(@RequestParam("subjectId") int subjectId, @RequestParam("teacherId") int teacherId) throws ServiceException {
+    public void assignTeacher(@RequestParam("subject-id") int subjectId, @RequestParam("teacher-id") int teacherId) throws ServiceException {
         subjectService.assignTeacher(subjectId, teacherId);
     }
 
     @PutMapping("/remove/teacher")
-    public void removeTeacher(@RequestParam("subjectId") int subjectId) throws ServiceException {
+    public void removeTeacher(@RequestParam("subject-id") int subjectId) throws ServiceException {
         subjectService.removeTeacher(subjectId);
     }
 
     @PutMapping("/change/teacher")
     @ResponseStatus(HttpStatus.OK)
-    public void changeTeacher(@RequestParam("subjectId") int subjectId, @RequestParam("teacherId") int teacherId) throws ServiceException {
+    public void changeTeacher(@RequestParam("subject-id") int subjectId, @RequestParam("teacher-id") int teacherId) throws ServiceException {
         subjectService.changeTeacher(subjectId, teacherId);
     }
 
-    @GetMapping("/related/{audienceId}")
-    public List<Subject> showSubjectsRelatedToAudience(@PathVariable("audienceId") int audienceId) throws ServiceException {
+    @GetMapping("/related/{audience-id}")
+    public List<Subject> showSubjectsRelatedToAudience(@PathVariable("audience-id") int audienceId) throws ServiceException {
         return subjectService.findAllSubjectRelatedToAudience(audienceId);
     }
 
-    @DeleteMapping("/{subjectId}")
+    @DeleteMapping("/{subject-id}")
     @ResponseStatus(HttpStatus.OK)
-    public void removeSubject(@PathVariable int subjectId) throws ServiceException {
+    public void removeSubject(@PathVariable("subject-id") int subjectId) throws ServiceException {
         subjectService.removeById(subjectId);
     }
 }

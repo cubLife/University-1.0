@@ -48,7 +48,8 @@ class ItemRestControllerTest {
     private WebApplicationContext webApplicationContext;
     @Autowired
     ObjectMapper objectMapper;
-    private static final String DEV_ITEMS_URL = "/dev/items";
+    private static final String API_ITEMS_URL = "/api/items";
+    private static final String API_ITEMS_LIST_URL = "/api/items/list";
     private static final String TEST = "Test";
 
     @BeforeAll
@@ -59,7 +60,7 @@ class ItemRestControllerTest {
     @Test
     void add() throws Exception {
         createTestData();
-        mockMvc.perform(post(DEV_ITEMS_URL).
+        mockMvc.perform(post(API_ITEMS_URL).
                 content(objectMapper.writeValueAsString(new ItemForm(1, "monday", 13, 1, 2, 1))).
                 contentType("application/json")).
                 andExpect(status().isCreated()).
@@ -67,8 +68,8 @@ class ItemRestControllerTest {
     }
 
     @Test
-    void showAllSubjects() throws Exception {
-        mockMvc.perform(get(DEV_ITEMS_URL)
+    void showAllItems() throws Exception {
+        mockMvc.perform(get(API_ITEMS_LIST_URL)
                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -76,16 +77,16 @@ class ItemRestControllerTest {
 
     @Test
     void showById() throws Exception {
-        mockMvc.perform(get(DEV_ITEMS_URL)
-                .contentType("application/json").param("itemId", "1"))
+        mockMvc.perform(get(API_ITEMS_URL)
+                .contentType("application/json").param("item-id", "1"))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
 
     @Test
     void deleteById() throws Exception {
-        mockMvc.perform(delete(DEV_ITEMS_URL + "/{itemId}", 1)
-                .contentType("application/json").param("cathedraId", "1"))
+        mockMvc.perform(delete(API_ITEMS_URL + "/{item-id}", 1)
+                .contentType("application/json").param("item-id", "1"))
                 .andExpect(status().isOk())
                 .andDo(print());
     }

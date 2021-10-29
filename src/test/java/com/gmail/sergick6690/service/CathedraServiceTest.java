@@ -2,6 +2,7 @@ package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.Repository.CathedraRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
+import com.gmail.sergick6690.modelsForms.CathedraForm;
 import com.gmail.sergick6690.universityModels.Cathedra;
 import com.gmail.sergick6690.universityModels.Faculty;
 import com.gmail.sergick6690.universityModels.Group;
@@ -13,8 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -27,10 +27,11 @@ class CathedraServiceTest {
     @InjectMocks
     private CathedraService service;
     private static final int ID = 1;
+    private static final String TEST = "Test";
 
     @Test
     void shouldInvokeAdd() throws ServiceException {
-        Cathedra cathedra = new Cathedra(ID, "Test", new Faculty(), new ArrayList<Group>());
+        Cathedra cathedra = new Cathedra(ID, TEST, new Faculty(), new ArrayList<Group>());
         service.add(cathedra);
         verify(repository).save(cathedra);
     }
@@ -52,6 +53,15 @@ class CathedraServiceTest {
         doNothing().when(mockCathedraService).removeById(anyInt());
         mockCathedraService.removeById(ID);
         verify(mockCathedraService).removeById(anyInt());
+    }
+
+    @Test
+    void shouldCreateNewCathedra() throws ServiceException {
+        CathedraForm cathedraForm = new CathedraForm(TEST, 1);
+        when(mockCathedraService.createNewCathedra(cathedraForm)).thenReturn(new Cathedra(ID, TEST, new Faculty(ID, TEST), null));
+        Cathedra expected = new Cathedra(ID, TEST, new Faculty(ID, TEST), null);
+        Cathedra actual = mockCathedraService.createNewCathedra(cathedraForm);
+        assertEquals(expected, actual);
     }
 
     @Test

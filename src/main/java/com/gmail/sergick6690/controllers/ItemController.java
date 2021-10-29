@@ -1,6 +1,5 @@
 package com.gmail.sergick6690.controllers;
 
-import com.gmail.sergick6690.ModelsCreator;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.modelsForms.ItemForm;
 import com.gmail.sergick6690.service.ItemService;
@@ -18,12 +17,10 @@ import javax.validation.Valid;
 @RequestMapping("/items")
 public class ItemController {
     private ItemService itemService;
-    private ModelsCreator modelsCreator;
 
     @Autowired
-    public ItemController(ItemService itemService, ModelsCreator modelsCreator) {
+    public ItemController(ItemService itemService) {
         this.itemService = itemService;
-        this.modelsCreator = modelsCreator;
     }
 
     @GetMapping()
@@ -55,7 +52,7 @@ public class ItemController {
         if (bindingResult.hasErrors()) {
             return "items/index";
         }
-        Item item = modelsCreator.createNewItem(itemForm);
+        Item item = itemService.createNewItem(itemForm);
         itemService.add(item);
         attributes.addFlashAttribute("message", "Was added new item - " + item);
         return "redirect:/items";

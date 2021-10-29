@@ -1,6 +1,5 @@
 package com.gmail.sergick6690.controllers;
 
-import com.gmail.sergick6690.ModelsCreator;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.modelsForms.StudentForm;
 import com.gmail.sergick6690.service.StudentService;
@@ -17,11 +16,9 @@ import javax.validation.Valid;
 @RequestMapping("/students")
 public class StudentController {
     private StudentService studentService;
-    private ModelsCreator modelsCreator;
 
-    public StudentController(StudentService studentService, ModelsCreator modelsCreator) {
+    public StudentController(StudentService studentService) {
         this.studentService = studentService;
-        this.modelsCreator = modelsCreator;
     }
 
     @GetMapping()
@@ -53,7 +50,7 @@ public class StudentController {
         if (bindingResult.hasErrors()) {
             return "students/index";
         }
-        Student student = modelsCreator.createNewStudent(studentForm);
+        Student student = studentService.createNewStudent(studentForm);
         studentService.add(student);
         attributes.addFlashAttribute("message", "Was added new student - " + student);
         return "redirect:/students";

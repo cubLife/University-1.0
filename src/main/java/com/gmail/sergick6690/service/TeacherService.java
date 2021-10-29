@@ -2,6 +2,7 @@ package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.Repository.TeacherRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
+import com.gmail.sergick6690.modelsForms.TeacherForm;
 import com.gmail.sergick6690.universityModels.Schedule;
 import com.gmail.sergick6690.universityModels.Teacher;
 import org.slf4j.Logger;
@@ -119,5 +120,11 @@ public class TeacherService {
             ERROR.error("Can't change schedule for teacher with id - " + teacherId, e);
             throw new ServiceException("Can't change schedule for teacher with id - " + teacherId + e, e);
         }
+    }
+
+    public Teacher createNewTeacher(TeacherForm teacherForm) throws ServiceException {
+        Schedule schedule = scheduleService.findById(teacherForm.getScheduleId());
+        return Teacher.builder().firstName(teacherForm.getFirstName()).lastName(teacherForm.getLastName())
+                .age(teacherForm.getAge()).sex(teacherForm.getSex()).degree(teacherForm.getDegree()).schedule(schedule).build();
     }
 }

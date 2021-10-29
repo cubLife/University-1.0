@@ -1,6 +1,5 @@
 package com.gmail.sergick6690.controllers;
 
-import com.gmail.sergick6690.ModelsCreator;
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.modelsForms.GroupForm;
 import com.gmail.sergick6690.service.GroupService;
@@ -18,12 +17,10 @@ import javax.validation.Valid;
 @RequestMapping("/groups")
 public class GroupController {
     private GroupService service;
-    private ModelsCreator modelsCreator;
 
     @Autowired
-    public GroupController(GroupService service, ModelsCreator modelsCreator) {
+    public GroupController(GroupService service) {
         this.service = service;
-        this.modelsCreator = modelsCreator;
     }
 
     @GetMapping()
@@ -61,7 +58,7 @@ public class GroupController {
         if (bindingResult.hasErrors()) {
             return "groups/index";
         }
-        Group group = modelsCreator.createNewGroup(groupForm);
+        Group group = service.createNewGroup(groupForm);
         service.add(group);
         attributes.addFlashAttribute("message", "Was added new group - " + group);
         return "redirect:/groups";

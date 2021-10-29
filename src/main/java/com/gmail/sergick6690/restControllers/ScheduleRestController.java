@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "dev/schedules", produces = {"application/xml", "application/json"})
+@RequestMapping(value = "api/schedules", produces = {"application/xml", "application/json"})
 public class ScheduleRestController {
     private ScheduleService scheduleService;
 
@@ -24,18 +24,18 @@ public class ScheduleRestController {
         return schedule;
     }
 
-    @GetMapping()
+    @GetMapping("/list")
     public List<Schedule> showAllSchedules() throws ServiceException {
         return scheduleService.findAll();
     }
 
-    @GetMapping("/{scheduleId}")
-    public Schedule showScheduleById(@PathVariable int scheduleId) throws ServiceException {
+    @GetMapping("/{schedule-id}")
+    public Schedule showScheduleById(@PathVariable("schedule-id") int scheduleId) throws ServiceException {
         return scheduleService.findById(scheduleId);
     }
 
-    @DeleteMapping("/{scheduleId}")
-    public void deleteScheduleById(@PathVariable int scheduleId) throws ServiceException {
+    @DeleteMapping("/{schedule-id}")
+    public void deleteScheduleById(@PathVariable("schedule-id") int scheduleId) throws ServiceException {
         scheduleService.removeById(scheduleId);
     }
 }

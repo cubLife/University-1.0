@@ -5,7 +5,6 @@ import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.modelsForms.GroupForm;
 import com.gmail.sergick6690.service.CathedraService;
 import com.gmail.sergick6690.service.FacultyService;
-import com.gmail.sergick6690.service.GroupService;
 import com.gmail.sergick6690.service.ScheduleService;
 import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.universityModels.Cathedra;
@@ -16,7 +15,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -36,8 +34,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 class GroupRestControllerTest {
     private MockMvc mockMvc;
-    @MockBean
-    private GroupService groupService;
     @Autowired
     CathedraService cathedraService;
     @Autowired
@@ -49,8 +45,9 @@ class GroupRestControllerTest {
     @Autowired
     ObjectMapper objectMapper;
     private static final String TEST = "TEST";
-    private static final String DEV_GROUPS_URL = "/dev/groups";
-    private static final String DEV_GROUPS_RELATED_URL = "/dev/groups/related";
+    private static final String API_GROUPS_URL = "/api/groups";
+    private static final String API_GROUPS_RELATED_URL = "/api/groups/related";
+    private static final String API_GROUPS_LIST_URL = "/api/groups/list";
 
     @BeforeAll
     public void setup() {
@@ -60,8 +57,8 @@ class GroupRestControllerTest {
     @Test
     void addGroup() throws Exception {
         createTestData();
-        mockMvc.perform(post(DEV_GROUPS_URL).
-                content(objectMapper.writeValueAsString(new GroupForm("Te_st", 1, 1))).
+        mockMvc.perform(post(API_GROUPS_URL).
+                content(objectMapper.writeValueAsString(new GroupForm(TEST + 1, 1, 1))).
                 contentType("application/json")).
                 andExpect(status().isCreated()).
                 andDo(print());
@@ -69,7 +66,7 @@ class GroupRestControllerTest {
 
     @Test
     void showAllGroups() throws Exception {
-        mockMvc.perform(get(DEV_GROUPS_URL)
+        mockMvc.perform(get(API_GROUPS_LIST_URL)
                 .contentType("application/json"))
                 .andExpect(status().isOk())
                 .andDo(print());
@@ -77,26 +74,25 @@ class GroupRestControllerTest {
 
     @Test
     void showById() throws Exception {
-        mockMvc.perform(get(DEV_GROUPS_URL)
-                .contentType("application/json").param("groupId", "1"))
+        mockMvc.perform(get(API_GROUPS_URL)
+                .contentType("application/json").param("group-id", "1"))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
 
     @Test
     void showGroupsRelatedToCathedra() throws Exception {
-        mockMvc.perform(get(DEV_GROUPS_RELATED_URL + "/{cathedraId}", 1)
+        mockMvc.perform(get(API_GROUPS_RELATED_URL + "/{cathedra-id}", 1)
                 .contentType("application/json")
-                .param("cathedraId", "1"))
+                .param("cathedra-id", "1"))
                 .andExpect(status().isOk())
                 .andDo(print());
-
     }
 
     @Test
     void deleteById() throws Exception {
-        mockMvc.perform(delete(DEV_GROUPS_URL + "/{groupId}", 1)
-                .contentType("application/json").param("groupId", "1"))
+        mockMvc.perform(delete(API_GROUPS_URL + "/{group-id}", 1)
+                .contentType("application/json").param("group-id", "1"))
                 .andExpect(status().isOk())
                 .andDo(print());
     }
