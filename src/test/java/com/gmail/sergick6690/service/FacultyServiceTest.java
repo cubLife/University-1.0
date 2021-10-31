@@ -2,7 +2,7 @@ package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.Repository.FacultyRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.university.Faculty;
+import com.gmail.sergick6690.universityModels.Faculty;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -28,7 +28,6 @@ class FacultyServiceTest {
         service.add(new Faculty());
         verify(mockRepository).save(new Faculty());
     }
-
 
     @Test
     void shouldInvokeFindById() throws ServiceException {

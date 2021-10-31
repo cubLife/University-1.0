@@ -2,8 +2,8 @@ package com.gmail.sergick6690.controllers;
 
 import com.gmail.sergick6690.service.SubjectService;
 import com.gmail.sergick6690.spring.SpringConfig;
-import com.gmail.sergick6690.university.Subject;
-import com.gmail.sergick6690.university.Teacher;
+import com.gmail.sergick6690.universityModels.Subject;
+import com.gmail.sergick6690.universityModels.Teacher;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -119,7 +119,6 @@ class SubjectControllerTest {
                 .andExpect(model().attribute("number", 0))
                 .andExpect(view().name(SUBJECTS_RELATED_VIEW));
     }
-
 
     @Test
     void add() throws Exception {

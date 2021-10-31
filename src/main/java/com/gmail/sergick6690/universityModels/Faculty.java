@@ -1,4 +1,9 @@
-package com.gmail.sergick6690.university;
+package com.gmail.sergick6690.universityModels;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -9,6 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
+@JacksonXmlRootElement
 public class Faculty {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,6 +24,8 @@ public class Faculty {
     private String name;
     @OneToMany(mappedBy = "faculty", cascade = CascadeType.ALL)
     @NotNull
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonManagedReference
     private List<Cathedra> cathedras = new ArrayList<>();
 
     public Faculty() {
@@ -31,6 +39,10 @@ public class Faculty {
 
     public Faculty(int id, String name) {
         this.id = id;
+        this.name = name;
+    }
+
+    public Faculty(String name) {
         this.name = name;
     }
 

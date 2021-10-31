@@ -2,7 +2,9 @@ package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.Repository.SubjectRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.university.Subject;
+import com.gmail.sergick6690.modelsForms.SubjectForm;
+import com.gmail.sergick6690.universityModels.Subject;
+import com.gmail.sergick6690.universityModels.Teacher;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,8 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -23,7 +24,8 @@ class SubjectServiceTest {
     private SubjectService mockSubjectService;
     @InjectMocks
     private SubjectService service;
-    private static final int ID = 1;
+    private static final int VALUE = 1;
+    private static final String TEST = "Test";
 
     @Test
     void shouldInvokeAdd() throws ServiceException {
@@ -50,11 +52,20 @@ class SubjectServiceTest {
         verify(mockSubjectService).removeById(anyInt());
     }
 
+    @Test
+    void shouldCreateNewSubject() throws ServiceException {
+        SubjectForm subjectForm = new SubjectForm(TEST, VALUE, TEST);
+        when(mockSubjectService.createNewSubject(subjectForm)).thenReturn(new Subject(1, TEST, new Teacher(), TEST));
+        Subject expected = new Subject(1, TEST, new Teacher(), TEST);
+        Subject actual = mockSubjectService.createNewSubject(subjectForm);
+        assertEquals(expected, actual);
+    }
+
     @SneakyThrows
     @Test
     void shouldInvokeFindAllSubjectRelatedToAudience() {
-        service.findAllSubjectRelatedToAudience(ID);
-        verify(subjectRepository).findAllSubjectRelatedToAudience(ID);
+        service.findAllSubjectRelatedToAudience(VALUE);
+        verify(subjectRepository).findAllSubjectRelatedToAudience(VALUE);
     }
 
     @Test
@@ -105,5 +116,4 @@ class SubjectServiceTest {
             mockSubjectService.findAllSubjectRelatedToAudience(anyInt());
         });
     }
-
 }

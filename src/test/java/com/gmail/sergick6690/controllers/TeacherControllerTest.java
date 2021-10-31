@@ -2,8 +2,8 @@ package com.gmail.sergick6690.controllers;
 
 import com.gmail.sergick6690.service.TeacherService;
 import com.gmail.sergick6690.spring.SpringConfig;
-import com.gmail.sergick6690.university.Schedule;
-import com.gmail.sergick6690.university.Teacher;
+import com.gmail.sergick6690.universityModels.Schedule;
+import com.gmail.sergick6690.universityModels.Teacher;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;

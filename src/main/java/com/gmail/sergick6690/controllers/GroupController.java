@@ -2,10 +2,8 @@ package com.gmail.sergick6690.controllers;
 
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.modelsForms.GroupForm;
-import com.gmail.sergick6690.service.CathedraService;
 import com.gmail.sergick6690.service.GroupService;
-import com.gmail.sergick6690.service.ScheduleService;
-import com.gmail.sergick6690.university.Group;
+import com.gmail.sergick6690.universityModels.Group;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,14 +17,10 @@ import javax.validation.Valid;
 @RequestMapping("/groups")
 public class GroupController {
     private GroupService service;
-    private ScheduleService scheduleService;
-    private CathedraService cathedraService;
 
     @Autowired
-    public GroupController(GroupService service, ScheduleService scheduleService, CathedraService cathedraService) {
+    public GroupController(GroupService service) {
         this.service = service;
-        this.scheduleService = scheduleService;
-        this.cathedraService = cathedraService;
     }
 
     @GetMapping()
@@ -64,7 +58,8 @@ public class GroupController {
         if (bindingResult.hasErrors()) {
             return "groups/index";
         }
-        Group group = createNewGroup(groupForm);
+        Group group = service.createNewGroup(groupForm);
+        service.add(group);
         attributes.addFlashAttribute("message", "Was added new group - " + group);
         return "redirect:/groups";
     }
@@ -74,14 +69,6 @@ public class GroupController {
         service.removeById(id);
         attributes.addFlashAttribute("message", "Was deleted group with id - " + id);
         return "redirect:/groups";
-    }
-
-    private Group createNewGroup(GroupForm groupForm) throws ServiceException {
-        Group group = new Group();
-        group.setName(groupForm.getName());
-        group.setCathedra(cathedraService.findById(groupForm.getCathedraId()));
-        group.setSchedule(scheduleService.findById(groupForm.getScheduleId()));
-        return group;
     }
 }
 

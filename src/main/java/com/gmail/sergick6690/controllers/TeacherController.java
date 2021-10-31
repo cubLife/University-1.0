@@ -2,10 +2,8 @@ package com.gmail.sergick6690.controllers;
 
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.modelsForms.TeacherForm;
-import com.gmail.sergick6690.service.ScheduleService;
 import com.gmail.sergick6690.service.TeacherService;
-import com.gmail.sergick6690.university.Schedule;
-import com.gmail.sergick6690.university.Teacher;
+import com.gmail.sergick6690.universityModels.Teacher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,12 +17,10 @@ import javax.validation.Valid;
 @RequestMapping("/teachers")
 public class TeacherController {
     private TeacherService teacherService;
-    private ScheduleService scheduleService;
 
     @Autowired
-    public TeacherController(TeacherService teacherService, ScheduleService scheduleService) {
+    public TeacherController(TeacherService teacherService) {
         this.teacherService = teacherService;
-        this.scheduleService = scheduleService;
     }
 
     @GetMapping()
@@ -63,7 +59,7 @@ public class TeacherController {
         if (bindingResult.hasErrors()) {
             return "teacher/index";
         }
-        Teacher teacher = createNewTeacher(teacherForm);
+        Teacher teacher = teacherService.createNewTeacher(teacherForm);
         teacherService.add(teacher);
         attributes.addFlashAttribute("message", "Was added new teacher - " + teacher);
         return "redirect:/teachers";
@@ -95,11 +91,5 @@ public class TeacherController {
         teacherService.removeById(id);
         attributes.addFlashAttribute("message", "Was deleted student with id - " + id);
         return "redirect:/teachers";
-    }
-
-    private Teacher createNewTeacher(TeacherForm teacherForm) throws ServiceException {
-        Schedule schedule = scheduleService.findById(teacherForm.getScheduleId());
-        return Teacher.builder().firstName(teacherForm.getFirstName()).lastName(teacherForm.getLastName())
-                .age(teacherForm.getAge()).sex(teacherForm.getSex()).degree(teacherForm.getDegree()).schedule(schedule).build();
     }
 }

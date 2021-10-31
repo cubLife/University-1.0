@@ -1,4 +1,6 @@
-package com.gmail.sergick6690.university;
+package com.gmail.sergick6690.universityModels;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
 import javax.validation.constraints.Max;
@@ -16,6 +18,7 @@ public class Item {
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subjectId")
+    @JsonBackReference
     private Subject subject;
     @NotBlank(message = "Day can't be empty")
     private String day;
@@ -25,12 +28,14 @@ public class Item {
     private int hour;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "audienceId")
+    @JsonBackReference
     private Audience audience;
     @Min(1)
     @Max(2)
     private int duration;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "scheduleId")
+    @JsonBackReference
     private Schedule schedule;
 
     public Item() {
@@ -132,7 +137,6 @@ public class Item {
     public int hashCode() {
         return Objects.hash(getId(), getDay(), getHour(), getDuration());
     }
-
 
     @Override
     public String toString() {

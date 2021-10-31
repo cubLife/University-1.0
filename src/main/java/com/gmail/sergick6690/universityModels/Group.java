@@ -1,8 +1,14 @@
-package com.gmail.sergick6690.university;
+package com.gmail.sergick6690.universityModels;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -15,11 +21,16 @@ public class Group {
     @NotBlank(message = "Name can't be empty")
     @Size(min = 5, max = 5, message = "Name of group should be equal 5 characters")
     private String name;
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonManagedReference
     @OneToMany(mappedBy = "group", cascade = CascadeType.ALL)
-    private List<Student> students;
+    private List<Student> students = new ArrayList<>();
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "scheduleId")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonBackReference
     private Schedule schedule;
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cathedraId")
     private Cathedra cathedra;
@@ -92,7 +103,7 @@ public class Group {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getName(), getStudents(), getSchedule(), getCathedra());
+        return Objects.hash(getId(), getName());
     }
 
     @Override
@@ -100,8 +111,6 @@ public class Group {
         return "Group{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", schedule=" + schedule +
-                ", cathedra=" + cathedra +
                 '}';
     }
 }

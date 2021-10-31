@@ -1,8 +1,8 @@
 package com.gmail.sergick6690.Repository;
 
 import com.gmail.sergick6690.spring.SpringConfig;
-import com.gmail.sergick6690.university.Schedule;
-import com.gmail.sergick6690.university.Teacher;
+import com.gmail.sergick6690.universityModels.Schedule;
+import com.gmail.sergick6690.universityModels.Teacher;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -71,8 +71,8 @@ class TeacherRepositoryTest {
     }
 
     private void generateTestData() {
-        scheduleRepository.save(new Schedule(TEST+1));
-        scheduleRepository.save(new Schedule(TEST+2));
+        scheduleRepository.save(new Schedule(TEST + 1));
+        scheduleRepository.save(new Schedule(TEST + 2));
         for (int i = 0; i < 5; i++) {
             teacherRepository.save(Teacher.builder().firstName(TEST).lastName(TEST).sex(TEST).age(1).degree(TEST)
                     .subjects(null).build());

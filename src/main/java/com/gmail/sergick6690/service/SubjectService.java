@@ -2,8 +2,9 @@ package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.Repository.SubjectRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.university.Subject;
-import com.gmail.sergick6690.university.Teacher;
+import com.gmail.sergick6690.modelsForms.SubjectForm;
+import com.gmail.sergick6690.universityModels.Subject;
+import com.gmail.sergick6690.universityModels.Teacher;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,5 +121,14 @@ public class SubjectService {
             ERROR.error("Can't change teacher for subject with id - " + subjectId, e);
             throw new ServiceException("Can't change teacher for subject with id - " + subjectId + e, e);
         }
+    }
+
+    public Subject createNewSubject(SubjectForm subjectForm) throws ServiceException {
+        Teacher teacher = teacherService.findById(subjectForm.getTeacherId());
+        Subject subject = new Subject();
+        subject.setName(subjectForm.getName());
+        subject.setDescription(subjectForm.getDescription());
+        subject.setTeacher(teacher);
+        return subject;
     }
 }

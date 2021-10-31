@@ -1,8 +1,11 @@
 package com.gmail.sergick6690.service;
 
+import com.gmail.sergick6690.Repository.CathedraRepository;
 import com.gmail.sergick6690.Repository.GroupRepository;
+import com.gmail.sergick6690.Repository.ScheduleRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.university.Group;
+import com.gmail.sergick6690.modelsForms.GroupForm;
+import com.gmail.sergick6690.universityModels.Group;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +19,16 @@ import static java.lang.String.format;
 @Service
 public class GroupService {
     private GroupRepository groupRepository;
+    private ScheduleRepository scheduleRepository;
+    private CathedraRepository cathedraRepository;
     private static final Logger ERROR = LoggerFactory.getLogger("com.gmail.sergick6690.error");
     private static final Logger DEBUG = LoggerFactory.getLogger("com.gmail.sergick6690.debug");
 
     @Autowired
-    public GroupService(GroupRepository groupRepository) {
+    public GroupService(GroupRepository groupRepository, ScheduleRepository scheduleRepository, CathedraRepository cathedraRepository) {
         this.groupRepository = groupRepository;
+        this.scheduleRepository = scheduleRepository;
+        this.cathedraRepository = cathedraRepository;
     }
 
     public void add(Group group) throws ServiceException {
@@ -79,5 +86,13 @@ public class GroupService {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException("Cant find any groups related to cathedra with cathedta id - " + id + e, e);
         }
+    }
+
+    public Group createNewGroup(GroupForm groupForm){
+        Group group = new Group();
+        group.setName(groupForm.getName());
+        group.setSchedule(scheduleRepository.findById(groupForm.getScheduleId()).get());
+        group.setCathedra(cathedraRepository.findById(groupForm.getCathedraId()).get());
+        return group;
     }
 }

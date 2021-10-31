@@ -1,6 +1,6 @@
 package com.gmail.sergick6690.Repository;
 
-import com.gmail.sergick6690.university.Teacher;
+import com.gmail.sergick6690.universityModels.Teacher;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

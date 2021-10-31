@@ -2,14 +2,8 @@ package com.gmail.sergick6690.controllers;
 
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.modelsForms.ItemForm;
-import com.gmail.sergick6690.service.AudienceService;
 import com.gmail.sergick6690.service.ItemService;
-import com.gmail.sergick6690.service.ScheduleService;
-import com.gmail.sergick6690.service.SubjectService;
-import com.gmail.sergick6690.university.Audience;
-import com.gmail.sergick6690.university.Item;
-import com.gmail.sergick6690.university.Schedule;
-import com.gmail.sergick6690.university.Subject;
+import com.gmail.sergick6690.universityModels.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,16 +17,10 @@ import javax.validation.Valid;
 @RequestMapping("/items")
 public class ItemController {
     private ItemService itemService;
-    private AudienceService audienceService;
-    private SubjectService subjectService;
-    private ScheduleService scheduleService;
 
     @Autowired
-    public ItemController(ItemService itemService, AudienceService audienceService, SubjectService subjectService, ScheduleService scheduleService) {
+    public ItemController(ItemService itemService) {
         this.itemService = itemService;
-        this.audienceService = audienceService;
-        this.subjectService = subjectService;
-        this.scheduleService = scheduleService;
     }
 
     @GetMapping()
@@ -64,7 +52,7 @@ public class ItemController {
         if (bindingResult.hasErrors()) {
             return "items/index";
         }
-        Item item = createNewItem(itemForm);
+        Item item = itemService.createNewItem(itemForm);
         itemService.add(item);
         attributes.addFlashAttribute("message", "Was added new item - " + item);
         return "redirect:/items";
@@ -75,15 +63,5 @@ public class ItemController {
         itemService.removeById(id);
         attributes.addFlashAttribute("message", "Was deleted item with id - " + id);
         return "redirect:/items";
-    }
-
-    private Item createNewItem(ItemForm itemForm) throws ServiceException {
-        Subject subject = subjectService.findById(itemForm.getSubjectId());
-        Audience audience = audienceService.findById(itemForm.getAudienceId());
-        Schedule schedule = scheduleService.findById(itemForm.getScheduleId());
-        String day = itemForm.getDay();
-        int hour = itemForm.getHour();
-        int duration = itemForm.getDuration();
-        return new Item(subject, day, hour, audience, duration, schedule);
     }
 }

@@ -2,15 +2,16 @@ package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.Repository.StudentRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.university.Student;
+import com.gmail.sergick6690.modelsForms.StudentForm;
+import com.gmail.sergick6690.universityModels.Group;
+import com.gmail.sergick6690.universityModels.Student;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -24,6 +25,8 @@ class StudentServiceTest {
     private StudentService mockStudentService;
     @InjectMocks
     private StudentService service;
+    private static final String TEST = "Test";
+    private  static final int VALUE = 1;
 
     @Test
     void shouldInvokeAdd() throws ServiceException {
@@ -55,6 +58,15 @@ class StudentServiceTest {
     void shouldAssignCourse() throws ServiceException {
         mockStudentService.assignCourse(anyInt(), anyInt());
         verify(mockStudentService).assignCourse(anyInt(), anyInt());
+    }
+
+    @Test
+    void shouldCreateNewStudent() throws ServiceException {
+        StudentForm studentForm = new StudentForm(TEST, TEST, TEST, VALUE, VALUE, VALUE);
+        when(mockStudentService.createNewStudent(studentForm)).thenReturn(Student.builder().id(VALUE).firstName(TEST).lastNAme(TEST).sex(TEST).age(VALUE).course(VALUE).group(new Group()).build());
+        Student expected = Student.builder().id(VALUE).firstName(TEST).lastNAme(TEST).sex(TEST).age(VALUE).course(VALUE).group(new Group()).build();
+        Student actual = mockStudentService.createNewStudent(studentForm);
+        assertEquals(expected, actual);
     }
 
     @Test

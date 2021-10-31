@@ -2,7 +2,7 @@ package com.gmail.sergick6690.controllers;
 
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.service.ScheduleService;
-import com.gmail.sergick6690.university.Schedule;
+import com.gmail.sergick6690.universityModels.Schedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

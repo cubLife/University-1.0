@@ -2,10 +2,10 @@ package com.gmail.sergick6690.controllers;
 
 import com.gmail.sergick6690.service.ItemService;
 import com.gmail.sergick6690.spring.SpringConfig;
-import com.gmail.sergick6690.university.Audience;
-import com.gmail.sergick6690.university.Item;
-import com.gmail.sergick6690.university.Schedule;
-import com.gmail.sergick6690.university.Subject;
+import com.gmail.sergick6690.universityModels.Audience;
+import com.gmail.sergick6690.universityModels.Item;
+import com.gmail.sergick6690.universityModels.Schedule;
+import com.gmail.sergick6690.universityModels.Subject;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;

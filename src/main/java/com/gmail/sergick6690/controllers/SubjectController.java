@@ -1,10 +1,9 @@
 package com.gmail.sergick6690.controllers;
 
 import com.gmail.sergick6690.exceptions.ServiceException;
+import com.gmail.sergick6690.modelsForms.SubjectForm;
 import com.gmail.sergick6690.service.SubjectService;
-import com.gmail.sergick6690.service.TeacherService;
-import com.gmail.sergick6690.university.Subject;
-import com.gmail.sergick6690.university.Teacher;
+import com.gmail.sergick6690.universityModels.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,12 +16,10 @@ import javax.validation.Valid;
 @RequestMapping("/subjects")
 public class SubjectController {
     private SubjectService subjectService;
-    private TeacherService teacherService;
 
     @Autowired
-    public SubjectController(SubjectService subjectService, TeacherService teacherService) {
+    public SubjectController(SubjectService subjectService) {
         this.subjectService = subjectService;
-        this.teacherService = teacherService;
     }
 
     @GetMapping()
@@ -57,8 +54,9 @@ public class SubjectController {
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute @Valid Subject subject, @RequestParam("teacherId") int teacherId, RedirectAttributes attributes) throws ServiceException {
-        subjectService.add(setTeacher(subject, teacherId));
+    public String add(@ModelAttribute @Valid SubjectForm subjectForm, RedirectAttributes attributes) throws ServiceException {
+        Subject subject = subjectService.createNewSubject(subjectForm);
+        subjectService.add(subject);
         attributes.addFlashAttribute("message", "Was added new subject - " + subject);
         return "redirect:/subjects";
     }
@@ -89,11 +87,5 @@ public class SubjectController {
         subjectService.removeById(id);
         attributes.addFlashAttribute("message", "Was deleted subject with id - " + id);
         return "redirect:/subjects";
-    }
-
-    private Subject setTeacher(Subject subject, int teacherId) throws ServiceException {
-        Teacher teacher = teacherService.findById(teacherId);
-        subject.setTeacher(teacher);
-        return subject;
     }
 }

@@ -2,10 +2,8 @@ package com.gmail.sergick6690.controllers;
 
 import com.gmail.sergick6690.exceptions.ServiceException;
 import com.gmail.sergick6690.modelsForms.StudentForm;
-import com.gmail.sergick6690.service.GroupService;
 import com.gmail.sergick6690.service.StudentService;
-import com.gmail.sergick6690.university.Group;
-import com.gmail.sergick6690.university.Student;
+import com.gmail.sergick6690.universityModels.Student;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,11 +16,9 @@ import javax.validation.Valid;
 @RequestMapping("/students")
 public class StudentController {
     private StudentService studentService;
-    private GroupService groupService;
 
-    public StudentController(StudentService studentService, GroupService groupService) {
+    public StudentController(StudentService studentService) {
         this.studentService = studentService;
-        this.groupService = groupService;
     }
 
     @GetMapping()
@@ -54,7 +50,7 @@ public class StudentController {
         if (bindingResult.hasErrors()) {
             return "students/index";
         }
-        Student student = createNewStudent(studentForm);
+        Student student = studentService.createNewStudent(studentForm);
         studentService.add(student);
         attributes.addFlashAttribute("message", "Was added new student - " + student);
         return "redirect:/students";
@@ -107,11 +103,5 @@ public class StudentController {
         studentService.changeCourse(studentId, course);
         attributes.addFlashAttribute("message", "Was changed course on course - " + course + " for student with id - " + studentId);
         return "redirect:/students";
-    }
-
-    private Student createNewStudent(StudentForm studentForm) throws ServiceException {
-        Group group = groupService.findById(studentForm.getGroupId());
-        return Student.builder().firstName(studentForm.getFirstName()).lastNAme(studentForm.getLastName())
-                .sex(studentForm.getSex()).age(studentForm.getAge()).course(studentForm.getCourse()).group(group).build();
     }
 }

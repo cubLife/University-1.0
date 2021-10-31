@@ -2,15 +2,17 @@ package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.Repository.GroupRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
-import com.gmail.sergick6690.university.Group;
+import com.gmail.sergick6690.modelsForms.GroupForm;
+import com.gmail.sergick6690.universityModels.Cathedra;
+import com.gmail.sergick6690.universityModels.Group;
+import com.gmail.sergick6690.universityModels.Schedule;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -22,7 +24,8 @@ class GroupServiceTest {
     private GroupService mockService;
     @InjectMocks
     private GroupService service;
-    private static final int ID = 1;
+    private static final int VALUE = 1;
+    private static final String TEST = "TEST";
 
     @Test
     void shouldInvokeAdd() throws ServiceException {
@@ -53,8 +56,17 @@ class GroupServiceTest {
 
     @Test
     void shouldInvokeFindAllGroupsRelatedToCathedra() throws ServiceException {
-        service.findAllGroupsRelatedToCathedra(ID);
-        verify(repository).findAllByCathedra_Id(ID);
+        service.findAllGroupsRelatedToCathedra(VALUE);
+        verify(repository).findAllByCathedra_Id(VALUE);
+    }
+
+    @Test
+    void shouldCreateNewGroup() throws ServiceException {
+        GroupForm groupForm = new GroupForm(TEST, VALUE, VALUE);
+        when(mockService.createNewGroup(groupForm)).thenReturn(new Group(VALUE, TEST, null, new Schedule(), new Cathedra()));
+        Group expected = new Group(VALUE, TEST, null, new Schedule(), new Cathedra());
+        Group actual = mockService.createNewGroup(groupForm);
+        assertEquals(expected, actual);
     }
 
     @Test

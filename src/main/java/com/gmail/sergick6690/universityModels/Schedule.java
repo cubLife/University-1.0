@@ -1,4 +1,8 @@
-package com.gmail.sergick6690.university;
+package com.gmail.sergick6690.universityModels;
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -16,6 +20,8 @@ public class Schedule {
     @Size(min = 5, message = "Name should be contain no less than 5 characters")
     private String name;
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @JsonManagedReference
     private List<Item> items;
 
     public Schedule() {

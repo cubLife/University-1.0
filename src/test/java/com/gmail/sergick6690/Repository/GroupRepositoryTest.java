@@ -1,10 +1,10 @@
 package com.gmail.sergick6690.Repository;
 
 import com.gmail.sergick6690.spring.SpringConfig;
-import com.gmail.sergick6690.university.Cathedra;
-import com.gmail.sergick6690.university.Faculty;
-import com.gmail.sergick6690.university.Group;
-import com.gmail.sergick6690.university.Schedule;
+import com.gmail.sergick6690.universityModels.Cathedra;
+import com.gmail.sergick6690.universityModels.Faculty;
+import com.gmail.sergick6690.universityModels.Group;
+import com.gmail.sergick6690.universityModels.Schedule;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,9 +35,9 @@ class GroupRepositoryTest {
     private static final String TEST = "test";
 
     @Test
-    void shouldAddGroup(){
+    void shouldAddGroup() {
         generateTestData();
-        Group expected = new Group(1, TEST+1, null, new Schedule(1, TEST+TEST, null), new Cathedra(1, TEST, new Faculty(1, TEST, null), null));
+        Group expected = new Group(1, TEST + 1, null, new Schedule(1, TEST + TEST, null), new Cathedra(1, TEST, new Faculty(1, TEST, null), null));
         Group actual = groupRepository.findAll().get(0);
         assertEquals(expected, actual);
     }
@@ -45,7 +45,7 @@ class GroupRepositoryTest {
     @Test
     void shouldFindGroupById() throws NotImplementedException {
         generateTestData();
-        Group expected = new Group(5, TEST+1, null, new Schedule(1, TEST+TEST, null), new Cathedra(2, TEST, new Faculty(1, TEST, null), null));
+        Group expected = new Group(5, TEST + 1, null, new Schedule(1, TEST + TEST, null), new Cathedra(2, TEST, new Faculty(1, TEST, null), null));
         Group actual = groupRepository.findById(5).get();
         assertEquals(expected, actual);
     }
@@ -74,10 +74,10 @@ class GroupRepositoryTest {
         facultyRepository.save(faculty);
         cathedraRepository.save(new Cathedra(TEST, faculty));
         cathedraRepository.save(new Cathedra(TEST, faculty));
-        scheduleRepository.save(new Schedule(TEST+TEST));
+        scheduleRepository.save(new Schedule(TEST + TEST));
         for (int i = 0; i < 5; i++) {
-            groupRepository.save(new Group(TEST+1, scheduleRepository.findById(1).get(), cathedraRepository.findById(1).get()));
-            groupRepository.save(new Group(TEST+1, scheduleRepository.findById(1).get(), cathedraRepository.findById(2).get()));
+            groupRepository.save(new Group(TEST + 1, scheduleRepository.findById(1).get(), cathedraRepository.findById(1).get()));
+            groupRepository.save(new Group(TEST + 1, scheduleRepository.findById(1).get(), cathedraRepository.findById(2).get()));
         }
     }
 }
