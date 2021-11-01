@@ -24,6 +24,14 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
+import springfox.documentation.builders.ApiInfoBuilder;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.oas.annotations.EnableOpenApi;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
 
 import javax.naming.NamingException;
 import java.util.List;
@@ -33,6 +41,7 @@ import java.util.Properties;
 @ComponentScan("com.gmail.sergick6690")
 @PropertySource("classpath:jndi.properties")
 @EnableTransactionManagement
+@EnableOpenApi
 public class SpringConfig implements WebMvcConfigurer {
     private final ApplicationContext applicationContext;
     private DataSourceConfig dataSource;
@@ -108,6 +117,26 @@ public class SpringConfig implements WebMvcConfigurer {
         templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode("HTML5");
         return templateResolver;
+    }
+
+    @Bean
+    public Docket api() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.gmail.sergick6690.restControllers"))
+                .paths(PathSelectors.any())
+                .build()
+                .apiInfo(apiInfo());
+    }
+
+    private ApiInfo apiInfo() {
+        return new ApiInfoBuilder().title("University API Documentation").
+                contact(new Contact("Serhii", "-", "sergick6690@gmail.com")).
+                description("API for University WEB service").
+                version("1.0.0").
+                license("Apache 2.0").
+                licenseUrl("https://www.apache.org/licenses/LICENSE-2.0.html").
+                build();
     }
 
     private Properties additionalProperties() {
