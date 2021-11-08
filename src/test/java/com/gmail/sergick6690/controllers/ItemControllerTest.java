@@ -1,27 +1,20 @@
 package com.gmail.sergick6690.controllers;
 
 import com.gmail.sergick6690.service.ItemService;
-import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.universityModels.Audience;
 import com.gmail.sergick6690.universityModels.Item;
 import com.gmail.sergick6690.universityModels.Schedule;
 import com.gmail.sergick6690.universityModels.Subject;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
@@ -31,15 +24,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ContextConfiguration(classes = {SpringConfig.class})
-@WebAppConfiguration
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ExtendWith({SpringExtension.class})
+@WebMvcTest
+@ContextConfiguration(classes = {ItemController.class})
 @ActiveProfiles("test")
 class ItemControllerTest {
-    private MockMvc mockMvc;
     @Autowired
-    private WebApplicationContext webApplicationContext;
+    private MockMvc mockMvc;
     @MockBean
     private ItemService service;
     private static final String ITEMS_INDEX_URL = "/items/";
@@ -54,11 +44,6 @@ class ItemControllerTest {
     private static final String REDIRECT = "/items";
     private static final String ITEM = "item";
     private static final String ITEMS = "items";
-
-    @BeforeAll
-    void setUp() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
-    }
 
     @Test
     void startPage() throws Exception {

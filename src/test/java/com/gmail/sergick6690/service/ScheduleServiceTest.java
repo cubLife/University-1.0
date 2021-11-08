@@ -2,6 +2,7 @@ package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.Repository.ScheduleRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
+import com.gmail.sergick6690.modelsForms.ScheduleForm;
 import com.gmail.sergick6690.universityModels.Schedule;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,8 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -88,5 +88,13 @@ class ScheduleServiceTest {
         assertThrows(ServiceException.class, () -> {
             mockScheduleService.removeById(anyInt());
         });
+    }
+
+    @Test
+    void shouldCreateNewSchedule() {
+        ScheduleForm scheduleForm = new ScheduleForm("Test");
+        Schedule expected = new Schedule("Test");
+        Schedule actual = service.createNewSchedule(scheduleForm);
+        assertEquals(expected, actual);
     }
 }

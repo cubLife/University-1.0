@@ -1,9 +1,11 @@
 package com.gmail.sergick6690.controllers;
 
 import com.gmail.sergick6690.exceptions.ServiceException;
+import com.gmail.sergick6690.modelsForms.AudienceForm;
 import com.gmail.sergick6690.service.AudienceService;
 import com.gmail.sergick6690.universityModels.Audience;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,7 +26,7 @@ public class AudienceController {
 
     @GetMapping()
     public String startPage(Model model) {
-        model.addAttribute("audience", new Audience());
+        model.addAttribute("audience", new AudienceForm());
         return "audiences/index";
     }
 
@@ -47,10 +49,12 @@ public class AudienceController {
     }
 
     @PostMapping("/add")
-    public String add(@Valid Audience audience, BindingResult bindingResult, RedirectAttributes attributes) throws ServiceException {
+    @ResponseStatus(HttpStatus.CREATED)
+    public String add(@Valid AudienceForm audienceForm, BindingResult bindingResult, RedirectAttributes attributes) throws ServiceException {
         if (bindingResult.hasErrors()) {
             return "audiences/index";
         }
+        Audience audience = service.createNewAudience(audienceForm);
         service.add(audience);
         attributes.addFlashAttribute("message", "Was added new audience - " + audience);
         return "redirect:/audiences";

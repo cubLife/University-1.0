@@ -1,6 +1,7 @@
 package com.gmail.sergick6690.controllers;
 
 import com.gmail.sergick6690.exceptions.ServiceException;
+import com.gmail.sergick6690.modelsForms.FacultyForm;
 import com.gmail.sergick6690.service.FacultyService;
 import com.gmail.sergick6690.universityModels.Faculty;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class FacultyController {
 
     @GetMapping()
     public String startPage(Model model) {
-        model.addAttribute("faculty", new Faculty());
+        model.addAttribute("faculty", new FacultyForm());
         return "faculties/index";
     }
 
@@ -47,10 +48,11 @@ public class FacultyController {
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute("faculty") @Valid Faculty faculty, BindingResult bindingResult, RedirectAttributes attributes) throws ServiceException {
+    public String add(@ModelAttribute("faculty") @Valid FacultyForm facultyForm, BindingResult bindingResult, RedirectAttributes attributes) throws ServiceException {
         if (bindingResult.hasErrors()) {
             return "faculties/index";
         }
+        Faculty faculty = service.createNewFaulty(facultyForm);
         service.add(faculty);
         attributes.addFlashAttribute("message", "Was added new faculty - " + faculty);
         return "redirect:/faculties";

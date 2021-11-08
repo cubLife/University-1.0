@@ -1,6 +1,7 @@
 package com.gmail.sergick6690.restControllers;
 
 import com.gmail.sergick6690.exceptions.ServiceException;
+import com.gmail.sergick6690.modelsForms.ScheduleForm;
 import com.gmail.sergick6690.service.ScheduleService;
 import com.gmail.sergick6690.universityModels.Schedule;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,7 +24,8 @@ public class ScheduleRestController {
     @PostMapping
     @ResponseStatus(value = HttpStatus.CREATED)
     @Operation(summary = "Add new schedule")
-    public Schedule addSchedule(@RequestBody Schedule schedule) throws ServiceException {
+    public Schedule addSchedule(@RequestBody ScheduleForm scheduleForm) throws ServiceException {
+        Schedule schedule = scheduleService.createNewSchedule(scheduleForm);
         scheduleService.add(schedule);
         return schedule;
     }

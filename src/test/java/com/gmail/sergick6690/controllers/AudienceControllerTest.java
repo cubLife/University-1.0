@@ -1,22 +1,15 @@
 package com.gmail.sergick6690.controllers;
 
 import com.gmail.sergick6690.service.AudienceService;
-import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.universityModels.Audience;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
@@ -26,15 +19,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ContextConfiguration(classes = {SpringConfig.class})
-@WebAppConfiguration
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ExtendWith({SpringExtension.class})
+@WebMvcTest
+@ContextConfiguration(classes = {AudienceController.class})
 @ActiveProfiles("test")
 class AudienceControllerTest {
-    private MockMvc mockMvc;
     @Autowired
-    private WebApplicationContext webApplicationContext;
+    private MockMvc mockMvc;
     @MockBean
     private AudienceService audienceService;
     private static final String AUDIENCES_INDEX_URL = "/audiences";
@@ -49,11 +39,6 @@ class AudienceControllerTest {
     private static final String AUDIENCES = "audiences";
     private static final String AUDIENCE = "audience";
     private static final String REDIRECT = "/audiences";
-
-    @BeforeAll
-    public void setup() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
-    }
 
     @Test
     void startPage() throws Exception {
@@ -98,7 +83,8 @@ class AudienceControllerTest {
     void add() throws Exception {
         mockMvc.perform(post(AUDIENCES_ADD_URL))
                 .andDo(print())
-                .andExpect(flash().attribute("message", "Was added new audience - " + new Audience()))
+                .andExpect(status().isCreated())
+                .andExpect(flash().attribute("message", "Was added new audience - null"))
                 .andExpect(redirectedUrl(REDIRECT));
     }
 

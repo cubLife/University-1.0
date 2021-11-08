@@ -2,6 +2,7 @@ package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.Repository.FacultyRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
+import com.gmail.sergick6690.modelsForms.FacultyForm;
 import com.gmail.sergick6690.universityModels.Faculty;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,8 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -87,5 +87,13 @@ class FacultyServiceTest {
         assertThrows(ServiceException.class, () -> {
             mockFacultyService.removeById(anyInt());
         });
+    }
+
+    @Test
+    void shouldCreateNewFaculty() {
+        FacultyForm facultyForm = new FacultyForm("Test");
+        Faculty expected = new Faculty("Test");
+        Faculty actual = service.createNewFaulty(facultyForm);
+        assertEquals(expected, actual);
     }
 }

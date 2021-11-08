@@ -1,6 +1,7 @@
 package com.gmail.sergick6690.restControllers;
 
 import com.gmail.sergick6690.exceptions.ServiceException;
+import com.gmail.sergick6690.modelsForms.FacultyForm;
 import com.gmail.sergick6690.service.FacultyService;
 import com.gmail.sergick6690.universityModels.Faculty;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,7 +24,8 @@ public class FacultyRestController {
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Add new faculty")
-    public Faculty add(@RequestBody Faculty faculty) throws ServiceException {
+    public Faculty add(@RequestBody FacultyForm facultyForm) throws ServiceException {
+        Faculty faculty = facultyService.createNewFaulty(facultyForm);
         facultyService.add(faculty);
         return faculty;
     }

@@ -1,6 +1,7 @@
 package com.gmail.sergick6690.controllers;
 
 import com.gmail.sergick6690.exceptions.ServiceException;
+import com.gmail.sergick6690.modelsForms.ScheduleForm;
 import com.gmail.sergick6690.service.ScheduleService;
 import com.gmail.sergick6690.universityModels.Schedule;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class ScheduleController {
 
     @GetMapping()
     public String startPage(Model model) {
-        model.addAttribute("schedule", new Schedule());
+        model.addAttribute("schedule", new ScheduleForm());
         return "schedules/index";
     }
 
@@ -47,10 +48,11 @@ public class ScheduleController {
     }
 
     @PostMapping("/add")
-    public String add(@Valid Schedule schedule, BindingResult bindingResult, RedirectAttributes attributes) throws ServiceException {
+    public String add(@Valid ScheduleForm scheduleForm, BindingResult bindingResult, RedirectAttributes attributes) throws ServiceException {
         if (bindingResult.hasErrors()) {
             return "schedules/index";
         }
+        Schedule schedule = service.createNewSchedule(scheduleForm);
         service.add(schedule);
         attributes.addFlashAttribute("message", "Was added new schedule - " + schedule);
         return "redirect:/schedules";
