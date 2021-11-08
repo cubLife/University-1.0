@@ -21,6 +21,10 @@ public class Audience {
     public Audience() {
     }
 
+    public Audience(int number) {
+        this.number = number;
+    }
+
     public Audience(int id, int number) {
         this.id = id;
         this.number = number;
@@ -40,6 +44,14 @@ public class Audience {
 
     public void setNumber(int number) {
         this.number = number;
+    }
+
+    public List<Item> getItems() {
+        return items;
+    }
+
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
 
     @Override

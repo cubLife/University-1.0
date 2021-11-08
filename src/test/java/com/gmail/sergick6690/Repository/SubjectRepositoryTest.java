@@ -1,25 +1,17 @@
 package com.gmail.sergick6690.Repository;
 
-import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.universityModels.*;
 import org.apache.maven.surefire.shared.lang3.NotImplementedException;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ExtendWith({SpringExtension.class, MockitoExtension.class})
-@ContextConfiguration(classes = SpringConfig.class)
-@WebAppConfiguration
-@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@DataJpaTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @ActiveProfiles("test")
 class SubjectRepositoryTest {
     @Autowired
@@ -32,8 +24,6 @@ class SubjectRepositoryTest {
     private AudienceRepository audienceRepository;
     @Autowired
     private TeacherRepository teacherRepository;
-    @Mock
-    private SubjectRepository mockSubjectRepository;
     private static final String TEST = "Test1";
 
     @Test
@@ -63,8 +53,10 @@ class SubjectRepositoryTest {
     @Test
     void removeSubjectById() {
         generateTestData();
-        subjectRepository.deleteById(1);
+        Subject subject = subjectRepository.findById(2).get();
+        subjectRepository.delete(subject);
         int expected = 4;
+        System.out.println(subjectRepository.findAll());
         int actual = subjectRepository.findAll().size();
         assertEquals(expected, actual);
     }

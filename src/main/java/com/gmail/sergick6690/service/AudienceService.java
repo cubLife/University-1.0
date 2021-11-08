@@ -2,6 +2,7 @@ package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.Repository.AudienceRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
+import com.gmail.sergick6690.modelsForms.AudienceForm;
 import com.gmail.sergick6690.universityModels.Audience;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,5 +69,9 @@ public class AudienceService {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException("Can't remove audience with id - " + id + e, e);
         }
+    }
+
+    public Audience createNewAudience(AudienceForm audienceForm) {
+        return new Audience(audienceForm.getNumber());
     }
 }

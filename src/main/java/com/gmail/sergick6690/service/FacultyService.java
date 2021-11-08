@@ -2,6 +2,7 @@ package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.Repository.FacultyRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
+import com.gmail.sergick6690.modelsForms.FacultyForm;
 import com.gmail.sergick6690.universityModels.Faculty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,5 +69,9 @@ public class FacultyService {
             ERROR.error(e.getMessage(), e);
             throw new ServiceException("Can't remove faculty with id - " + id + e, e);
         }
+    }
+
+    public Faculty createNewFaulty(FacultyForm facultyForm) {
+        return new Faculty(facultyForm.getName());
     }
 }

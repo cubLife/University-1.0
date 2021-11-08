@@ -2,6 +2,7 @@ package com.gmail.sergick6690.service;
 
 import com.gmail.sergick6690.Repository.AudienceRepository;
 import com.gmail.sergick6690.exceptions.ServiceException;
+import com.gmail.sergick6690.modelsForms.AudienceForm;
 import com.gmail.sergick6690.universityModels.Audience;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,8 +12,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
@@ -91,5 +91,13 @@ class AudienceServiceTest {
         assertThrows(ServiceException.class, () -> {
             mockAudienceService.removeById(anyInt());
         });
+    }
+
+    @Test
+    void shouldCreateNewAudience() {
+        AudienceForm audienceForm = new AudienceForm(1);
+        Audience expected = new Audience(0, 1);
+        Audience actual = audienceService.createNewAudience(audienceForm);
+        assertEquals(expected, actual);
     }
 }

@@ -1,24 +1,17 @@
 package com.gmail.sergick6690.controllers;
 
 import com.gmail.sergick6690.service.CathedraService;
-import com.gmail.sergick6690.spring.SpringConfig;
 import com.gmail.sergick6690.universityModels.Cathedra;
 import com.gmail.sergick6690.universityModels.Faculty;
 import com.gmail.sergick6690.universityModels.Group;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,15 +22,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@ContextConfiguration(classes = {SpringConfig.class})
-@WebAppConfiguration
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ExtendWith({SpringExtension.class})
+@WebMvcTest
+@ContextConfiguration(classes = {CathedraController.class})
 @ActiveProfiles("test")
 class CathedraControllerTest {
-    private MockMvc mockMvc;
     @Autowired
-    private WebApplicationContext webApplicationContext;
+    private MockMvc mockMvc;
     @MockBean
     CathedraService service;
     private static final String CATHEDRAS_INDEX_URL = "/cathedras";
@@ -52,11 +42,6 @@ class CathedraControllerTest {
     private static final String CATHEDRA = "cathedra";
     private static final String CATHEDRAS = "cathedras";
     private static final String REDIRECT = "/cathedras";
-
-    @BeforeAll
-    public void setup() {
-        this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
-    }
 
     @Test
     void startPage() throws Exception {

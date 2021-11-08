@@ -1,6 +1,7 @@
 package com.gmail.sergick6690.restControllers;
 
 import com.gmail.sergick6690.exceptions.ServiceException;
+import com.gmail.sergick6690.modelsForms.AudienceForm;
 import com.gmail.sergick6690.service.AudienceService;
 import com.gmail.sergick6690.universityModels.Audience;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,7 +24,8 @@ public class AudienceRestController {
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(summary = "Add new audience")
-    public Audience addAudience(@RequestBody Audience audience) throws ServiceException {
+    public Audience addAudience(@RequestBody AudienceForm audienceForm) throws ServiceException {
+        Audience audience = new Audience(audienceForm.getNumber());
         audienceService.add(audience);
         return audience;
     }
